@@ -1,0 +1,1783 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta http-equiv="Permissions-Policy" content="clipboard-read=*, clipboard-write=*">
+    <title>Intermediate Reading Challenge - Day 47 | EDUNEST</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: linear-gradient(135deg, #ffffff 0%, #ffe5e5 100%);
+            color: #2c3e50;
+            overflow: hidden;
+            height: 100vh;
+        }
+
+        /* Welcome Screen - Red and White Theme */
+        #welcomeScreen {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: linear-gradient(135deg, #ff4757 0%, #ff6b7a 50%, #ffffff 100%);
+            padding: 20px;
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .logo-image {
+            width: 180px;
+            height: auto;
+            margin-bottom: 20px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            background: white;
+            padding: 10px;
+        }
+
+        .brand-name {
+            font-family: 'Space Mono', monospace;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 10px;
+            text-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            letter-spacing: 3px;
+        }
+
+        .subtitle {
+            font-size: 0.9rem;
+            color: #ffffff;
+            margin-bottom: 40px;
+            letter-spacing: 2px;
+            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .welcome-box {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: 3px solid #ff4757;
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 500px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(255, 71, 87, 0.4);
+        }
+
+        .test-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #ff4757;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .owner-info {
+            text-align: center;
+            font-size: 0.85rem;
+            color: #7f8c8d;
+            margin-bottom: 30px;
+        }
+
+        .owner-info span {
+            color: #ff4757;
+            font-weight: 600;
+        }
+
+        .input-group {
+            margin-bottom: 25px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+            color: #2c3e50;
+            font-weight: 500;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 12px 15px;
+            background: #f8f9fa;
+            border: 2px solid rgba(255, 71, 87, 0.3);
+            border-radius: 10px;
+            color: #2c3e50;
+            font-size: 1rem;
+            font-family: 'Outfit', sans-serif;
+            transition: all 0.3s ease;
+        }
+
+        .input-group input:focus {
+            outline: none;
+            border-color: #ff4757;
+            background: #ffffff;
+            box-shadow: 0 0 20px rgba(255, 71, 87, 0.3);
+        }
+
+        .start-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #ff4757 0%, #ff6b7a 100%);
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Outfit', sans-serif;
+            letter-spacing: 1px;
+        }
+
+        .start-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(255, 71, 87, 0.4);
+        }
+
+        .start-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .error-message {
+            color: #ff4757;
+            font-size: 0.85rem;
+            margin-top: 10px;
+            text-align: center;
+            display: none;
+        }
+
+        /* Test Screen */
+        #testScreen {
+            display: none;
+            height: 100vh;
+            flex-direction: column;
+            background: #ffffff;
+        }
+
+        .test-header {
+            background: linear-gradient(135deg, #ff4757 0%, #ff6b7a 100%);
+            border-bottom: 3px solid #ff4757;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .header-logo {
+            width: 50px;
+            height: auto;
+            border-radius: 8px;
+            background: white;
+            padding: 5px;
+        }
+
+        .student-info {
+            font-size: 0.95rem;
+            color: #ffffff;
+        }
+
+        .student-info span {
+            font-weight: 600;
+        }
+
+        .owner-badge {
+            font-size: 0.75rem;
+            color: rgba(255, 255, 255, 0.9);
+            padding: 5px 10px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 15px;
+        }
+
+        .timer-display {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #ffffff;
+            padding: 8px 20px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            font-family: 'Space Mono', monospace;
+            letter-spacing: 1px;
+            min-width: 120px;
+            text-align: center;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .timer-display.warning {
+            background: rgba(255, 193, 7, 0.3);
+            border-color: #ffc107;
+            color: #ffc107;
+            animation: pulse 1s infinite;
+        }
+
+        .timer-display.danger {
+            background: rgba(244, 67, 54, 0.3);
+            border-color: #f44336;
+            color: #f44336;
+            animation: pulse 0.5s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .test-content {
+            flex: 1;
+            overflow: hidden;
+            display: flex;
+            flex-direction: row;
+            background: #f8f9fa;
+        }
+
+        .questions-container {
+            display: flex;
+            flex-direction: row;
+            height: 100%;
+            width: 100%;
+        }
+
+        /* Left side - Passage */
+        .passage-section {
+            flex: 1;
+            width: 50%;
+            min-width: 0;
+            overflow-y: auto;
+            overflow-x: hidden;
+            -webkit-overflow-scrolling: touch;
+            padding: 30px;
+            background: #ffffff;
+            border-right: 3px solid #ff4757;
+        }
+
+        .passage-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #ff4757;
+            margin-bottom: 25px;
+            text-align: center;
+        }
+
+        .passage-content {
+            line-height: 1.8;
+            font-size: 1rem;
+            color: #2c3e50;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+        }
+
+        .passage-content p {
+            margin-bottom: 20px;
+            text-align: justify;
+        }
+
+        /* Right side - Questions */
+        .questions-wrapper {
+            flex: 1;
+            width: 50%;
+            min-width: 0;
+            display: flex;
+            flex-direction: column;
+            background: #f8f9fa;
+            overflow-y: auto;
+            overflow-x: hidden;
+            -webkit-overflow-scrolling: touch;
+            scroll-behavior: smooth;
+            padding: 30px;
+        }
+
+        .question-section {
+            margin-bottom: 40px;
+            padding: 25px;
+            background: #ffffff;
+            border: 3px solid rgba(255, 71, 87, 0.3);
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .section-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: #ff4757;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid rgba(255, 71, 87, 0.3);
+        }
+
+        .section-navigation {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 25px 0;
+            padding: 15px;
+            background: rgba(255, 71, 87, 0.05);
+            border-radius: 10px;
+        }
+
+        .nav-button {
+            padding: 10px 25px;
+            background: #ff4757;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        .nav-button:hover {
+            background: #ff6b7a;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 71, 87, 0.4);
+        }
+
+        .section-instruction {
+            font-size: 1rem;
+            color: #2c3e50;
+            margin-bottom: 25px;
+            line-height: 1.6;
+            font-weight: 500;
+        }
+
+        .question-item {
+            margin-bottom: 25px;
+            padding: 20px;
+            background: #f8f9fa;
+            border: 2px solid rgba(255, 71, 87, 0.2);
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .question-item:hover {
+            border-color: #ff4757;
+            background: #ffffff;
+            box-shadow: 0 3px 15px rgba(255, 71, 87, 0.2);
+        }
+
+        .question-item.answered {
+            border-color: #2ecc71;
+            background: rgba(46, 204, 113, 0.05);
+        }
+
+        .question-item.answered::after {
+            content: "✓";
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            color: #2ecc71;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .question-number {
+            font-weight: 600;
+            color: #ff4757;
+            margin-bottom: 10px;
+            font-size: 1rem;
+        }
+
+        .question-text {
+            font-size: 0.95rem;
+            margin-bottom: 15px;
+            color: #2c3e50;
+            line-height: 1.6;
+        }
+
+        .options {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .option-btn {
+            padding: 10px 20px;
+            background: #ffffff;
+            border: 2px solid rgba(255, 71, 87, 0.3);
+            border-radius: 8px;
+            color: #2c3e50;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.9rem;
+            min-width: 80px;
+            text-align: center;
+        }
+
+        .option-btn:hover {
+            background: rgba(255, 71, 87, 0.1);
+            border-color: #ff4757;
+            transform: translateY(-2px);
+        }
+
+        .option-btn.selected {
+            background: #ff4757;
+            border-color: #ff4757;
+            color: #fff;
+            font-weight: 600;
+            box-shadow: 0 5px 15px rgba(255, 71, 87, 0.4);
+        }
+
+        .gap-fill-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+            font-size: 0.95rem;
+        }
+
+        .gap-fill-input {
+            padding: 10px 15px;
+            background: #ffffff;
+            border: 2px solid rgba(255, 71, 87, 0.3);
+            border-radius: 8px;
+            color: #2c3e50;
+            font-size: 0.95rem;
+            font-family: 'Outfit', sans-serif;
+            min-width: 200px;
+            transition: all 0.3s ease;
+        }
+
+        .gap-fill-input:focus {
+            outline: none;
+            border-color: #ff4757;
+            background: #ffffff;
+            box-shadow: 0 0 15px rgba(255, 71, 87, 0.3);
+        }
+
+        .gap-fill-input.filled {
+            border-color: #2ecc71;
+            background: rgba(46, 204, 113, 0.05);
+        }
+
+        .submit-section {
+            padding: 25px 30px;
+            text-align: center;
+            background: linear-gradient(135deg, rgba(255, 71, 87, 0.1) 0%, rgba(255, 255, 255, 0.5) 100%);
+            border-top: 3px solid #ff4757;
+            margin-top: 20px;
+        }
+
+        .submit-btn {
+            padding: 15px 50px;
+            background: linear-gradient(135deg, #ff4757 0%, #ff6b7a 100%);
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Outfit', sans-serif;
+            letter-spacing: 1px;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(255, 71, 87, 0.4);
+        }
+
+        /* Answer Sheet Modal */
+        #answerSheet {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 1000;
+            overflow-y: auto;
+            padding: 40px 20px;
+        }
+
+        .answer-sheet-content {
+            max-width: 900px;
+            margin: 0 auto;
+            background: #ffffff;
+            border: 3px solid #ff4757;
+            border-radius: 20px;
+            padding: 40px;
+        }
+
+        .answer-sheet-header {
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 2px solid rgba(255, 71, 87, 0.3);
+            padding-bottom: 20px;
+        }
+
+        .answer-sheet-logo {
+            width: 100px;
+            margin: 0 auto 15px;
+            border-radius: 8px;
+        }
+
+        .answer-sheet-header h2 {
+            font-size: 2rem;
+            color: #ff4757;
+            margin-bottom: 10px;
+        }
+
+        .answer-list {
+            margin-bottom: 30px;
+        }
+
+        .answer-section {
+            margin-bottom: 30px;
+        }
+
+        .answer-section-title {
+            font-size: 1.1rem;
+            color: #ff4757;
+            margin-bottom: 15px;
+            font-weight: 600;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(255, 71, 87, 0.2);
+        }
+
+        .answer-row {
+            display: grid;
+            grid-template-columns: 150px 1fr;
+            gap: 20px;
+            padding: 12px 20px;
+            margin-bottom: 10px;
+            background: #f8f9fa;
+            border-left: 4px solid #ff4757;
+            border-radius: 5px;
+        }
+
+        .answer-row:nth-child(even) {
+            background: #ffffff;
+        }
+
+        .answer-number {
+            font-weight: 600;
+            color: #ff4757;
+        }
+
+        .answer-value {
+            color: #2c3e50;
+            word-break: break-word;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 30px;
+        }
+
+        .copy-btn, .download-btn {
+            padding: 12px 30px;
+            background: #ff4757;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Outfit', sans-serif;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            -webkit-tap-highlight-color: transparent;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+
+        .copy-btn:active, .download-btn:active {
+            transform: scale(0.95);
+            background: #ff6b7a;
+        }
+
+        .copy-btn:hover, .download-btn:hover {
+            background: #ff6b7a;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 71, 87, 0.4);
+        }
+
+        .copy-feedback {
+            color: #2ecc71;
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-top: 20px;
+            text-align: center;
+            display: none;
+            padding: 15px;
+            background: rgba(46, 204, 113, 0.1);
+            border-radius: 10px;
+            border: 2px solid #2ecc71;
+        }
+
+        /* Proctoring Overlay */
+        #proctoringOverlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000;
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .proctoring-box {
+            background: rgba(255, 71, 87, 0.1);
+            backdrop-filter: blur(10px);
+            border: 3px solid #ff4757;
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 500px;
+            width: 90%;
+            text-align: center;
+            animation: shake 0.5s;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+
+        .proctoring-box h2 {
+            color: #ff4757;
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+        }
+
+        .proctoring-box p {
+            color: #ffffff;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+
+        .proctoring-input {
+            width: 100%;
+            padding: 12px 15px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid #ff4757;
+            border-radius: 10px;
+            color: #fff;
+            font-size: 1rem;
+            font-family: 'Space Mono', monospace;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .proctoring-input:focus {
+            outline: none;
+            box-shadow: 0 0 20px rgba(255, 71, 87, 0.5);
+        }
+
+        .reactivate-btn {
+            width: 100%;
+            padding: 15px;
+            background: #ff4757;
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            font-family: 'Outfit', sans-serif;
+            transition: all 0.3s ease;
+        }
+
+        .reactivate-btn:hover {
+            background: #ff6b7a;
+        }
+
+        /* Mobile Responsiveness - KEEP SIDE BY SIDE ON ALL DEVICES */
+        @media (max-width: 1024px) {
+            .passage-section {
+                padding: 20px;
+            }
+
+            .questions-wrapper {
+                padding: 20px;
+            }
+
+            .passage-title {
+                font-size: 1.5rem;
+            }
+
+            .passage-content {
+                font-size: 0.9rem;
+            }
+
+            .question-section {
+                padding: 20px;
+            }
+
+            .section-title {
+                font-size: 1.2rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .logo-image {
+                width: 130px;
+            }
+
+            .brand-name {
+                font-size: 2rem;
+            }
+
+            .welcome-box {
+                padding: 30px 20px;
+            }
+
+            .test-title {
+                font-size: 1.2rem;
+            }
+
+            .test-header {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 10px;
+            }
+
+            .timer-display {
+                font-size: 1rem;
+                padding: 6px 15px;
+                min-width: 100px;
+            }
+
+            .passage-section {
+                padding: 15px;
+            }
+
+            .questions-wrapper {
+                padding: 15px;
+            }
+
+            .passage-title {
+                font-size: 1.3rem;
+                margin-bottom: 15px;
+            }
+
+            .passage-content {
+                font-size: 0.85rem;
+                line-height: 1.6;
+            }
+
+            .passage-content p {
+                margin-bottom: 15px;
+            }
+
+            .question-section {
+                padding: 15px;
+                margin-bottom: 30px;
+            }
+
+            .section-title {
+                font-size: 1rem;
+            }
+
+            .section-instruction {
+                font-size: 0.9rem;
+            }
+
+            .question-item {
+                padding: 15px;
+            }
+
+            .question-number {
+                font-size: 0.9rem;
+            }
+
+            .question-text {
+                font-size: 0.85rem;
+            }
+
+            .options {
+                flex-direction: column;
+            }
+
+            .option-btn {
+                width: 100%;
+                font-size: 0.85rem;
+            }
+
+            .gap-fill-input {
+                width: 100%;
+                min-width: auto;
+                font-size: 0.85rem;
+            }
+
+            .submit-section {
+                padding: 20px;
+            }
+
+            .submit-btn {
+                padding: 12px 30px;
+                font-size: 1rem;
+            }
+
+            .nav-button {
+                padding: 8px 15px;
+                font-size: 0.85rem;
+            }
+
+            .section-navigation {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .answer-sheet-content {
+                padding: 25px;
+            }
+
+            .answer-sheet-header h2 {
+                font-size: 1.5rem;
+            }
+
+            .answer-row {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+
+            .button-group {
+                flex-direction: column;
+            }
+
+            .copy-btn, .download-btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+
+        /* Extra small devices - maintain side by side */
+        @media (max-width: 480px) {
+            .passage-section {
+                padding: 10px;
+            }
+
+            .questions-wrapper {
+                padding: 10px;
+            }
+
+            .passage-title {
+                font-size: 1.1rem;
+            }
+
+            .passage-content {
+                font-size: 0.8rem;
+            }
+
+            .question-section {
+                padding: 12px;
+            }
+
+            .section-title {
+                font-size: 0.95rem;
+            }
+
+            .question-text {
+                font-size: 0.8rem;
+            }
+        }
+
+        /* Scrollbar Styling */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #ff4757;
+            border-radius: 5px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #ff6b7a;
+        }
+    </style>
+</head>
+<body>
+    <!-- Welcome Screen -->
+    <div id="welcomeScreen">
+        <img src="https://image2url.com/r2/default/images/1769700366134-01db5cda-e300-4af6-8039-9c7cad80199a.png" alt="EDUNEST Logo" class="logo-image">
+        <div class="brand-name">EDUNEST</div>
+        <div class="subtitle">EDUCATIONAL EXCELLENCE</div>
+        
+        <div class="welcome-box">
+            <h1 class="test-title">Intermediate Reading Challenge - Day 47</h1>
+            <div class="owner-info">Test Owner: <span>JONY</span></div>
+            
+            <div class="input-group">
+                <label for="studentName">Student Name</label>
+                <input type="text" id="studentName" placeholder="Enter your full name" autocomplete="off">
+            </div>
+            
+            <div class="input-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" placeholder="Enter password" autocomplete="off">
+            </div>
+            
+            <button class="start-btn" id="startBtn" disabled>START TEST</button>
+            <div class="error-message" id="errorMessage">Invalid password. Please try again.</div>
+        </div>
+    </div>
+
+    <!-- Test Screen -->
+    <div id="testScreen">
+        <div class="test-header">
+            <div class="header-left">
+                <img src="https://image2url.com/r2/default/images/1769700366134-01db5cda-e300-4af6-8039-9c7cad80199a.png" alt="EDUNEST" class="header-logo">
+                <div class="student-info">Student: <span id="displayName"></span></div>
+            </div>
+            <div class="timer-display" id="timerDisplay">35:00</div>
+            <div class="owner-badge">Owner: JONY</div>
+        </div>
+        
+        <div class="test-content">
+            <div class="questions-container">
+                <!-- Left Side - Reading Passage -->
+                <div class="passage-section">
+                    <h1 class="passage-title">Cowboys</h1>
+                    <div class="passage-content">
+                        <p>Cowboys have always had a romantic image. When people first watched Hollywood films, being a cowboy wasn't a job. It was a life of adventure, freedom, horses. It was a classic symbol of the United States of America. In reality, the real American cowboys have lived and worked here in the west and south-west of the United States for over three centuries, long before Hollywood. The adventure and romance have disappeared but the hard work and long hours are the same as they've always been.</p>
+
+                        <p>No one knows how many cowboys are still working. Maybe between ten and fifty thousand. It's also difficult to define a twenty-first century cowboy. Surely it can't be the big cattle owners who do business with a seventy-billion dollar beef industry? These modern ranches use the latest technology and employ accountants. But even some of the old traditional cattle ranches make more money nowadays by offering holidays to tourists; people come and stay for a holiday and live the cowboy's life (or a Hollywood version of it).</p>
+
+                        <p>But even with technology and Hollywood romance, real cowboys still do the same job they have done for years. The cattle still need to walk across huge plains and eat grass many miles from the ranch. And so cowboys ride on horses to bring them home. Cowboys work in the middle of nowhere, in a place where you can't make a phone call because mobile phones don't work. Like the cowboys of the past, twenty-first century cowboys still get up early on freezing cold mornings and make breakfast over an open fire. There is no Monday to Friday, weekends off or paid holidays.</p>
+
+                        <p>So why do men – because it is usually men – choose this life? Pat Crisswell had a good job with the government. He made good money but he didn't like the city. He wanted to do something different. So one day, he gave up his job and moved to a ranch in Texas, earning much less as a cowboy. He remembers his work colleagues in the city on the day he left. They all thought Pat was crazy. But he wanted job satisfaction more than money.</p>
+
+                        <p>Two brothers – Tyrel and Blaine Tucker – have lived on ranches and worked with cows since they were children. Their mother had a ranch in Wyoming. Last winter, they looked after 2,300 cows. Every day from December until April, they rode across nearly 100,000 acres of land with only the cattle, the horses, and each other for company. Eighteen-year-old Tyrel Tucker says, 'It was fun. You get to be by yourself.'</p>
+
+                        <p>Blaine has a large moustache and Tyrel is growing his. They wear traditional cowboy clothes with the famous hat and boots. You could do the same job in a baseball cap and a truck but Tyrel and Blaine prefer the traditional cowboy culture: 'It's a real life about you, your horse and the open country.'</p>
+                    </div>
+                </div>
+
+                <!-- Right Side - Questions -->
+                <div class="questions-wrapper">
+                <div class="question-section" id="section1">
+                    <h2 class="section-title">Questions 1-10</h2>
+                    <p class="section-instruction">Choose the correct answer (A, B, C or D).</p>
+                    
+                    <div class="question-item" id="q1">
+                        <div class="question-number">Question 1</div>
+                        <div class="question-text">Title the text.</div>
+                        <div class="options">
+                            <button class="option-btn" onclick="selectOption(1, 'A. Cowboys of Hollywood')">A. Cowboys of Hollywood</button>
+                            <button class="option-btn" onclick="selectOption(1, 'B. Two brothers')">B. Two brothers</button>
+                            <button class="option-btn" onclick="selectOption(1, 'C. Twenty-first century cowboys')">C. Twenty-first century cowboys</button>
+                            <button class="option-btn" onclick="selectOption(1, 'D. American cowboys')">D. American cowboys</button>
+                        </div>
+                    </div>
+
+                    <div class="question-item" id="q2">
+                        <div class="question-number">Question 2</div>
+                        <div class="question-text">Real American cowboys lived and worked in the west for …</div>
+                        <div class="options">
+                            <button class="option-btn" onclick="selectOption(2, 'A. 300 years, long before Hollywood')">A. 300 years, long before Hollywood</button>
+                            <button class="option-btn" onclick="selectOption(2, 'B. 3 centuries, after Hollywood')">B. 3 centuries, after Hollywood</button>
+                            <button class="option-btn" onclick="selectOption(2, 'C. 3 centuries when Hollywood is created')">C. 3 centuries when Hollywood is created</button>
+                            <button class="option-btn" onclick="selectOption(2, 'D. A long time before')">D. A long time before</button>
+                        </div>
+                    </div>
+
+                    <div class="question-item" id="q3">
+                        <div class="question-number">Question 3</div>
+                        <div class="question-text">How many cowboys are still working?</div>
+                        <div class="options">
+                            <button class="option-btn" onclick="selectOption(3, 'A. It is unknown')">A. It is unknown</button>
+                            <button class="option-btn" onclick="selectOption(3, 'B. Between 10,000 and 50,000')">B. Between 10,000 and 50,000</button>
+                            <button class="option-btn" onclick="selectOption(3, 'C. 10,000')">C. 10,000</button>
+                            <button class="option-btn" onclick="selectOption(3, 'D. 50,000')">D. 50,000</button>
+                        </div>
+                    </div>
+
+                    <div class="question-item" id="q4">
+                        <div class="question-number">Question 4</div>
+                        <div class="question-text">Find the wrong statement.</div>
+                        <div class="options">
+                            <button class="option-btn" onclick="selectOption(4, 'A. It is difficult to define a twenty-first century cowboy')">A. It is difficult to define a twenty-first century cowboy</button>
+                            <button class="option-btn" onclick="selectOption(4, 'B. With technology and Hollywood romance, real cowboys\' activity is not the same as it was years before')">B. With technology and Hollywood romance, real cowboys' activity is not the same as it was years before</button>
+                            <button class="option-btn" onclick="selectOption(4, 'C. Even old traditional ranches make more money than before')">C. Even old traditional ranches make more money than before</button>
+                            <button class="option-btn" onclick="selectOption(4, 'D. Modern ranches employ bookkeepers')">D. Modern ranches employ bookkeepers</button>
+                        </div>
+                    </div>
+
+                    <div class="question-item" id="q5">
+                        <div class="question-number">Question 5</div>
+                        <div class="question-text">Find out the synonym of the underlined word:<br>"The cattle still need to walk across <u>huge</u> plains and eat grass many miles from the ranch."</div>
+                        <div class="options">
+                            <button class="option-btn" onclick="selectOption(5, 'A. Fields')">A. Fields</button>
+                            <button class="option-btn" onclick="selectOption(5, 'B. Flatlands')">B. Flatlands</button>
+                            <button class="option-btn" onclick="selectOption(5, 'C. Gardens')">C. Gardens</button>
+                            <button class="option-btn" onclick="selectOption(5, 'D. Meadows')">D. Meadows</button>
+                        </div>
+                    </div>
+
+                    <div class="question-item" id="q6">
+                        <div class="question-number">Question 6</div>
+                        <div class="question-text">Find out the antonym of the underlined word:<br>"The cattle still need to walk across <u>huge</u> plains and eat grass many miles from the ranch."</div>
+                        <div class="options">
+                            <button class="option-btn" onclick="selectOption(6, 'A. Large')">A. Large</button>
+                            <button class="option-btn" onclick="selectOption(6, 'B. Small')">B. Small</button>
+                            <button class="option-btn" onclick="selectOption(6, 'C. Big')">C. Big</button>
+                            <button class="option-btn" onclick="selectOption(6, 'D. Tremendous')">D. Tremendous</button>
+                        </div>
+                    </div>
+
+                    <div class="question-item" id="q7">
+                        <div class="question-number">Question 7</div>
+                        <div class="question-text">Find the true statement.</div>
+                        <div class="options">
+                            <button class="option-btn" onclick="selectOption(7, 'A. Monday is a day off for cowboys')">A. Monday is a day off for cowboys</button>
+                            <button class="option-btn" onclick="selectOption(7, 'B. Cowboys work far away from downtown')">B. Cowboys work far away from downtown</button>
+                            <button class="option-btn" onclick="selectOption(7, 'C. Cowboys no longer get up early')">C. Cowboys no longer get up early</button>
+                            <button class="option-btn" onclick="selectOption(7, 'D. Friday is a day off for cowboys')">D. Friday is a day off for cowboys</button>
+                        </div>
+                    </div>
+
+                    <div class="question-item" id="q8">
+                        <div class="question-number">Question 8</div>
+                        <div class="question-text">Why did Pat Crisswell gave up his job and left for Texas?</div>
+                        <div class="options">
+                            <button class="option-btn" onclick="selectOption(8, 'A. He was crazy')">A. He was crazy</button>
+                            <button class="option-btn" onclick="selectOption(8, 'B. Not mentioned')">B. Not mentioned</button>
+                            <button class="option-btn" onclick="selectOption(8, 'C. He wanted to make more money')">C. He wanted to make more money</button>
+                            <button class="option-btn" onclick="selectOption(8, 'D. He didn\'t like city life')">D. He didn't like city life</button>
+                        </div>
+                    </div>
+
+                    <div class="question-item" id="q9">
+                        <div class="question-number">Question 9</div>
+                        <div class="question-text">How old was Blaine Tucker?</div>
+                        <div class="options">
+                            <button class="option-btn" onclick="selectOption(9, 'A. Not given')">A. Not given</button>
+                            <button class="option-btn" onclick="selectOption(9, 'B. 17')">B. 17</button>
+                            <button class="option-btn" onclick="selectOption(9, 'C. 18')">C. 18</button>
+                            <button class="option-btn" onclick="selectOption(9, 'D. 8')">D. 8</button>
+                        </div>
+                    </div>
+
+                    <div class="question-item" id="q10">
+                        <div class="question-number">Question 10</div>
+                        <div class="question-text">Tyrel is growing his …</div>
+                        <div class="options">
+                            <button class="option-btn" onclick="selectOption(10, 'A. 2,300 cows')">A. 2,300 cows</button>
+                            <button class="option-btn" onclick="selectOption(10, 'B. Horse')">B. Horse</button>
+                            <button class="option-btn" onclick="selectOption(10, 'C. Moustache')">C. Moustache</button>
+                            <button class="option-btn" onclick="selectOption(10, 'D. Eight-year-old son')">D. Eight-year-old son</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Navigation to next section -->
+                <div class="section-navigation">
+                    <button class="nav-button" onclick="scrollToSection('section2')">Go to Questions 11-16 →</button>
+                </div>
+
+                <!-- Questions 11-16: True/False/Not Given -->
+                <div class="question-section" id="section2">
+                    <h2 class="section-title">Questions 11-16</h2>
+                    <p class="section-instruction">Choose TRUE, FALSE or NOT GIVEN.</p>
+                    
+                    <div class="question-item" id="q11">
+                        <div class="question-number">Question 11</div>
+                        <div class="question-text">Hollywood films made cowboys look like symbols of freedom and adventure.</div>
+                        <div class="options">
+                            <button class="option-btn" onclick="selectOption(11, 'TRUE')">TRUE</button>
+                            <button class="option-btn" onclick="selectOption(11, 'FALSE')">FALSE</button>
+                            <button class="option-btn" onclick="selectOption(11, 'NOT GIVEN')">NOT GIVEN</button>
+                        </div>
+                    </div>
+
+                    <div class="question-item" id="q12">
+                        <div class="question-number">Question 12</div>
+                        <div class="question-text">Real American cowboys existed before Hollywood films were made.</div>
+                        <div class="options">
+                            <button class="option-btn" onclick="selectOption(12, 'TRUE')">TRUE</button>
+                            <button class="option-btn" onclick="selectOption(12, 'FALSE')">FALSE</button>
+                            <button class="option-btn" onclick="selectOption(12, 'NOT GIVEN')">NOT GIVEN</button>
+                        </div>
+                    </div>
+
+                    <div class="question-item" id="q13">
+                        <div class="question-number">Question 13</div>
+                        <div class="question-text">All modern cattle ranches earn most of their money from tourism.</div>
+                        <div class="options">
+                            <button class="option-btn" onclick="selectOption(13, 'TRUE')">TRUE</button>
+                            <button class="option-btn" onclick="selectOption(13, 'FALSE')">FALSE</button>
+                            <button class="option-btn" onclick="selectOption(13, 'NOT GIVEN')">NOT GIVEN</button>
+                        </div>
+                    </div>
+
+                    <div class="question-item" id="q14">
+                        <div class="question-number">Question 14</div>
+                        <div class="question-text">Cowboys still ride horses because cattle live far from the ranch.</div>
+                        <div class="options">
+                            <button class="option-btn" onclick="selectOption(14, 'TRUE')">TRUE</button>
+                            <button class="option-btn" onclick="selectOption(14, 'FALSE')">FALSE</button>
+                            <button class="option-btn" onclick="selectOption(14, 'NOT GIVEN')">NOT GIVEN</button>
+                        </div>
+                    </div>
+
+                    <div class="question-item" id="q15">
+                        <div class="question-number">Question 15</div>
+                        <div class="question-text">Pat Crisswell's family helped him decide to become a cowboy.</div>
+                        <div class="options">
+                            <button class="option-btn" onclick="selectOption(15, 'TRUE')">TRUE</button>
+                            <button class="option-btn" onclick="selectOption(15, 'FALSE')">FALSE</button>
+                            <button class="option-btn" onclick="selectOption(15, 'NOT GIVEN')">NOT GIVEN</button>
+                        </div>
+                    </div>
+
+                    <div class="question-item" id="q16">
+                        <div class="question-number">Question 16</div>
+                        <div class="question-text">Tyrel and Blaine Tucker work only during the summer months.</div>
+                        <div class="options">
+                            <button class="option-btn" onclick="selectOption(16, 'TRUE')">TRUE</button>
+                            <button class="option-btn" onclick="selectOption(16, 'FALSE')">FALSE</button>
+                            <button class="option-btn" onclick="selectOption(16, 'NOT GIVEN')">NOT GIVEN</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Navigation buttons -->
+                <div class="section-navigation">
+                    <button class="nav-button" onclick="scrollToSection('section1')">← Back to Questions 1-10</button>
+                    <button class="nav-button" onclick="scrollToSection('section3')">Go to Questions 17-20 →</button>
+                </div>
+
+                <!-- Questions 17-20: Gap Fill -->
+                <div class="question-section" id="section3">
+                    <h2 class="section-title">Questions 17-20</h2>
+                    <p class="section-instruction">Fill in the gaps (no more than TWO words).</p>
+                    
+                    <div class="question-item" id="q17">
+                        <div class="question-number">Question 17</div>
+                        <div class="question-text">
+                            <div class="gap-fill-wrapper">
+                                Cowboys have lived in the west and south-west of the United States for over 
+                                <input type="text" class="gap-fill-input" id="input17" placeholder="your answer" oninput="checkGapFill(17)">.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question-item" id="q18">
+                        <div class="question-number">Question 18</div>
+                        <div class="question-text">
+                            <div class="gap-fill-wrapper">
+                                Many cowboys work in places where 
+                                <input type="text" class="gap-fill-input" id="input18" placeholder="your answer" oninput="checkGapFill(18)">
+                                do not work.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question-item" id="q19">
+                        <div class="question-number">Question 19</div>
+                        <div class="question-text">
+                            <div class="gap-fill-wrapper">
+                                Pat Crisswell left his government job because he wanted 
+                                <input type="text" class="gap-fill-input" id="input19" placeholder="your answer" oninput="checkGapFill(19)">.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question-item" id="q20">
+                        <div class="question-number">Question 20</div>
+                        <div class="question-text">
+                            <div class="gap-fill-wrapper">
+                                Tyrel and Blaine rode across nearly 
+                                <input type="text" class="gap-fill-input" id="input20" placeholder="your answer" oninput="checkGapFill(20)">
+                                of land.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Navigation buttons -->
+                <div class="section-navigation">
+                    <button class="nav-button" onclick="scrollToSection('section2')">← Back to Questions 11-16</button>
+                </div>
+
+                <div class="submit-section">
+                    <button class="submit-btn" onclick="submitTest()">SUBMIT TEST</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+
+    <!-- Answer Sheet Modal -->
+    <div id="answerSheet">
+        <div class="answer-sheet-content">
+            <div class="answer-sheet-header">
+                <img src="https://image2url.com/r2/default/images/1769700366134-01db5cda-e300-4af6-8039-9c7cad80199a.png" alt="EDUNEST" class="answer-sheet-logo">
+                <h2>Your Answer Sheet</h2>
+                <div class="student-info" style="color: #2c3e50;">Student: <span id="sheetName" style="color: #ff4757;"></span></div>
+                <div class="student-info" style="color: #2c3e50;">Intermediate Reading Challenge - Day 47</div>
+            </div>
+            
+            <div class="answer-list">
+                <div class="answer-section">
+                    <div class="answer-section-title">Questions 1-10: Multiple Choice</div>
+                    <div id="answers1"></div>
+                </div>
+
+                <div class="answer-section">
+                    <div class="answer-section-title">Questions 11-16: True/False/Not Given</div>
+                    <div id="answers2"></div>
+                </div>
+
+                <div class="answer-section">
+                    <div class="answer-section-title">Questions 17-20: Gap Fill</div>
+                    <div id="answers3"></div>
+                </div>
+            </div>
+            
+            <div class="button-group">
+                <button class="copy-btn" onclick="copyAnswers()">
+                    <span>📋</span> COPY ANSWERS
+                </button>
+                <button class="download-btn" onclick="downloadPDF()">
+                    <span>📄</span> DOWNLOAD PDF
+                </button>
+            </div>
+            <div class="copy-feedback" id="copyFeedback">✓ Answers copied to clipboard successfully!</div>
+        </div>
+    </div>
+
+    <!-- Proctoring Overlay -->
+    <div id="proctoringOverlay">
+        <div class="proctoring-box">
+            <h2>⚠️ ATTENTION</h2>
+            <p>You have lost focus on the test window. Please enter the reactivation code to continue.</p>
+            <input type="text" class="proctoring-input" id="reactivationCode" placeholder="Enter code" autocomplete="off">
+            <button class="reactivate-btn" onclick="reactivateTest()">REACTIVATE</button>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script>
+        // Global variables
+        const CORRECT_PASSWORD = '2222';
+        const REACTIVATION_CODE = '0202';
+        const TEST_DURATION = 35 * 60; // 35 minutes in seconds
+        let studentName = '';
+        let answers = {};
+        let testActive = false;
+        let timeRemaining = TEST_DURATION;
+        let timerInterval = null;
+
+        // Enable start button when both fields are filled
+        document.getElementById('studentName').addEventListener('input', checkInputs);
+        document.getElementById('password').addEventListener('input', checkInputs);
+
+        function checkInputs() {
+            const name = document.getElementById('studentName').value.trim();
+            const password = document.getElementById('password').value.trim();
+            const startBtn = document.getElementById('startBtn');
+            
+            if (name && password) {
+                startBtn.disabled = false;
+            } else {
+                startBtn.disabled = true;
+            }
+        }
+
+        // Allow Enter key to submit
+        document.getElementById('password').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter' && !document.getElementById('startBtn').disabled) {
+                document.getElementById('startBtn').click();
+            }
+        });
+
+        // Start test
+        document.getElementById('startBtn').addEventListener('click', function() {
+            const name = document.getElementById('studentName').value.trim();
+            const password = document.getElementById('password').value.trim();
+            const errorMessage = document.getElementById('errorMessage');
+            
+            if (password === CORRECT_PASSWORD) {
+                studentName = name;
+                document.getElementById('displayName').textContent = studentName;
+                
+                // Enter fullscreen FIRST
+                enterFullscreen();
+                
+                setTimeout(() => {
+                    document.getElementById('welcomeScreen').style.display = 'none';
+                    document.getElementById('testScreen').style.display = 'flex';
+                    testActive = true;
+                    
+                    // Start the timer
+                    startTimer();
+                }, 100);
+            } else {
+                errorMessage.style.display = 'block';
+                document.getElementById('password').value = '';
+                document.getElementById('password').focus();
+            }
+        });
+
+        // Timer functions
+        function startTimer() {
+            updateTimerDisplay();
+            
+            timerInterval = setInterval(() => {
+                timeRemaining--;
+                updateTimerDisplay();
+                
+                // Check if time is up
+                if (timeRemaining <= 0) {
+                    clearInterval(timerInterval);
+                    autoSubmitTest();
+                }
+            }, 1000);
+        }
+
+        function updateTimerDisplay() {
+            const minutes = Math.floor(timeRemaining / 60);
+            const seconds = timeRemaining % 60;
+            const display = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+            
+            const timerElement = document.getElementById('timerDisplay');
+            timerElement.textContent = display;
+            
+            // Change color based on time remaining
+            if (timeRemaining <= 60) {
+                // Last minute - red and pulsing
+                timerElement.classList.remove('warning');
+                timerElement.classList.add('danger');
+            } else if (timeRemaining <= 300) {
+                // Last 5 minutes - yellow warning
+                timerElement.classList.add('warning');
+                timerElement.classList.remove('danger');
+            } else {
+                timerElement.classList.remove('warning', 'danger');
+            }
+        }
+
+        function autoSubmitTest() {
+            // Collect all gap-fill answers
+            for (let i = 17; i <= 20; i++) {
+                const input = document.getElementById('input' + i);
+                answers[i] = input ? input.value.trim() : '';
+            }
+            
+            // Auto copy to clipboard
+            autoSaveAnswers();
+            
+            // Show answer sheet
+            displayAnswerSheet();
+            
+            // Alert the student
+            setTimeout(() => {
+                alert('⏰ Time is up! Your answers have been automatically submitted and copied to clipboard.');
+            }, 500);
+        }
+
+        function autoSaveAnswers() {
+            let text = `EDUNEST - Intermediate Reading Challenge - Day 47\n`;
+            text += `Student: ${studentName}\n`;
+            text += `Date: ${new Date().toLocaleDateString()}\n`;
+            text += `Time: AUTO-SUBMITTED (Time Expired)\n\n`;
+            text += `ANSWER SHEET\n`;
+            text += `${'='.repeat(60)}\n\n`;
+            
+            text += `Questions 1-10: Multiple Choice\n${'-'.repeat(60)}\n`;
+            for (let i = 1; i <= 10; i++) {
+                text += `${i}. ${answers[i] || '(No answer)'}\n`;
+            }
+            
+            text += `\nQuestions 11-16: True/False/Not Given\n${'-'.repeat(60)}\n`;
+            for (let i = 11; i <= 16; i++) {
+                text += `${i}. ${answers[i] || '(No answer)'}\n`;
+            }
+            
+            text += `\nQuestions 17-20: Gap Fill\n${'-'.repeat(60)}\n`;
+            for (let i = 17; i <= 20; i++) {
+                text += `${i}. ${answers[i] || '(No answer)'}\n`;
+            }
+            
+            // Try to copy to clipboard
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(text).catch(() => {
+                    copyTextLegacy(text);
+                });
+            } else {
+                copyTextLegacy(text);
+            }
+        }
+
+        // Enter fullscreen mode
+        function enterFullscreen() {
+            const elem = document.documentElement;
+            if (elem.requestFullscreen) {
+                elem.requestFullscreen();
+            } else if (elem.webkitRequestFullscreen) {
+                elem.webkitRequestFullscreen();
+            } else if (elem.msRequestFullscreen) {
+                elem.msRequestFullscreen();
+            }
+        }
+
+        // Proctoring system
+        let proctoringActive = false;
+
+        window.addEventListener('blur', function() {
+            if (testActive && !proctoringActive) {
+                showProctoringOverlay();
+            }
+        });
+
+        document.addEventListener('fullscreenchange', function() {
+            if (!document.fullscreenElement && testActive && !proctoringActive) {
+                showProctoringOverlay();
+            }
+        });
+
+        document.addEventListener('webkitfullscreenchange', function() {
+            if (!document.webkitFullscreenElement && testActive && !proctoringActive) {
+                showProctoringOverlay();
+            }
+        });
+
+        document.addEventListener('visibilitychange', function() {
+            if (document.hidden && testActive && !proctoringActive) {
+                showProctoringOverlay();
+            }
+        });
+
+        function showProctoringOverlay() {
+            proctoringActive = true;
+            document.getElementById('proctoringOverlay').style.display = 'flex';
+            document.getElementById('reactivationCode').value = '';
+            document.getElementById('reactivationCode').focus();
+        }
+
+        function reactivateTest() {
+            const code = document.getElementById('reactivationCode').value.trim();
+            
+            if (code === REACTIVATION_CODE) {
+                document.getElementById('proctoringOverlay').style.display = 'none';
+                proctoringActive = false;
+                enterFullscreen();
+            } else {
+                alert('Incorrect reactivation code. Please try again.');
+                document.getElementById('reactivationCode').value = '';
+                document.getElementById('reactivationCode').focus();
+            }
+        }
+
+        document.getElementById('reactivationCode').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                reactivateTest();
+            }
+        });
+
+        // Select option with visual feedback
+        function selectOption(questionNum, value) {
+            const questionItem = document.getElementById('q' + questionNum);
+            
+            if (questionItem) {
+                const buttons = questionItem.querySelectorAll('.option-btn');
+                buttons.forEach(btn => btn.classList.remove('selected'));
+                
+                event.target.classList.add('selected');
+                questionItem.classList.add('answered');
+            }
+            
+            answers[questionNum] = value;
+        }
+
+        // Check gap fill with visual feedback
+        function checkGapFill(questionNum) {
+            const input = document.getElementById('input' + questionNum);
+            const questionItem = document.getElementById('q' + questionNum);
+            
+            if (input && input.value.trim() !== '') {
+                input.classList.add('filled');
+                questionItem.classList.add('answered');
+            } else if (input) {
+                input.classList.remove('filled');
+                questionItem.classList.remove('answered');
+            }
+        }
+
+        // Submit test
+        function submitTest() {
+            // Stop the timer
+            if (timerInterval) {
+                clearInterval(timerInterval);
+            }
+            
+            // Get gap-fill answers
+            for (let i = 17; i <= 20; i++) {
+                const input = document.getElementById('input' + i);
+                answers[i] = input ? input.value.trim() : '';
+            }
+            
+            displayAnswerSheet();
+        }
+
+        function displayAnswerSheet() {
+            document.getElementById('sheetName').textContent = studentName;
+            
+            // Questions 1-10
+            const answers1 = document.getElementById('answers1');
+            answers1.innerHTML = '';
+            for (let i = 1; i <= 10; i++) {
+                answers1.innerHTML += `
+                    <div class="answer-row">
+                        <div class="answer-number">Question ${i}</div>
+                        <div class="answer-value">${answers[i] || '(No answer)'}</div>
+                    </div>
+                `;
+            }
+            
+            // Questions 11-16
+            const answers2 = document.getElementById('answers2');
+            answers2.innerHTML = '';
+            for (let i = 11; i <= 16; i++) {
+                answers2.innerHTML += `
+                    <div class="answer-row">
+                        <div class="answer-number">Question ${i}</div>
+                        <div class="answer-value">${answers[i] || '(No answer)'}</div>
+                    </div>
+                `;
+            }
+            
+            // Questions 17-20
+            const answers3 = document.getElementById('answers3');
+            answers3.innerHTML = '';
+            for (let i = 17; i <= 20; i++) {
+                answers3.innerHTML += `
+                    <div class="answer-row">
+                        <div class="answer-number">Question ${i}</div>
+                        <div class="answer-value">${answers[i] || '(No answer)'}</div>
+                    </div>
+                `;
+            }
+            
+            document.getElementById('answerSheet').style.display = 'block';
+            testActive = false;
+        }
+
+        // Copy answers - Enhanced for all devices
+        function copyAnswers() {
+            let text = `EDUNEST - Intermediate Reading Challenge - Day 47\n`;
+            text += `Student: ${studentName}\n`;
+            text += `Date: ${new Date().toLocaleDateString()}\n\n`;
+            text += `ANSWER SHEET\n`;
+            text += `${'='.repeat(60)}\n\n`;
+            
+            text += `Questions 1-10: Multiple Choice\n${'-'.repeat(60)}\n`;
+            for (let i = 1; i <= 10; i++) {
+                text += `${i}. ${answers[i] || '(No answer)'}\n`;
+            }
+            
+            text += `\nQuestions 11-16: True/False/Not Given\n${'-'.repeat(60)}\n`;
+            for (let i = 11; i <= 16; i++) {
+                text += `${i}. ${answers[i] || '(No answer)'}\n`;
+            }
+            
+            text += `\nQuestions 17-20: Gap Fill\n${'-'.repeat(60)}\n`;
+            for (let i = 17; i <= 20; i++) {
+                text += `${i}. ${answers[i] || '(No answer)'}\n`;
+            }
+            
+            // Try modern clipboard API first
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(text).then(() => {
+                    showCopyFeedback();
+                }).catch(() => {
+                    copyTextLegacy(text);
+                });
+            } else {
+                copyTextLegacy(text);
+            }
+        }
+
+        // Legacy copy method for maximum compatibility
+        function copyTextLegacy(text) {
+            const textarea = document.createElement('textarea');
+            textarea.value = text;
+            textarea.style.position = 'fixed';
+            textarea.style.top = '0';
+            textarea.style.left = '0';
+            textarea.style.width = '2em';
+            textarea.style.height = '2em';
+            textarea.style.padding = '0';
+            textarea.style.border = 'none';
+            textarea.style.outline = 'none';
+            textarea.style.boxShadow = 'none';
+            textarea.style.background = 'transparent';
+            textarea.style.opacity = '0';
+            
+            document.body.appendChild(textarea);
+            textarea.focus();
+            textarea.select();
+            
+            if (navigator.userAgent.match(/ipad|iphone/i)) {
+                const range = document.createRange();
+                range.selectNodeContents(textarea);
+                const selection = window.getSelection();
+                selection.removeAllRanges();
+                selection.addRange(range);
+                textarea.setSelectionRange(0, 999999);
+            }
+            
+            let success = false;
+            try {
+                success = document.execCommand('copy');
+            } catch (err) {
+                console.error('Copy failed:', err);
+            }
+            
+            document.body.removeChild(textarea);
+            
+            if (success) {
+                showCopyFeedback();
+            } else {
+                alert('Copy failed. Please copy manually:\n\n' + text.substring(0, 500) + '...');
+            }
+        }
+
+        function showCopyFeedback() {
+            const feedback = document.getElementById('copyFeedback');
+            feedback.style.display = 'block';
+            setTimeout(() => {
+                feedback.style.display = 'none';
+            }, 3000);
+        }
+
+        // Download PDF
+        function downloadPDF() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            
+            doc.setFontSize(20);
+            doc.setTextColor(255, 71, 87);
+            doc.text('EDUNEST', 105, 20, { align: 'center' });
+            
+            doc.setFontSize(14);
+            doc.setTextColor(0, 0, 0);
+            doc.text('Intermediate Reading Challenge - Day 47', 105, 30, { align: 'center' });
+            
+            doc.setFontSize(11);
+            doc.text(`Student: ${studentName}`, 20, 45);
+            doc.text(`Date: ${new Date().toLocaleDateString()}`, 20, 52);
+            
+            doc.setDrawColor(255, 71, 87);
+            doc.setLineWidth(0.5);
+            doc.line(20, 58, 190, 58);
+            
+            doc.setFontSize(13);
+            doc.setTextColor(255, 71, 87);
+            doc.text('ANSWER SHEET', 105, 68, { align: 'center' });
+            
+            doc.setFontSize(10);
+            doc.setTextColor(0, 0, 0);
+            let yPosition = 80;
+            
+            const sections = [
+                { title: 'Questions 1-10: Multiple Choice', start: 1, end: 10 },
+                { title: 'Questions 11-16: True/False/Not Given', start: 11, end: 16 },
+                { title: 'Questions 17-20: Gap Fill', start: 17, end: 20 }
+            ];
+            
+            sections.forEach(section => {
+                if (yPosition > 250) {
+                    doc.addPage();
+                    yPosition = 20;
+                }
+                
+                doc.setFontSize(11);
+                doc.setTextColor(255, 71, 87);
+                doc.text(section.title, 20, yPosition);
+                yPosition += 8;
+                
+                doc.setFontSize(10);
+                doc.setTextColor(0, 0, 0);
+                
+                for (let i = section.start; i <= section.end; i++) {
+                    if (yPosition > 270) {
+                        doc.addPage();
+                        yPosition = 20;
+                    }
+                    
+                    const answer = answers[i] || '(No answer)';
+                    doc.text(`${i}.`, 25, yPosition);
+                    
+                    const lines = doc.splitTextToSize(answer, 150);
+                    doc.text(lines, 35, yPosition);
+                    yPosition += lines.length * 7;
+                }
+                
+                yPosition += 5;
+            });
+            
+            const pageCount = doc.internal.getNumberOfPages();
+            for (let i = 1; i <= pageCount; i++) {
+                doc.setPage(i);
+                doc.setFontSize(8);
+                doc.setTextColor(150, 150, 150);
+                doc.text(`Owner: JONY | EDUNEST © ${new Date().getFullYear()}`, 105, 285, { align: 'center' });
+            }
+            
+            doc.save(`${studentName}_Reading_Day47_Answers.pdf`);
+        }
+
+        // Prevent shortcuts during test
+        document.addEventListener('keydown', function(e) {
+            if (testActive) {
+                if (e.key === 'F11' || (e.altKey && e.key === 'Tab') || 
+                    (e.ctrlKey && (e.key === 'w' || e.key === 'W'))) {
+                    e.preventDefault();
+                }
+            }
+        });
+
+        // Smooth scroll to section
+        function scrollToSection(sectionId) {
+            const section = document.getElementById(sectionId);
+            if (section) {
+                section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        }
+    </script>
+</body>
+</html>
