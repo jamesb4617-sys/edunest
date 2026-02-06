@@ -1,0 +1,1582 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EDUNEST Reading Challenge - Day 48</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Welcome Screen */
+        #welcomeScreen {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .welcome-container {
+            background: white;
+            padding: 50px 40px;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            max-width: 500px;
+            width: 100%;
+            text-align: center;
+            border: 3px solid #dc2626;
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .logo-container {
+            margin-bottom: 30px;
+        }
+
+        .logo {
+            max-width: 200px;
+            height: auto;
+            margin-bottom: 20px;
+        }
+
+        .welcome-title {
+            font-size: 28px;
+            font-weight: bold;
+            color: #1f2937;
+            margin-bottom: 10px;
+        }
+
+        .welcome-subtitle {
+            font-size: 16px;
+            color: #6b7280;
+            margin-bottom: 30px;
+        }
+
+        .creator-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-size: 14px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 10px rgba(102, 126, 234, 0.3);
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .input-label {
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 8px;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 14px;
+            border: 2px solid #dc2626;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: all 0.3s;
+            background: #f9fafb;
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-color: #667eea;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .start-btn {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 10px;
+        }
+
+        .start-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(220, 38, 38, 0.3);
+        }
+
+        .start-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .error-message {
+            color: #dc2626;
+            font-size: 14px;
+            margin-top: 10px;
+            display: none;
+        }
+
+        /* Test Container */
+        #testContainer {
+            display: none;
+            height: 100vh;
+            background: white;
+        }
+
+        .test-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-bottom: 4px solid #dc2626;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        .test-header h1 {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .header-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 10px;
+        }
+
+        .student-info {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .timer-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .timer-display {
+            font-size: 28px;
+            font-weight: bold;
+            padding: 10px 25px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            min-width: 150px;
+            text-align: center;
+            font-family: 'Courier New', monospace;
+        }
+
+        .timer-display.warning {
+            background: rgba(255, 165, 0, 0.3);
+            border-color: #ffa500;
+            animation: pulse 1s infinite;
+        }
+
+        .timer-display.critical {
+            background: rgba(220, 38, 38, 0.3);
+            border-color: #dc2626;
+            animation: pulse 0.5s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        .progress-tracker {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 10px 20px;
+            border-radius: 10px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .progress-text {
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .progress-circle {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: conic-gradient(#10b981 0deg, rgba(255,255,255,0.3) 0deg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: bold;
+            position: relative;
+        }
+
+        .progress-circle::before {
+            content: '';
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .progress-number {
+            position: relative;
+            z-index: 1;
+        }
+
+        .test-content {
+            display: flex;
+            height: calc(100vh - 140px);
+            overflow: hidden;
+        }
+
+        .passage-panel {
+            flex: 1;
+            padding: 30px;
+            overflow-y: auto;
+            border-right: 3px solid #dc2626;
+            background: linear-gradient(to bottom, #f9fafb 0%, #ffffff 100%);
+        }
+
+        .questions-panel {
+            flex: 1;
+            padding: 30px;
+            overflow-y: auto;
+            background: white;
+        }
+
+        .passage-title {
+            font-size: 28px;
+            font-weight: bold;
+            color: #1f2937;
+            margin-bottom: 30px;
+            text-align: center;
+            padding-bottom: 15px;
+            border-bottom: 3px solid #dc2626;
+        }
+
+        .paragraph {
+            margin-bottom: 25px;
+            line-height: 1.8;
+            color: #374151;
+        }
+
+        .paragraph-title {
+            font-size: 20px;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 12px;
+            padding: 8px 15px;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+            border-left: 4px solid #dc2626;
+            border-radius: 5px;
+        }
+
+        .question-section {
+            margin-bottom: 40px;
+        }
+
+        .section-title {
+            font-size: 20px;
+            font-weight: bold;
+            color: white;
+            background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%);
+            padding: 15px 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 10px rgba(220, 38, 38, 0.2);
+        }
+
+        .question {
+            background: #f9fafb;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-radius: 10px;
+            border: 2px solid #e5e7eb;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .question:hover {
+            border-color: #667eea;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.1);
+        }
+
+        .question.answered {
+            border-color: #10b981;
+            background: linear-gradient(to right, rgba(16, 185, 129, 0.05), #f9fafb);
+        }
+
+        .question.answered::after {
+            content: '✓';
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            width: 30px;
+            height: 30px;
+            background: #10b981;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            font-weight: bold;
+            animation: checkmark 0.3s ease-in;
+        }
+
+        @keyframes checkmark {
+            0% { transform: scale(0); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+
+        .question-text {
+            font-size: 16px;
+            color: #1f2937;
+            margin-bottom: 15px;
+            font-weight: 500;
+        }
+
+        .question-number {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 15px;
+            font-size: 14px;
+            font-weight: 600;
+            margin-right: 10px;
+        }
+
+        .options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .option {
+            flex: 1;
+            min-width: 120px;
+            padding: 12px 20px;
+            border: 2px solid #dc2626;
+            border-radius: 8px;
+            background: white;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+            font-weight: 500;
+            color: #374151;
+        }
+
+        .option:hover {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+            border-color: #667eea;
+        }
+
+        .option.selected {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-color: #667eea;
+            box-shadow: 0 4px 10px rgba(102, 126, 234, 0.3);
+        }
+
+        .gap-input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #dc2626;
+            border-radius: 8px;
+            font-size: 16px;
+            margin-top: 10px;
+            transition: all 0.3s;
+        }
+
+        .gap-input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .submit-container {
+            text-align: center;
+            padding: 30px;
+            background: linear-gradient(to top, #f9fafb 0%, #ffffff 100%);
+            border-top: 3px solid #dc2626;
+        }
+
+        .submit-btn {
+            padding: 16px 60px;
+            background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 8px 20px rgba(220, 38, 38, 0.3);
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 30px rgba(220, 38, 38, 0.4);
+        }
+
+        /* Proctoring System */
+        #proctoringModal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 10000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .proctoring-content {
+            background: white;
+            padding: 50px 40px;
+            border-radius: 20px;
+            text-align: center;
+            max-width: 500px;
+            width: 90%;
+            border: 4px solid #dc2626;
+            box-shadow: 0 20px 60px rgba(220, 38, 38, 0.5);
+        }
+
+        .warning-icon {
+            font-size: 60px;
+            color: #dc2626;
+            margin-bottom: 20px;
+        }
+
+        .proctoring-title {
+            font-size: 24px;
+            font-weight: bold;
+            color: #1f2937;
+            margin-bottom: 15px;
+        }
+
+        .proctoring-message {
+            font-size: 16px;
+            color: #6b7280;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+
+        /* Results Modal */
+        #resultsModal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 9999;
+            align-items: center;
+            justify-content: center;
+            overflow-y: auto;
+        }
+
+        .results-content {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            max-width: 800px;
+            width: 90%;
+            margin: 20px;
+            border: 3px solid #dc2626;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .results-header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 3px solid #dc2626;
+        }
+
+        .results-title {
+            font-size: 28px;
+            font-weight: bold;
+            color: #1f2937;
+            margin-bottom: 10px;
+        }
+
+        .answer-sheet {
+            background: #f9fafb;
+            padding: 30px;
+            border-radius: 10px;
+            border: 2px solid #e5e7eb;
+            margin-bottom: 20px;
+        }
+
+        .answer-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .answer-row:last-child {
+            border-bottom: none;
+        }
+
+        .answer-label {
+            font-weight: 600;
+            color: #374151;
+        }
+
+        .answer-value {
+            color: #667eea;
+            font-weight: 500;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .action-btn {
+            padding: 14px 30px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .copy-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .download-btn {
+            background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%);
+            color: white;
+        }
+
+        .action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+        }
+
+        .copy-notification {
+            display: none;
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #10b981;
+            color: white;
+            padding: 15px 25px;
+            border-radius: 10px;
+            box-shadow: 0 8px 20px rgba(16, 185, 129, 0.3);
+            z-index: 10001;
+            animation: slideIn 0.3s ease-in;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(400px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .test-content {
+                flex-direction: column;
+            }
+
+            .passage-panel,
+            .questions-panel {
+                flex: none;
+                height: auto;
+                border-right: none;
+                border-bottom: 3px solid #dc2626;
+            }
+
+            .welcome-container {
+                padding: 30px 25px;
+            }
+
+            .welcome-title {
+                font-size: 24px;
+            }
+
+            .passage-title {
+                font-size: 24px;
+            }
+
+            .section-title {
+                font-size: 18px;
+            }
+
+            .options {
+                flex-direction: column;
+            }
+
+            .option {
+                min-width: 100%;
+            }
+
+            .button-group {
+                flex-direction: column;
+            }
+
+            .action-btn {
+                width: 100%;
+            }
+
+            .header-info {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .timer-container {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .timer-display {
+                width: 100%;
+                font-size: 24px;
+            }
+
+            .progress-tracker {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+
+        /* Scrollbar Styling */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 5px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+        }
+
+        /* Time's Up Modal */
+        #timesUpModal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 10001;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .timesup-content {
+            background: white;
+            padding: 50px 40px;
+            border-radius: 20px;
+            text-align: center;
+            max-width: 500px;
+            width: 90%;
+            border: 4px solid #dc2626;
+            box-shadow: 0 20px 60px rgba(220, 38, 38, 0.5);
+            animation: shake 0.5s ease-in-out;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+
+        .timesup-icon {
+            font-size: 80px;
+            margin-bottom: 20px;
+        }
+
+        .timesup-title {
+            font-size: 32px;
+            font-weight: bold;
+            color: #dc2626;
+            margin-bottom: 15px;
+        }
+
+        .timesup-message {
+            font-size: 18px;
+            color: #6b7280;
+            margin-bottom: 30px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Welcome Screen -->
+    <div id="welcomeScreen">
+        <div class="welcome-container">
+            <div class="logo-container">
+                <img src="https://image2url.com/r2/default/images/1769700366134-01db5cda-e300-4af6-8039-9c7cad80199a.png" alt="EDUNEST Logo" class="logo">
+            </div>
+            <h1 class="welcome-title">Reading Challenge - Day 48</h1>
+            <p class="welcome-subtitle">Intermediate Level Assessment</p>
+            <div class="creator-badge">
+                Created by JONY
+            </div>
+            
+            <div class="input-group">
+                <label class="input-label">Student Name</label>
+                <input type="text" id="studentName" class="input-field" placeholder="Enter your full name">
+            </div>
+            
+            <div class="input-group">
+                <label class="input-label">Access Password</label>
+                <input type="password" id="password" class="input-field" placeholder="Enter password">
+            </div>
+            
+            <div class="error-message" id="errorMessage">Incorrect password. Please try again.</div>
+            
+            <button class="start-btn" id="startBtn" disabled>Start Test</button>
+        </div>
+    </div>
+
+    <!-- Test Container -->
+    <div id="testContainer">
+        <div class="test-header">
+            <h1>EDUNEST Reading Challenge - Day 48</h1>
+            <div class="header-info">
+                <div class="student-info">Student: <span id="displayStudentName"></span></div>
+                <div class="timer-container">
+                    <div class="progress-tracker">
+                        <span class="progress-text">Progress:</span>
+                        <div class="progress-circle" id="progressCircle">
+                            <span class="progress-number" id="progressNumber">0/30</span>
+                        </div>
+                    </div>
+                    <div class="timer-display" id="timerDisplay">25:00</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="test-content">
+            <!-- Passage Panel -->
+            <div class="passage-panel">
+                <h2 class="passage-title">Charlie Chaplin – Reading Text</h2>
+                
+                <div class="paragraph">
+                    <div class="paragraph-title">Paragraph A</div>
+                    <p>He was believed to have been born on April 16, 1889. There is some doubt whether April 16 is actually his birthday, and it is possible he was not born in 1889. There is also uncertainty about his birthplace: London or Fontainebleau, France. There is no doubt, however, as to his parentage: he was born to Charles Chaplin, Sr. and Hannah Harriette Hill (aka Lily Harley on stage), both Music Hall entertainers. His parents separated soon after his birth, leaving him in the care of his increasingly unstable mother.</p>
+                </div>
+                
+                <div class="paragraph">
+                    <div class="paragraph-title">Paragraph B</div>
+                    <p>In 1896, Chaplin's mother was unable to find work; Charlie and his older half-brother Sydney Chaplin had to be left in the workhouse at Lambeth, moving after several weeks to Hanwell School for Orphans and Destitute Children. His father died an alcoholic when Charlie was 12, and his mother suffered a mental breakdown, and was eventually admitted temporarily to the Cane Hill Asylum at Coulsdon (near Croydon). She died in 1928 in the United States, two years after coming to the States to live with Chaplin, by then a commercial success.</p>
+                </div>
+                
+                <div class="paragraph">
+                    <div class="paragraph-title">Paragraph C</div>
+                    <p>Charlie first took to the stage when, aged five, he performed in Music Hall in 1894, standing in for his mother. As a child, he was confined to a bed for weeks due to a serious illness, and, at night, his mother would sit at the window and act out what was going on outside. In 1900, aged 11, his brother helped get him the role of a comic cat in the pantomime Cinderella at the London Hippodrome. In 1903 he appeared in Jim, A Romance of Cockayne, followed by his first regular job, as the newspaper boy Billy in Sherlock Holmes, a part he played into 1906. This was followed by Casey's Court Circus variety show, and, the following year, he became a clown in Fred Karno's Fun Factory slapstick comedy company.</p>
+                </div>
+                
+                <div class="paragraph">
+                    <div class="paragraph-title">Paragraph D</div>
+                    <p>According to immigration records, he arrived in the United States with the Karno troupe on October 2, 1912. In the Karno Company was Arthur Stanley Jefferson, who would later become known as Stan Laurel. Chaplin and Laurel shared a room in a boarding house. Stan Laurel returned to England but Chaplin remained in the United States. Chaplin's act was seen by film producer Mack Sennett, who hired him for his studio, the Keystone Film Company.</p>
+                </div>
+            </div>
+            
+            <!-- Questions Panel -->
+            <div class="questions-panel">
+                <!-- Questions 1-8: TRUE/FALSE/NOT GIVEN -->
+                <div class="question-section">
+                    <div class="section-title">Questions 1-8: TRUE / FALSE / NOT GIVEN</div>
+                    
+                    <div class="question">
+                        <div class="question-text">
+                            <span class="question-number">1</span>
+                            It is proved that Charlie Chaplin was born in 1889.
+                        </div>
+                        <div class="options">
+                            <div class="option" data-question="1" data-value="TRUE">TRUE</div>
+                            <div class="option" data-question="1" data-value="FALSE">FALSE</div>
+                            <div class="option" data-question="1" data-value="NOT GIVEN">NOT GIVEN</div>
+                        </div>
+                    </div>
+                    
+                    <div class="question">
+                        <div class="question-text">
+                            <span class="question-number">2</span>
+                            It is not proved that Chaplin was born in London.
+                        </div>
+                        <div class="options">
+                            <div class="option" data-question="2" data-value="TRUE">TRUE</div>
+                            <div class="option" data-question="2" data-value="FALSE">FALSE</div>
+                            <div class="option" data-question="2" data-value="NOT GIVEN">NOT GIVEN</div>
+                        </div>
+                    </div>
+                    
+                    <div class="question">
+                        <div class="question-text">
+                            <span class="question-number">3</span>
+                            Chaplin's parents drifted apart after his birth.
+                        </div>
+                        <div class="options">
+                            <div class="option" data-question="3" data-value="TRUE">TRUE</div>
+                            <div class="option" data-question="3" data-value="FALSE">FALSE</div>
+                            <div class="option" data-question="3" data-value="NOT GIVEN">NOT GIVEN</div>
+                        </div>
+                    </div>
+                    
+                    <div class="question">
+                        <div class="question-text">
+                            <span class="question-number">4</span>
+                            Chaplin's father died at war.
+                        </div>
+                        <div class="options">
+                            <div class="option" data-question="4" data-value="TRUE">TRUE</div>
+                            <div class="option" data-question="4" data-value="FALSE">FALSE</div>
+                            <div class="option" data-question="4" data-value="NOT GIVEN">NOT GIVEN</div>
+                        </div>
+                    </div>
+                    
+                    <div class="question">
+                        <div class="question-text">
+                            <span class="question-number">5</span>
+                            Chaplin got success in the United States.
+                        </div>
+                        <div class="options">
+                            <div class="option" data-question="5" data-value="TRUE">TRUE</div>
+                            <div class="option" data-question="5" data-value="FALSE">FALSE</div>
+                            <div class="option" data-question="5" data-value="NOT GIVEN">NOT GIVEN</div>
+                        </div>
+                    </div>
+                    
+                    <div class="question">
+                        <div class="question-text">
+                            <span class="question-number">6</span>
+                            Being a child, Chaplin suffered from serious illness.
+                        </div>
+                        <div class="options">
+                            <div class="option" data-question="6" data-value="TRUE">TRUE</div>
+                            <div class="option" data-question="6" data-value="FALSE">FALSE</div>
+                            <div class="option" data-question="6" data-value="NOT GIVEN">NOT GIVEN</div>
+                        </div>
+                    </div>
+                    
+                    <div class="question">
+                        <div class="question-text">
+                            <span class="question-number">7</span>
+                            Charlie Chaplin never wanted to be an actor.
+                        </div>
+                        <div class="options">
+                            <div class="option" data-question="7" data-value="TRUE">TRUE</div>
+                            <div class="option" data-question="7" data-value="FALSE">FALSE</div>
+                            <div class="option" data-question="7" data-value="NOT GIVEN">NOT GIVEN</div>
+                        </div>
+                    </div>
+                    
+                    <div class="question">
+                        <div class="question-text">
+                            <span class="question-number">8</span>
+                            Chaplin returned to England with Stan Laurel.
+                        </div>
+                        <div class="options">
+                            <div class="option" data-question="8" data-value="TRUE">TRUE</div>
+                            <div class="option" data-question="8" data-value="FALSE">FALSE</div>
+                            <div class="option" data-question="8" data-value="NOT GIVEN">NOT GIVEN</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Questions 9-18: Multiple Choice A/B/C -->
+                <div class="question-section">
+                    <div class="section-title">Questions 9-18: Choose A, B or C</div>
+                    
+                    <div class="question">
+                        <div class="question-text">
+                            <span class="question-number">9</span>
+                            Why is there doubt about Chaplin's birth date?
+                        </div>
+                        <div class="options">
+                            <div class="option" data-question="9" data-value="A">A) The records were lost</div>
+                            <div class="option" data-question="9" data-value="B">B) Different information exists</div>
+                            <div class="option" data-question="9" data-value="C">C) His parents disagreed</div>
+                        </div>
+                    </div>
+                    
+                    <div class="question">
+                        <div class="question-text">
+                            <span class="question-number">10</span>
+                            What is certain about Charlie Chaplin's parents?
+                        </div>
+                        <div class="options">
+                            <div class="option" data-question="10" data-value="A">A) They were rich</div>
+                            <div class="option" data-question="10" data-value="B">B) They worked in Music Hall</div>
+                            <div class="option" data-question="10" data-value="C">C) They lived in France</div>
+                        </div>
+                    </div>
+                    
+                    <div class="question">
+                        <div class="question-text">
+                            <span class="question-number">11</span>
+                            After his parents separated, Charlie lived with his:
+                        </div>
+                        <div class="options">
+                            <div class="option" data-question="11" data-value="A">A) Father</div>
+                            <div class="option" data-question="11" data-value="B">B) Brother</div>
+                            <div class="option" data-question="11" data-value="C">C) Mother</div>
+                        </div>
+                    </div>
+                    
+                    <div class="question">
+                        <div class="question-text">
+                            <span class="question-number">12</span>
+                            Why were Charlie and his brother sent to a workhouse?
+                        </div>
+                        <div class="options">
+                            <div class="option" data-question="12" data-value="A">A) Their mother was ill</div>
+                            <div class="option" data-question="12" data-value="B">B) Their mother had no job</div>
+                            <div class="option" data-question="12" data-value="C">C) Their father left them</div>
+                        </div>
+                    </div>
+                    
+                    <div class="question">
+                        <div class="question-text">
+                            <span class="question-number">13</span>
+                            What happened to Chaplin's father?
+                        </div>
+                        <div class="options">
+                            <div class="option" data-question="13" data-value="A">A) He moved abroad</div>
+                            <div class="option" data-question="13" data-value="B">B) He became famous</div>
+                            <div class="option" data-question="13" data-value="C">C) He died young</div>
+                        </div>
+                    </div>
+                    
+                    <div class="question">
+                        <div class="question-text">
+                            <span class="question-number">14</span>
+                            How old was Charlie when he first performed on stage?
+                        </div>
+                        <div class="options">
+                            <div class="option" data-question="14" data-value="A">A) Five</div>
+                            <div class="option" data-question="14" data-value="B">B) Eleven</div>
+                            <div class="option" data-question="14" data-value="C">C) Twelve</div>
+                        </div>
+                    </div>
+                    
+                    <div class="question">
+                        <div class="question-text">
+                            <span class="question-number">15</span>
+                            Who helped Charlie get a role in Cinderella?
+                        </div>
+                        <div class="options">
+                            <div class="option" data-question="15" data-value="A">A) His mother</div>
+                            <div class="option" data-question="15" data-value="B">B) His teacher</div>
+                            <div class="option" data-question="15" data-value="C">C) His brother</div>
+                        </div>
+                    </div>
+                    
+                    <div class="question">
+                        <div class="question-text">
+                            <span class="question-number">16</span>
+                            What kind of job did Charlie have in Sherlock Holmes?
+                        </div>
+                        <div class="options">
+                            <div class="option" data-question="16" data-value="A">A) A clown</div>
+                            <div class="option" data-question="16" data-value="B">B) A newspaper boy</div>
+                            <div class="option" data-question="16" data-value="C">C) A singer</div>
+                        </div>
+                    </div>
+                    
+                    <div class="question">
+                        <div class="question-text">
+                            <span class="question-number">17</span>
+                            When did Chaplin arrive in the United States?
+                        </div>
+                        <div class="options">
+                            <div class="option" data-question="17" data-value="A">A) 1903</div>
+                            <div class="option" data-question="17" data-value="B">B) 1906</div>
+                            <div class="option" data-question="17" data-value="C">C) 1912</div>
+                        </div>
+                    </div>
+                    
+                    <div class="question">
+                        <div class="question-text">
+                            <span class="question-number">18</span>
+                            Who gave Chaplin his first job in an American film studio?
+                        </div>
+                        <div class="options">
+                            <div class="option" data-question="18" data-value="A">A) Stan Laurel</div>
+                            <div class="option" data-question="18" data-value="B">B) Fred Karno</div>
+                            <div class="option" data-question="18" data-value="C">C) Mack Sennett</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Questions 19-24: Paragraph Matching -->
+                <div class="question-section">
+                    <div class="section-title">Questions 19-24: Choose A, B, C or D</div>
+                    
+                    <div class="question">
+                        <div class="question-text">
+                            <span class="question-number">19</span>
+                            Which paragraph talks about uncertainty about Chaplin's birth?
+                        </div>
+                        <div class="options">
+                            <div class="option" data-question="19" data-value="A">PARAGRAPH A</div>
+                            <div class="option" data-question="19" data-value="B">PARAGRAPH B</div>
+                            <div class="option" data-question="19" data-value="C">PARAGRAPH C</div>
+                            <div class="option" data-question="19" data-value="D">PARAGRAPH D</div>
+                        </div>
+                    </div>
+                    
+                    <div class="question">
+                        <div class="question-text">
+                            <span class="question-number">20</span>
+                            Which paragraph describes his difficult childhood and family problems?
+                        </div>
+                        <div class="options">
+                            <div class="option" data-question="20" data-value="A">PARAGRAPH A</div>
+                            <div class="option" data-question="20" data-value="B">PARAGRAPH B</div>
+                            <div class="option" data-question="20" data-value="C">PARAGRAPH C</div>
+                            <div class="option" data-question="20" data-value="D">PARAGRAPH D</div>
+                        </div>
+                    </div>
+                    
+                    <div class="question">
+                        <div class="question-text">
+                            <span class="question-number">21</span>
+                            Which paragraph explains how Chaplin started performing as a child?
+                        </div>
+                        <div class="options">
+                            <div class="option" data-question="21" data-value="A">PARAGRAPH A</div>
+                            <div class="option" data-question="21" data-value="B">PARAGRAPH B</div>
+                            <div class="option" data-question="21" data-value="C">PARAGRAPH C</div>
+                            <div class="option" data-question="21" data-value="D">PARAGRAPH D</div>
+                        </div>
+                    </div>
+                    
+                    <div class="question">
+                        <div class="question-text">
+                            <span class="question-number">22</span>
+                            Which paragraph mentions Chaplin's illness as a child?
+                        </div>
+                        <div class="options">
+                            <div class="option" data-question="22" data-value="A">PARAGRAPH A</div>
+                            <div class="option" data-question="22" data-value="B">PARAGRAPH B</div>
+                            <div class="option" data-question="22" data-value="C">PARAGRAPH C</div>
+                            <div class="option" data-question="22" data-value="D">PARAGRAPH D</div>
+                        </div>
+                    </div>
+                    
+                    <div class="question">
+                        <div class="question-text">
+                            <span class="question-number">23</span>
+                            Which paragraph describes his journey to the United States?
+                        </div>
+                        <div class="options">
+                            <div class="option" data-question="23" data-value="A">PARAGRAPH A</div>
+                            <div class="option" data-question="23" data-value="B">PARAGRAPH B</div>
+                            <div class="option" data-question="23" data-value="C">PARAGRAPH C</div>
+                            <div class="option" data-question="23" data-value="D">PARAGRAPH D</div>
+                        </div>
+                    </div>
+                    
+                    <div class="question">
+                        <div class="question-text">
+                            <span class="question-number">24</span>
+                            Which paragraph mentions Stan Laurel?
+                        </div>
+                        <div class="options">
+                            <div class="option" data-question="24" data-value="A">PARAGRAPH A</div>
+                            <div class="option" data-question="24" data-value="B">PARAGRAPH B</div>
+                            <div class="option" data-question="24" data-value="C">PARAGRAPH C</div>
+                            <div class="option" data-question="24" data-value="D">PARAGRAPH D</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Questions 25-30: Gap Filling -->
+                <div class="question-section">
+                    <div class="section-title">Questions 25-30: Gap Filling (No more than TWO words)</div>
+                    
+                    <div class="question">
+                        <div class="question-text">
+                            <span class="question-number">25</span>
+                            Chaplin's parents were both ________________ entertainers.
+                        </div>
+                        <input type="text" class="gap-input" data-question="25" maxlength="30" placeholder="Type your answer (no more than 2 words)">
+                    </div>
+                    
+                    <div class="question">
+                        <div class="question-text">
+                            <span class="question-number">26</span>
+                            Charlie and his brother were sent to a ________________ in Lambeth.
+                        </div>
+                        <input type="text" class="gap-input" data-question="26" maxlength="30" placeholder="Type your answer (no more than 2 words)">
+                    </div>
+                    
+                    <div class="question">
+                        <div class="question-text">
+                            <span class="question-number">27</span>
+                            Chaplin arrived in the USA on ________________.
+                        </div>
+                        <input type="text" class="gap-input" data-question="27" maxlength="30" placeholder="Type your answer (no more than 2 words)">
+                    </div>
+                    
+                    <div class="question">
+                        <div class="question-text">
+                            <span class="question-number">28</span>
+                            Mack Sennett worked for the ________________ Company.
+                        </div>
+                        <input type="text" class="gap-input" data-question="28" maxlength="30" placeholder="Type your answer (no more than 2 words)">
+                    </div>
+                    
+                    <div class="question">
+                        <div class="question-text">
+                            <span class="question-number">29</span>
+                            Charlie first performed on stage when he was ________________ old.
+                        </div>
+                        <input type="text" class="gap-input" data-question="29" maxlength="30" placeholder="Type your answer (no more than 2 words)">
+                    </div>
+                    
+                    <div class="question">
+                        <div class="question-text">
+                            <span class="question-number">30</span>
+                            Chaplin shared a room with ________________ in a boarding house.
+                        </div>
+                        <input type="text" class="gap-input" data-question="30" maxlength="30" placeholder="Type your answer (no more than 2 words)">
+                    </div>
+                </div>
+                
+                <div class="submit-container">
+                    <button class="submit-btn" id="submitBtn">Submit Test</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Proctoring Modal -->
+    <div id="proctoringModal">
+        <div class="proctoring-content">
+            <div class="warning-icon">⚠️</div>
+            <div class="proctoring-title">Security Alert</div>
+            <div class="proctoring-message">
+                You have left the test window. Please enter the reactivation code to continue.
+            </div>
+            <div class="input-group">
+                <input type="password" id="reactivationCode" class="input-field" placeholder="Enter reactivation code">
+            </div>
+            <div class="error-message" id="reactivationError">Incorrect code. Please try again.</div>
+            <button class="start-btn" id="reactivateBtn">Reactivate Test</button>
+        </div>
+    </div>
+
+    <!-- Results Modal -->
+    <div id="resultsModal">
+        <div class="results-content">
+            <div class="results-header">
+                <div class="results-title">Test Submission Complete</div>
+                <div class="student-info">Student: <span id="resultStudentName"></span></div>
+            </div>
+            
+            <div class="answer-sheet" id="answerSheet"></div>
+            
+            <div class="button-group">
+                <button class="action-btn copy-btn" id="copyAnswersBtn">📋 Copy Answers</button>
+                <button class="action-btn download-btn" id="downloadPdfBtn">📄 Download PDF</button>
+            </div>
+            <p style="margin-top: 20px; color: #6b7280; font-size: 14px; text-align: center;">
+                To start a new test, please close and reopen this file.
+            </p>
+        </div>
+    </div>
+
+    <!-- Copy Notification -->
+    <div class="copy-notification" id="copyNotification">
+        ✓ Answers copied to clipboard!
+    </div>
+
+    <!-- Time's Up Modal -->
+    <div id="timesUpModal">
+        <div class="timesup-content">
+            <div class="timesup-icon">⏰</div>
+            <div class="timesup-title">Time's Up!</div>
+            <div class="timesup-message">
+                The test time has expired. Your answers have been automatically submitted.
+            </div>
+            <button class="start-btn" id="viewResultsBtn">View Results</button>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script>
+        // Store answers
+        let answers = {};
+        let studentName = '';
+        let testActive = false;
+        let timerInterval = null;
+        let timeRemaining = 25 * 60; // 25 minutes in seconds
+
+        // Timer Function
+        function startTimer() {
+            updateTimerDisplay();
+            timerInterval = setInterval(() => {
+                timeRemaining--;
+                updateTimerDisplay();
+                
+                if (timeRemaining <= 0) {
+                    clearInterval(timerInterval);
+                    timeUp();
+                }
+            }, 1000);
+        }
+
+        function updateTimerDisplay() {
+            const minutes = Math.floor(timeRemaining / 60);
+            const seconds = timeRemaining % 60;
+            const display = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+            const timerElement = document.getElementById('timerDisplay');
+            timerElement.textContent = display;
+            
+            // Add visual warnings
+            if (timeRemaining <= 60) {
+                timerElement.classList.add('critical');
+                timerElement.classList.remove('warning');
+            } else if (timeRemaining <= 300) {
+                timerElement.classList.add('warning');
+                timerElement.classList.remove('critical');
+            } else {
+                timerElement.classList.remove('warning', 'critical');
+            }
+        }
+
+        function timeUp() {
+            testActive = false;
+            document.getElementById('timesUpModal').style.display = 'flex';
+        }
+
+        document.getElementById('viewResultsBtn').addEventListener('click', function() {
+            document.getElementById('timesUpModal').style.display = 'none';
+            showResults();
+        });
+
+        // Progress Tracking
+        function updateProgress() {
+            const answered = Object.keys(answers).length;
+            const total = 30;
+            const percentage = (answered / total) * 100;
+            const degrees = (percentage / 100) * 360;
+            
+            document.getElementById('progressNumber').textContent = `${answered}/${total}`;
+            document.getElementById('progressCircle').style.background = 
+                `conic-gradient(#10b981 ${degrees}deg, rgba(255,255,255,0.3) ${degrees}deg)`;
+        }
+
+        // Visual Feedback for Questions
+        function markQuestionAsAnswered(questionNumber) {
+            const questionElements = document.querySelectorAll('.question');
+            questionElements.forEach((element, index) => {
+                const currentQuestionNum = index + 1;
+                if (currentQuestionNum == questionNumber) {
+                    element.classList.add('answered');
+                }
+            });
+        }
+
+        // Welcome Screen Logic
+        const studentNameInput = document.getElementById('studentName');
+        const passwordInput = document.getElementById('password');
+        const startBtn = document.getElementById('startBtn');
+        const errorMessage = document.getElementById('errorMessage');
+
+        function checkInputs() {
+            if (studentNameInput.value.trim() && passwordInput.value) {
+                startBtn.disabled = false;
+            } else {
+                startBtn.disabled = true;
+            }
+        }
+
+        studentNameInput.addEventListener('input', checkInputs);
+        passwordInput.addEventListener('input', checkInputs);
+
+        startBtn.addEventListener('click', function() {
+            if (passwordInput.value === '0303') {
+                studentName = studentNameInput.value.trim();
+                document.getElementById('displayStudentName').textContent = studentName;
+                document.getElementById('welcomeScreen').style.display = 'none';
+                document.getElementById('testContainer').style.display = 'block';
+                enterFullscreen();
+                testActive = true;
+                setupProctoring();
+                startTimer(); // Start the 25-minute timer
+            } else {
+                errorMessage.style.display = 'block';
+                passwordInput.value = '';
+                passwordInput.focus();
+            }
+        });
+
+        // Fullscreen
+        function enterFullscreen() {
+            const elem = document.documentElement;
+            if (elem.requestFullscreen) {
+                elem.requestFullscreen();
+            } else if (elem.webkitRequestFullscreen) {
+                elem.webkitRequestFullscreen();
+            } else if (elem.msRequestFullscreen) {
+                elem.msRequestFullscreen();
+            }
+        }
+
+        // Proctoring System
+        function setupProctoring() {
+            // Detect window focus loss
+            window.addEventListener('blur', function() {
+                if (testActive) {
+                    showProctoringModal();
+                }
+            });
+
+            // Detect fullscreen exit
+            document.addEventListener('fullscreenchange', function() {
+                if (!document.fullscreenElement && testActive) {
+                    showProctoringModal();
+                }
+            });
+
+            document.addEventListener('webkitfullscreenchange', function() {
+                if (!document.webkitFullscreenElement && testActive) {
+                    showProctoringModal();
+                }
+            });
+
+            // Detect visibility change (tab switch)
+            document.addEventListener('visibilitychange', function() {
+                if (document.hidden && testActive) {
+                    showProctoringModal();
+                }
+            });
+        }
+
+        function showProctoringModal() {
+            document.getElementById('proctoringModal').style.display = 'flex';
+            document.getElementById('reactivationCode').value = '';
+            document.getElementById('reactivationError').style.display = 'none';
+        }
+
+        document.getElementById('reactivateBtn').addEventListener('click', function() {
+            const code = document.getElementById('reactivationCode').value;
+            if (code === '3332') {
+                document.getElementById('proctoringModal').style.display = 'none';
+                enterFullscreen();
+            } else {
+                document.getElementById('reactivationError').style.display = 'block';
+                document.getElementById('reactivationCode').value = '';
+            }
+        });
+
+        // Question Selection Logic
+        document.querySelectorAll('.option').forEach(option => {
+            option.addEventListener('click', function() {
+                const question = this.getAttribute('data-question');
+                const value = this.getAttribute('data-value');
+                
+                // Deselect other options for this question
+                document.querySelectorAll(`.option[data-question="${question}"]`).forEach(opt => {
+                    opt.classList.remove('selected');
+                });
+                
+                // Select this option
+                this.classList.add('selected');
+                answers[question] = value;
+                
+                // Update visual feedback and progress
+                markQuestionAsAnswered(question);
+                updateProgress();
+            });
+        });
+
+        // Gap filling inputs
+        document.querySelectorAll('.gap-input').forEach(input => {
+            input.addEventListener('input', function() {
+                const question = this.getAttribute('data-question');
+                const value = this.value.trim();
+                
+                if (value) {
+                    answers[question] = value;
+                    markQuestionAsAnswered(question);
+                } else {
+                    delete answers[question];
+                }
+                
+                updateProgress();
+            });
+        });
+
+        // Submit Test
+        document.getElementById('submitBtn').addEventListener('click', function() {
+            testActive = false;
+            if (timerInterval) {
+                clearInterval(timerInterval);
+            }
+            showResults();
+        });
+
+        function showResults() {
+            const answerSheet = document.getElementById('answerSheet');
+            document.getElementById('resultStudentName').textContent = studentName;
+            
+            let html = '';
+            for (let i = 1; i <= 30; i++) {
+                const answer = answers[i] || '(Not answered)';
+                html += `
+                    <div class="answer-row">
+                        <div class="answer-label">Question ${i}:</div>
+                        <div class="answer-value">${answer}</div>
+                    </div>
+                `;
+            }
+            
+            answerSheet.innerHTML = html;
+            document.getElementById('resultsModal').style.display = 'flex';
+        }
+
+        // Copy Answers
+        document.getElementById('copyAnswersBtn').addEventListener('click', function() {
+            let text = `EDUNEST Reading Challenge - Day 48\n`;
+            text += `Student: ${studentName}\n`;
+            text += `Date: ${new Date().toLocaleDateString()}\n\n`;
+            text += `ANSWER SHEET\n`;
+            text += `${'='.repeat(50)}\n\n`;
+            
+            for (let i = 1; i <= 30; i++) {
+                const answer = answers[i] || '(Not answered)';
+                text += `Question ${i}: ${answer}\n`;
+            }
+            
+            // Copy to clipboard with fallback methods
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(text).then(() => {
+                    showCopyNotification();
+                }).catch(() => {
+                    fallbackCopy(text);
+                });
+            } else {
+                fallbackCopy(text);
+            }
+        });
+
+        function fallbackCopy(text) {
+            const textArea = document.createElement('textarea');
+            textArea.value = text;
+            textArea.style.position = 'fixed';
+            textArea.style.left = '-999999px';
+            textArea.style.top = '-999999px';
+            document.body.appendChild(textArea);
+            textArea.focus();
+            textArea.select();
+            
+            try {
+                document.execCommand('copy');
+                showCopyNotification();
+            } catch (err) {
+                alert('Please manually copy the answers from the screen');
+            }
+            
+            document.body.removeChild(textArea);
+        }
+
+        function showCopyNotification() {
+            const notification = document.getElementById('copyNotification');
+            notification.style.display = 'block';
+            setTimeout(() => {
+                notification.style.display = 'none';
+            }, 3000);
+        }
+
+        // Download PDF
+        document.getElementById('downloadPdfBtn').addEventListener('click', function() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            
+            // Header
+            doc.setFontSize(20);
+            doc.setFont(undefined, 'bold');
+            doc.text('EDUNEST Reading Challenge - Day 48', 105, 20, { align: 'center' });
+            
+            doc.setFontSize(12);
+            doc.setFont(undefined, 'normal');
+            doc.text(`Student: ${studentName}`, 20, 35);
+            doc.text(`Date: ${new Date().toLocaleDateString()}`, 20, 42);
+            
+            doc.setLineWidth(0.5);
+            doc.line(20, 48, 190, 48);
+            
+            // Answers
+            doc.setFontSize(14);
+            doc.setFont(undefined, 'bold');
+            doc.text('ANSWER SHEET', 20, 58);
+            
+            doc.setFontSize(11);
+            doc.setFont(undefined, 'normal');
+            
+            let y = 70;
+            for (let i = 1; i <= 30; i++) {
+                const answer = answers[i] || '(Not answered)';
+                doc.text(`Question ${i}: ${answer}`, 20, y);
+                y += 8;
+                
+                // Add new page if needed
+                if (y > 270) {
+                    doc.addPage();
+                    y = 20;
+                }
+            }
+            
+            doc.save(`${studentName}_ReadingTest_Day48.pdf`);
+        });
+    </script>
+</body>
+</html>
