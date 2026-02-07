@@ -618,18 +618,6 @@
 
         /* Mobile Responsive */
         @media (max-width: 768px) {
-            .test-content {
-                flex-direction: column;
-            }
-
-            .passage-panel,
-            .questions-panel {
-                flex: none;
-                height: auto;
-                border-right: none;
-                border-bottom: 3px solid #dc2626;
-            }
-
             .welcome-container {
                 padding: 30px 25px;
             }
@@ -680,6 +668,124 @@
             .progress-tracker {
                 width: 100%;
                 justify-content: center;
+            }
+        }
+
+        /* Mobile Portrait - Vertical Split (Top/Bottom) */
+        @media (max-width: 768px) and (orientation: portrait) {
+            .test-content {
+                flex-direction: column;
+                height: auto;
+            }
+
+            .passage-panel {
+                flex: none;
+                height: auto;
+                min-height: 40vh;
+                border-right: none;
+                border-bottom: 3px solid #dc2626;
+            }
+
+            .questions-panel {
+                flex: none;
+                height: auto;
+                min-height: 60vh;
+            }
+        }
+
+        /* Mobile Landscape - Horizontal Split (Left/Right) */
+        @media (max-width: 1024px) and (orientation: landscape) {
+            .test-content {
+                flex-direction: row;
+            }
+
+            .passage-panel {
+                flex: 1;
+                height: calc(100vh - 140px);
+                border-right: 3px solid #dc2626;
+                border-bottom: none;
+            }
+
+            .questions-panel {
+                flex: 1;
+                height: calc(100vh - 140px);
+            }
+
+            .test-header h1 {
+                font-size: 18px;
+            }
+
+            .timer-container {
+                flex-direction: row;
+                gap: 10px;
+            }
+
+            .timer-display {
+                font-size: 20px;
+                min-width: 100px;
+                padding: 8px 15px;
+            }
+
+            .progress-tracker {
+                padding: 8px 15px;
+            }
+
+            .progress-text {
+                font-size: 12px;
+            }
+
+            .progress-circle {
+                width: 40px;
+                height: 40px;
+            }
+
+            .progress-circle::before {
+                width: 32px;
+                height: 32px;
+            }
+
+            .progress-number {
+                font-size: 12px;
+            }
+        }
+
+        /* Tablet Portrait - Top/Bottom Split */
+        @media (min-width: 769px) and (max-width: 1024px) and (orientation: portrait) {
+            .test-content {
+                flex-direction: column;
+            }
+
+            .passage-panel {
+                flex: none;
+                height: auto;
+                min-height: 45vh;
+                border-right: none;
+                border-bottom: 3px solid #dc2626;
+            }
+
+            .questions-panel {
+                flex: none;
+                height: auto;
+                min-height: 55vh;
+            }
+        }
+
+        /* Desktop and Laptop - Always Left/Right Split */
+        @media (min-width: 1025px) {
+            .test-content {
+                flex-direction: row;
+            }
+
+            .passage-panel {
+                flex: 1;
+                height: calc(100vh - 140px);
+                border-right: 3px solid #dc2626;
+                border-bottom: none;
+            }
+
+            .questions-panel {
+                flex: 1;
+                height: calc(100vh - 140px);
             }
         }
 
