@@ -1,0 +1,1019 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EDUNEST Grammar Test</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #e53e3e 0%, #ffffff 100%);
+            min-height: 100vh;
+        }
+
+        /* Brand Logo */
+        .brand-logo {
+            position: fixed;
+            top: 15px;
+            right: 15px;
+            width: 80px;
+            height: auto;
+            z-index: 100;
+            background: white;
+            padding: 5px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
+
+        .brand-logo img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        /* Owner Name */
+        .owner-name {
+            position: fixed;
+            top: 15px;
+            left: 15px;
+            background: white;
+            padding: 8px 15px;
+            border-radius: 8px;
+            border: 2px solid #e53e3e;
+            font-weight: bold;
+            color: #e53e3e;
+            font-size: 0.9em;
+            z-index: 100;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
+
+        /* Welcome Screen */
+        .welcome-screen {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .welcome-card {
+            background: white;
+            border: 4px solid #e53e3e;
+            border-radius: 20px;
+            padding: 50px;
+            max-width: 550px;
+            width: 100%;
+            box-shadow: 0 15px 50px rgba(229, 62, 62, 0.3);
+            text-align: center;
+        }
+
+        .brand-title {
+            color: #e53e3e;
+            font-size: 3em;
+            font-weight: bold;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .welcome-subtitle {
+            color: #333;
+            font-size: 1.5em;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .test-owner {
+            color: #e53e3e;
+            font-size: 1.1em;
+            margin-bottom: 30px;
+            font-style: italic;
+        }
+
+        .input-group {
+            margin-bottom: 25px;
+            text-align: left;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #e53e3e;
+            font-weight: bold;
+            font-size: 1.05em;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 14px;
+            border: 3px solid #e53e3e;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+
+        .input-group input:focus {
+            outline: none;
+            border-color: #c53030;
+            box-shadow: 0 0 0 4px rgba(229, 62, 62, 0.15);
+        }
+
+        .start-button {
+            background: #e53e3e;
+            color: white;
+            border: none;
+            padding: 18px 50px;
+            font-size: 1.3em;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: bold;
+            text-transform: uppercase;
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .start-button:hover:not(:disabled) {
+            background: #c53030;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(229, 62, 62, 0.4);
+        }
+
+        .start-button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Test Container */
+        .test-container {
+            display: none;
+            max-width: 950px;
+            margin: 0 auto;
+            padding: 100px 20px 40px;
+            background: white;
+            min-height: 100vh;
+        }
+
+        .test-header {
+            background: white;
+            border: 4px solid #e53e3e;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 30px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(229, 62, 62, 0.2);
+        }
+
+        .test-header h1 {
+            color: #e53e3e;
+            font-size: 2.2em;
+            margin-bottom: 15px;
+        }
+
+        .student-info {
+            color: #555;
+            font-size: 1.15em;
+            margin-top: 10px;
+        }
+
+        /* Question Cards */
+        .question-card {
+            background: white;
+            border: 3px solid #e53e3e;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 3px 10px rgba(229, 62, 62, 0.15);
+        }
+
+        .question-number {
+            color: #e53e3e;
+            font-weight: bold;
+            font-size: 1.3em;
+            margin-bottom: 12px;
+        }
+
+        .question-text {
+            color: #333;
+            font-size: 1.1em;
+            margin-bottom: 20px;
+            line-height: 1.7;
+        }
+
+        /* Multiple Choice Options */
+        .options {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .option-card {
+            background: white;
+            border: 3px solid #e53e3e;
+            border-radius: 10px;
+            padding: 18px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+            font-weight: bold;
+            color: #333;
+            min-height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.05em;
+        }
+
+        .option-card:hover {
+            background: #fff5f5;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(229, 62, 62, 0.3);
+        }
+
+        .option-card.selected {
+            background: #e53e3e;
+            color: white;
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(229, 62, 62, 0.5);
+        }
+
+        /* Submit Button */
+        .submit-button {
+            background: #e53e3e;
+            color: white;
+            border: none;
+            padding: 18px 50px;
+            font-size: 1.3em;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: bold;
+            margin: 40px auto;
+            display: block;
+            text-transform: uppercase;
+        }
+
+        .submit-button:hover {
+            background: #c53030;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(229, 62, 62, 0.4);
+        }
+
+        /* Results Container */
+        .results-container {
+            display: none;
+            max-width: 850px;
+            margin: 0 auto;
+            padding: 100px 20px 40px;
+            background: white;
+            min-height: 100vh;
+        }
+
+        .results-header {
+            background: white;
+            border: 4px solid #e53e3e;
+            border-radius: 15px;
+            padding: 35px;
+            text-align: center;
+            margin-bottom: 35px;
+            box-shadow: 0 4px 15px rgba(229, 62, 62, 0.2);
+        }
+
+        .results-header h1 {
+            color: #e53e3e;
+            font-size: 2.8em;
+            margin-bottom: 20px;
+        }
+
+        .results-student {
+            color: #555;
+            font-size: 1.4em;
+        }
+
+        .answer-sheet {
+            background: #f7fafc;
+            border: 3px solid #e53e3e;
+            border-radius: 12px;
+            padding: 35px;
+            margin-bottom: 25px;
+        }
+
+        .answer-sheet h2 {
+            color: #e53e3e;
+            font-size: 1.8em;
+            margin-bottom: 25px;
+            text-align: center;
+        }
+
+        .answer-item {
+            display: flex;
+            padding: 14px;
+            margin-bottom: 10px;
+            background: white;
+            border-radius: 10px;
+            border: 2px solid #e2e8f0;
+        }
+
+        .answer-number {
+            font-weight: bold;
+            color: #e53e3e;
+            min-width: 60px;
+            font-size: 1.05em;
+        }
+
+        .answer-value {
+            color: #333;
+            font-size: 1.05em;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin-top: 35px;
+            flex-wrap: wrap;
+        }
+
+        .action-button {
+            background: #e53e3e;
+            color: white;
+            border: none;
+            padding: 15px 35px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+            font-size: 1.1em;
+        }
+
+        .action-button:hover {
+            background: #c53030;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(229, 62, 62, 0.4);
+        }
+
+        /* Proctoring Overlay */
+        .proctor-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.98);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .proctor-box {
+            background: white;
+            padding: 45px;
+            border-radius: 20px;
+            text-align: center;
+            max-width: 550px;
+            width: 90%;
+            border: 4px solid #e53e3e;
+            box-shadow: 0 10px 40px rgba(229, 62, 62, 0.5);
+        }
+
+        .proctor-box h2 {
+            color: #e53e3e;
+            margin-bottom: 20px;
+            font-size: 2.2em;
+        }
+
+        .proctor-box p {
+            color: #555;
+            margin-bottom: 30px;
+            font-size: 1.15em;
+        }
+
+        .code-input {
+            width: 100%;
+            padding: 14px;
+            border: 3px solid #e53e3e;
+            border-radius: 10px;
+            font-size: 18px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .reactivate-button {
+            background: #e53e3e;
+            color: white;
+            border: none;
+            padding: 14px 35px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 1.1em;
+            transition: all 0.3s;
+        }
+
+        .reactivate-button:hover {
+            background: #c53030;
+            transform: translateY(-2px);
+        }
+
+        .error-message {
+            color: #e53e3e;
+            margin-top: 15px;
+            font-weight: bold;
+            font-size: 1.05em;
+        }
+
+        /* Mobile Responsiveness */
+        @media (max-width: 768px) {
+            .brand-logo {
+                width: 60px;
+                top: 10px;
+                right: 10px;
+            }
+
+            .owner-name {
+                top: 10px;
+                left: 10px;
+                font-size: 0.8em;
+                padding: 6px 12px;
+            }
+
+            .welcome-card {
+                padding: 30px;
+            }
+
+            .brand-title {
+                font-size: 2.2em;
+            }
+
+            .welcome-subtitle {
+                font-size: 1.2em;
+            }
+
+            .test-header h1 {
+                font-size: 1.7em;
+            }
+
+            .question-card {
+                padding: 18px;
+            }
+
+            .options {
+                grid-template-columns: 1fr;
+                gap: 12px;
+            }
+
+            .option-card {
+                padding: 15px;
+                font-size: 1em;
+            }
+
+            .submit-button, .action-button {
+                padding: 14px 30px;
+                font-size: 1.05em;
+            }
+
+            .results-header h1 {
+                font-size: 2.2em;
+            }
+
+            .answer-sheet {
+                padding: 25px;
+            }
+
+            .test-container, .results-container {
+                padding-top: 80px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .welcome-card {
+                padding: 25px;
+            }
+
+            .brand-title {
+                font-size: 1.8em;
+            }
+
+            .test-container, .results-container {
+                padding: 70px 15px 30px;
+            }
+
+            .brand-logo {
+                width: 50px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Brand Logo (hidden on welcome screen, shown during test) -->
+    <div class="brand-logo" id="brandLogo" style="display: none;">
+        <img src="https://image2url.com/r2/default/images/1769700366134-01db5cda-e300-4af6-8039-9c7cad80199a.png" alt="EDUNEST">
+    </div>
+
+    <!-- Owner Name (hidden on welcome screen, shown during test) -->
+    <div class="owner-name" id="ownerName" style="display: none;">
+        Owner: JONY
+    </div>
+
+    <!-- Welcome Screen -->
+    <div class="welcome-screen" id="welcomeScreen">
+        <div class="welcome-card">
+            <div class="brand-title">EDUNEST</div>
+            <div class="welcome-subtitle">Grammar Test</div>
+            <div class="test-owner">Owner: JONY</div>
+            
+            <div class="input-group">
+                <label for="studentName">Student Name</label>
+                <input type="text" id="studentName" placeholder="Enter your full name">
+            </div>
+
+            <div class="input-group">
+                <label for="testPassword">Password</label>
+                <input type="password" id="testPassword" placeholder="Enter password">
+            </div>
+            
+            <button class="start-button" id="startButton" disabled>Start Test</button>
+        </div>
+    </div>
+
+    <!-- Test Container -->
+    <div class="test-container" id="testContainer">
+        <div class="test-header">
+            <h1>EDUNEST Grammar Test</h1>
+            <div class="student-info">Student: <span id="studentNameTest"></span></div>
+        </div>
+
+        <div id="questionsContainer"></div>
+
+        <button class="submit-button" id="submitButton">Submit Test</button>
+    </div>
+
+    <!-- Results Container -->
+    <div class="results-container" id="resultsContainer">
+        <div class="results-header">
+            <h1>Test Complete! ✓</h1>
+            <p class="results-student">Student: <span id="studentNameResults"></span></p>
+        </div>
+
+        <div class="answer-sheet">
+            <h2>Your Answer Sheet</h2>
+            <div id="answerSheet"></div>
+        </div>
+
+        <div class="action-buttons">
+            <button class="action-button" id="copyAnswersButton">Copy Answers</button>
+            <button class="action-button" id="downloadPDFButton">Download PDF</button>
+        </div>
+    </div>
+
+    <!-- Proctor Overlay -->
+    <div class="proctor-overlay" id="proctorOverlay">
+        <div class="proctor-box">
+            <h2>⚠️ Warning</h2>
+            <p>Test interruption detected. Enter the reactivation code to continue.</p>
+            <input type="text" class="code-input" id="reactivationCode" placeholder="Enter code">
+            <button class="reactivate-button" id="reactivateButton">Reactivate Test</button>
+            <div class="error-message" id="errorMessage"></div>
+        </div>
+    </div>
+
+    <script>
+        // Test Data - Exact from DOCX file
+        const questions = [
+            {
+                number: 1,
+                text: "Which of the following is a subject pronoun?",
+                options: ["A) Him", "B) Her", "C) They", "D) Them"]
+            },
+            {
+                number: 2,
+                text: "What is the object pronoun in the sentence: \"She gave the book to ___.\"",
+                options: ["A) I", "B) Me", "C) My", "D) Mine"]
+            },
+            {
+                number: 3,
+                text: "Identify the possessive pronoun in the sentence: \"That car is ___.\"",
+                options: ["A) His", "B) He", "C) Him", "D) He's"]
+            },
+            {
+                number: 4,
+                text: "Which is the correct reflexive pronoun for \"I\"?",
+                options: ["A) Myself", "B) Himself", "C) Herself", "D) Themselves"]
+            },
+            {
+                number: 5,
+                text: "Choose the correct pronoun to complete the sentence: \"___ is going to the store.\"",
+                options: ["A) Me", "B) I", "C) Mine", "D) Myself"]
+            },
+            {
+                number: 6,
+                text: "Which of the following is a possessive adjective?",
+                options: ["A) His", "B) He", "C) Him", "D) They"]
+            },
+            {
+                number: 7,
+                text: "What is the correct pronoun for the sentence: \"Jack and ___ went to the park.\"",
+                options: ["A) Me", "B) Mine", "C) I", "D) Myself"]
+            },
+            {
+                number: 8,
+                text: "Select the correct relative pronoun: \"The book ___ I read was fascinating.\"",
+                options: ["A) Which", "B) That", "C) Who", "D) Whom"]
+            },
+            {
+                number: 9,
+                text: "Identify the correct pronoun in the sentence: \"___ finished the project on time.\"",
+                options: ["A) Her", "B) She", "C) Herself", "D) Hers"]
+            },
+            {
+                number: 10,
+                text: "Which of these is not an indefinite pronoun?",
+                options: ["A) Somebody", "B) Everyone", "C) Nothing", "D) Herself"]
+            },
+            {
+                number: 11,
+                text: "Choose the correct reflexive pronoun: \"They bought ___ new clothes.\"",
+                options: ["A) Their", "B) Themselves", "C) Them", "D) They"]
+            },
+            {
+                number: 12,
+                text: "What is the subject pronoun in the sentence: \"___ are very happy with the results.\"",
+                options: ["A) Us", "B) Them", "C) They", "D) Their"]
+            },
+            {
+                number: 13,
+                text: "Which pronoun completes the sentence correctly: \"Is this pen ___?\"",
+                options: ["A) You", "B) Your", "C) Yours", "D) Yourself"]
+            },
+            {
+                number: 14,
+                text: "Choose the correct pronoun: \"The teacher gave ___ students extra homework.\"",
+                options: ["A) We", "B) Us", "C) Our", "D) Ours"]
+            },
+            {
+                number: 15,
+                text: "Identify the possessive pronoun in the sentence: \"The cat licked ___ paw.\"",
+                options: ["A) It", "B) Its", "C) It's", "D) Their"]
+            },
+            {
+                number: 16,
+                text: "Which is the correct demonstrative pronoun for plural objects?",
+                options: ["A) This", "B) That", "C) These", "D) It"]
+            },
+            {
+                number: 17,
+                text: "Complete the sentence with the correct pronoun: \"___ went to the movies last night.\"",
+                options: ["A) Them", "B) Us", "C) He", "D) His"]
+            },
+            {
+                number: 18,
+                text: "Choose the correct pronoun for the sentence: \"Sarah and ___ are best friends.\"",
+                options: ["A) Herself", "B) Me", "C) Mine", "D) I"]
+            },
+            {
+                number: 19,
+                text: "Select the correct possessive pronoun: \"This bike is ___.\"",
+                options: ["A) My", "B) Mine", "C) I", "D) Me"]
+            },
+            {
+                number: 20,
+                text: "Identify the relative pronoun in the sentence: \"The person ___ called you is my cousin.\"",
+                options: ["A) Who", "B) Which", "C) That", "D) Whose"]
+            },
+            {
+                number: 21,
+                text: "What is the correct pronoun for the sentence: \"It was ___ who made the cake.\"",
+                options: ["A) Her", "B) She", "C) Hers", "D) Herself"]
+            },
+            {
+                number: 22,
+                text: "Which of the following is a subjective pronoun?",
+                options: ["A) Me", "B) Him", "C) They", "D) Their"]
+            },
+            {
+                number: 23,
+                text: "Choose the correct pronoun for the sentence: \"___ is my brother.\"",
+                options: ["A) He", "B) Him", "C) His", "D) He's"]
+            },
+            {
+                number: 24,
+                text: "Select the pronoun that fits the sentence: \"Is this jacket ___?\"",
+                options: ["A) Him", "B) Hers", "C) Your", "D) They"]
+            },
+            {
+                number: 25,
+                text: "Identify the correct pronoun for the sentence: \"___ love to play soccer.\"",
+                options: ["A) We", "B) Us", "C) Our", "D) Ourselves"]
+            },
+            {
+                number: 26,
+                text: "Which pronoun completes the sentence: \"___ will go shopping today.\"",
+                options: ["A) Me", "B) My", "C) Us", "D) I"]
+            },
+            {
+                number: 27,
+                text: "Choose the correct possessive adjective: \"This is ___ book.\"",
+                options: ["A) My", "B) Mine", "C) I", "D) Me"]
+            },
+            {
+                number: 28,
+                text: "Which is the correct pronoun for the sentence: \"___ forgot their keys.\"",
+                options: ["A) Them", "B) They", "C) Their", "D) Theirs"]
+            },
+            {
+                number: 29,
+                text: "Select the correct relative pronoun: \"The car ___ broke down is new.\"",
+                options: ["A) Who", "B) Whom", "C) That", "D) Those"]
+            },
+            {
+                number: 30,
+                text: "Identify the correct pronoun for the sentence: \"Neither of ___ can attend the meeting.\"",
+                options: ["A) Us", "B) Our", "C) We", "D) Them"]
+            }
+        ];
+
+        // Global variables
+        let studentName = '';
+        let answers = {};
+        let testActive = false;
+
+        // DOM elements
+        const welcomeScreen = document.getElementById('welcomeScreen');
+        const testContainer = document.getElementById('testContainer');
+        const resultsContainer = document.getElementById('resultsContainer');
+        const studentNameInput = document.getElementById('studentName');
+        const testPassword = document.getElementById('testPassword');
+        const startButton = document.getElementById('startButton');
+        const submitButton = document.getElementById('submitButton');
+        const questionsContainer = document.getElementById('questionsContainer');
+        const studentNameTest = document.getElementById('studentNameTest');
+        const studentNameResults = document.getElementById('studentNameResults');
+        const answerSheet = document.getElementById('answerSheet');
+        const copyAnswersButton = document.getElementById('copyAnswersButton');
+        const downloadPDFButton = document.getElementById('downloadPDFButton');
+        const proctorOverlay = document.getElementById('proctorOverlay');
+        const reactivationCode = document.getElementById('reactivationCode');
+        const reactivateButton = document.getElementById('reactivateButton');
+        const errorMessage = document.getElementById('errorMessage');
+        const brandLogo = document.getElementById('brandLogo');
+        const ownerName = document.getElementById('ownerName');
+
+        // Enable start button when both name and correct password are entered
+        studentNameInput.addEventListener('input', checkCredentials);
+        testPassword.addEventListener('input', checkCredentials);
+
+        function checkCredentials() {
+            const name = studentNameInput.value.trim();
+            const password = testPassword.value;
+            
+            if (name && password === '2222') {
+                startButton.disabled = false;
+            } else {
+                startButton.disabled = true;
+            }
+        }
+
+        // Start Test
+        startButton.addEventListener('click', () => {
+            const name = studentNameInput.value.trim();
+            const password = testPassword.value;
+            
+            if (name && password === '2222') {
+                studentName = name;
+                welcomeScreen.style.display = 'none';
+                testContainer.style.display = 'block';
+                brandLogo.style.display = 'block';
+                ownerName.style.display = 'block';
+                studentNameTest.textContent = name;
+                renderQuestions();
+                testActive = true;
+                enterFullscreen();
+                setupProctoring();
+            } else if (!name) {
+                alert('Please enter your name');
+            } else {
+                alert('Incorrect password');
+            }
+        });
+
+        // Render Questions
+        function renderQuestions() {
+            questionsContainer.innerHTML = '';
+            questions.forEach(q => {
+                const questionCard = document.createElement('div');
+                questionCard.className = 'question-card';
+                
+                const questionNumber = document.createElement('div');
+                questionNumber.className = 'question-number';
+                questionNumber.textContent = `${q.number}.`;
+                
+                const questionText = document.createElement('div');
+                questionText.className = 'question-text';
+                questionText.textContent = q.text;
+                
+                const optionsDiv = document.createElement('div');
+                optionsDiv.className = 'options';
+                
+                q.options.forEach(option => {
+                    const optionCard = document.createElement('div');
+                    optionCard.className = 'option-card';
+                    optionCard.dataset.question = q.number;
+                    optionCard.dataset.answer = option;
+                    optionCard.textContent = option;
+                    
+                    optionCard.addEventListener('click', () => selectAnswer(q.number, option, optionCard));
+                    
+                    optionsDiv.appendChild(optionCard);
+                });
+                
+                questionCard.appendChild(questionNumber);
+                questionCard.appendChild(questionText);
+                questionCard.appendChild(optionsDiv);
+                questionsContainer.appendChild(questionCard);
+            });
+        }
+
+        // Select Answer
+        function selectAnswer(questionNum, answer, element) {
+            const allOptions = document.querySelectorAll(`[data-question="${questionNum}"]`);
+            allOptions.forEach(opt => opt.classList.remove('selected'));
+            element.classList.add('selected');
+            answers[questionNum] = answer;
+        }
+
+        // Submit Test
+        submitButton.addEventListener('click', () => {
+            testActive = false;
+            testContainer.style.display = 'none';
+            resultsContainer.style.display = 'block';
+            studentNameResults.textContent = studentName;
+            displayAnswers();
+            exitFullscreen();
+        });
+
+        // Display Answers
+        function displayAnswers() {
+            answerSheet.innerHTML = '';
+            for (let i = 1; i <= questions.length; i++) {
+                const answerItem = document.createElement('div');
+                answerItem.className = 'answer-item';
+                
+                const answerNumber = document.createElement('span');
+                answerNumber.className = 'answer-number';
+                answerNumber.textContent = `${i}.`;
+                
+                const answerValue = document.createElement('span');
+                answerValue.className = 'answer-value';
+                answerValue.textContent = answers[i] || 'Not answered';
+                
+                answerItem.appendChild(answerNumber);
+                answerItem.appendChild(answerValue);
+                answerSheet.appendChild(answerItem);
+            }
+        }
+
+        // Copy Answers
+        copyAnswersButton.addEventListener('click', () => {
+            let text = `EDUNEST Grammar Test - Answer Sheet\nStudent: ${studentName}\n\n`;
+            for (let i = 1; i <= questions.length; i++) {
+                text += `${i}. ${answers[i] || 'Not answered'}\n`;
+            }
+            
+            navigator.clipboard.writeText(text).then(() => {
+                alert('Answers copied to clipboard!');
+            });
+        });
+
+        // Download PDF
+        downloadPDFButton.addEventListener('click', () => {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            
+            // Title
+            doc.setFontSize(20);
+            doc.setTextColor(229, 62, 62);
+            doc.text('EDUNEST Grammar Test', 105, 20, { align: 'center' });
+            
+            // Student name
+            doc.setFontSize(12);
+            doc.setTextColor(0, 0, 0);
+            doc.text(`Student: ${studentName}`, 20, 35);
+            
+            // Date
+            const date = new Date().toLocaleDateString();
+            doc.text(`Date: ${date}`, 20, 42);
+            
+            // Owner
+            doc.text(`Test Owner: JONY`, 20, 49);
+            
+            // Answers
+            doc.setFontSize(11);
+            let yPos = 60;
+            for (let i = 1; i <= questions.length; i++) {
+                if (yPos > 270) {
+                    doc.addPage();
+                    yPos = 20;
+                }
+                doc.text(`${i}. ${answers[i] || 'Not answered'}`, 20, yPos);
+                yPos += 8;
+            }
+            
+            // Auto-save
+            doc.save(`${studentName}_EDUNEST_Grammar_Test.pdf`);
+        });
+
+        // Fullscreen Functions
+        function enterFullscreen() {
+            const elem = document.documentElement;
+            if (elem.requestFullscreen) {
+                elem.requestFullscreen();
+            } else if (elem.webkitRequestFullscreen) {
+                elem.webkitRequestFullscreen();
+            } else if (elem.msRequestFullscreen) {
+                elem.msRequestFullscreen();
+            }
+        }
+
+        function exitFullscreen() {
+            if (document.exitFullscreen) {
+                document.exitFullscreen();
+            } else if (document.webkitExitFullscreen) {
+                document.webkitExitFullscreen();
+            } else if (document.msExitFullscreen) {
+                document.msExitFullscreen();
+            }
+        }
+
+        // Proctoring System
+        function setupProctoring() {
+            window.addEventListener('blur', handleProctorViolation);
+            document.addEventListener('fullscreenchange', handleFullscreenChange);
+            document.addEventListener('webkitfullscreenchange', handleFullscreenChange);
+            document.addEventListener('msfullscreenchange', handleFullscreenChange);
+            document.addEventListener('visibilitychange', handleVisibilityChange);
+        }
+
+        function handleProctorViolation() {
+            if (testActive) {
+                showProctorOverlay();
+            }
+        }
+
+        function handleFullscreenChange() {
+            if (testActive && !document.fullscreenElement && !document.webkitFullscreenElement && !document.msFullscreenElement) {
+                showProctorOverlay();
+            }
+        }
+
+        function handleVisibilityChange() {
+            if (testActive && document.hidden) {
+                showProctorOverlay();
+            }
+        }
+
+        function showProctorOverlay() {
+            proctorOverlay.style.display = 'flex';
+            reactivationCode.value = '';
+            errorMessage.textContent = '';
+        }
+
+        function hideProctorOverlay() {
+            proctorOverlay.style.display = 'none';
+            enterFullscreen();
+        }
+
+        // Reactivation
+        reactivateButton.addEventListener('click', () => {
+            if (reactivationCode.value === '0429') {
+                hideProctorOverlay();
+            } else {
+                errorMessage.textContent = 'Incorrect code. Please try again.';
+            }
+        });
+
+        reactivationCode.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                reactivateButton.click();
+            }
+        });
+
+        // Prevent right-click during test
+        document.addEventListener('contextmenu', (e) => {
+            if (testActive) {
+                e.preventDefault();
+            }
+        });
+    </script>
+</body>
+</html>
