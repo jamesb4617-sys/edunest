@@ -393,7 +393,7 @@
             box-shadow: 0 4px 10px rgba(102, 126, 234, 0.3);
         }
 
-        /* Part 2 - Split Screen */
+        /* Part 2 - Mobile-Friendly Matching System */
         .split-container {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -406,8 +406,6 @@
             padding: 25px;
             border-radius: 12px;
             border: 2px solid #dc2626;
-            max-height: 600px;
-            overflow-y: auto;
         }
 
         .choices-column {
@@ -415,8 +413,6 @@
             padding: 25px;
             border-radius: 12px;
             border: 2px solid #667eea;
-            max-height: 600px;
-            overflow-y: auto;
         }
 
         .column-title {
@@ -449,11 +445,18 @@
             min-height: 70px;
             transition: all 0.3s;
             position: relative;
+            cursor: pointer;
         }
 
         .person-item:hover {
             box-shadow: 0 4px 12px rgba(220, 38, 38, 0.2);
             transform: translateY(-2px);
+        }
+
+        .person-item.active {
+            border-color: #667eea;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), white);
+            box-shadow: 0 6px 15px rgba(102, 126, 234, 0.3);
         }
 
         .person-item.answered {
@@ -485,29 +488,26 @@
             font-size: 16px;
         }
 
-        .drop-zone {
-            width: 60px;
+        .selected-letter {
+            min-width: 60px;
             height: 60px;
-            border: 3px dashed #dc2626;
+            border: 2px solid #667eea;
             border-radius: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
-            background: #f9fafb;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            font-weight: bold;
+            font-size: 22px;
             transition: all 0.3s;
         }
 
-        .drop-zone.drag-over {
-            background: rgba(102, 126, 234, 0.2);
-            border-color: #667eea;
-            border-style: solid;
-            transform: scale(1.1);
-        }
-
-        .drop-zone.filled {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border-style: solid;
-            border-color: #667eea;
+        .selected-letter.empty {
+            background: #f9fafb;
+            border-style: dashed;
+            color: #9ca3af;
+            font-size: 14px;
         }
 
         .job-item {
@@ -516,7 +516,7 @@
             border-radius: 10px;
             padding: 15px 20px;
             margin-bottom: 12px;
-            cursor: move;
+            cursor: pointer;
             transition: all 0.3s;
             user-select: none;
             font-weight: 500;
@@ -538,9 +538,21 @@
             color: #667eea;
         }
 
-        .job-item.dragging {
-            opacity: 0.5;
-            transform: rotate(5deg);
+        .job-item.selected {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            transform: scale(1.05);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .job-item.selected .job-letter {
+            background: white;
+            color: #667eea;
+        }
+
+        .job-item.used {
+            opacity: 0.4;
+            pointer-events: none;
         }
 
         .job-letter {
@@ -557,10 +569,22 @@
             flex-shrink: 0;
         }
 
-        .dropped-letter {
-            color: white;
-            font-weight: bold;
-            font-size: 22px;
+        .instruction-hint {
+            background: linear-gradient(to right, rgba(102, 126, 234, 0.1), transparent);
+            border-left: 4px solid #667eea;
+            padding: 12px 15px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            font-size: 14px;
+            color: #374151;
+            font-weight: 500;
+        }
+
+        @media (max-width: 768px) {
+            .instruction-hint {
+                font-size: 13px;
+                padding: 10px 12px;
+            }
         }
 
         /* Part 3 - Multiple Choice */
@@ -1092,64 +1116,67 @@
             <div class="section">
                 <div class="section-title">📍 Part 2: Questions 6-10</div>
                 <div class="section-instructions">
-                    <strong>Instructions:</strong> Drag and drop the correct letter (A-H) to match each person with their job.
+                    <strong>Instructions:</strong> Match each person with their job by selecting a person, then tapping/clicking the correct job letter (A-H).
+                </div>
+                <div class="instruction-hint">
+                    💡 <strong>How to match:</strong> Tap a person's name → Tap the correct job letter
                 </div>
 
                 <div class="split-container">
                     <div class="questions-column">
                         <div class="column-title">👥 PEOPLE</div>
                         
-                        <div class="person-item">
+                        <div class="person-item" data-person="6">
                             <span class="person-name"><strong>6.</strong> Bill</span>
-                            <div class="drop-zone" data-person="6"></div>
+                            <div class="selected-letter empty" data-person="6">Tap →</div>
                         </div>
                         
-                        <div class="person-item">
+                        <div class="person-item" data-person="7">
                             <span class="person-name"><strong>7.</strong> David</span>
-                            <div class="drop-zone" data-person="7"></div>
+                            <div class="selected-letter empty" data-person="7">Tap →</div>
                         </div>
                         
-                        <div class="person-item">
+                        <div class="person-item" data-person="8">
                             <span class="person-name"><strong>8.</strong> Paul's mother</span>
-                            <div class="drop-zone" data-person="8"></div>
+                            <div class="selected-letter empty" data-person="8">Tap →</div>
                         </div>
                         
-                        <div class="person-item">
+                        <div class="person-item" data-person="9">
                             <span class="person-name"><strong>9.</strong> Paul's father</span>
-                            <div class="drop-zone" data-person="9"></div>
+                            <div class="selected-letter empty" data-person="9">Tap →</div>
                         </div>
                         
-                        <div class="person-item">
+                        <div class="person-item" data-person="10">
                             <span class="person-name"><strong>10.</strong> Paul</span>
-                            <div class="drop-zone" data-person="10"></div>
+                            <div class="selected-letter empty" data-person="10">Tap →</div>
                         </div>
                     </div>
 
                     <div class="choices-column">
-                        <div class="column-title">💼 JOBS (Drag to match)</div>
+                        <div class="column-title">💼 JOBS (Tap to match)</div>
                         
-                        <div class="job-item" draggable="true" data-letter="A">
+                        <div class="job-item" data-letter="A">
                             <span class="job-letter">A</span> bank clerk
                         </div>
-                        <div class="job-item" draggable="true" data-letter="B">
+                        <div class="job-item" data-letter="B">
                             <span class="job-letter">B</span> doctor
                         </div>
-                        <div class="job-item" draggable="true" data-letter="C">
+                        <div class="job-item" data-letter="C">
                             <span class="job-letter">C</span> farmer
                         </div>
-                        <div class="job-item" draggable="true" data-letter="D">
+                        <div class="job-item" data-letter="D">
                             <span class="job-letter">D</span> shop assistant
                         </div>
-                        <div class="job-item" draggable="true" data-letter="E">
+                        <div class="job-item" data-letter="E">
                             <span class="job-letter">E</span> stopped work
                         </div>
-                        <div class="job-item" draggable="true" data-letter="F">
+                        <div class="job-item" data-letter="F">
                             <span class="job-letter">F</span> student
                         </div>
-                        <div class="job-item" draggable="true" data-letter="G">
+                        <div class="job-item" data-letter="G">
                             <span class="job-letter">G</span> teacher
                         </div>
-                        <div class="job-item" draggable="true" data-letter="H">
+                        <div class="job-item" data-letter="H">
                             <span class="job-letter">H</span> writer
                         </div>
                     </div>
@@ -1482,44 +1509,74 @@
             });
         });
 
-        // Part 2: Drag and Drop
-        let draggedLetter = null;
+        // Part 2: Mobile-Friendly Tap-to-Match System
+        let activePerson = null;
+        let usedLetters = new Set();
 
-        document.querySelectorAll('.job-item').forEach(item => {
-            item.addEventListener('dragstart', function() {
-                draggedLetter = this.getAttribute('data-letter');
-                this.classList.add('dragging');
-            });
-
-            item.addEventListener('dragend', function() {
-                this.classList.remove('dragging');
+        // Click on person to select
+        document.querySelectorAll('.person-item').forEach(item => {
+            item.addEventListener('click', function(e) {
+                // Don't trigger if clicking the letter box
+                if (e.target.classList.contains('selected-letter')) return;
+                
+                // Remove active state from all
+                document.querySelectorAll('.person-item').forEach(p => p.classList.remove('active'));
+                
+                // Set this as active
+                this.classList.add('active');
+                activePerson = this.getAttribute('data-person');
             });
         });
 
-        document.querySelectorAll('.drop-zone').forEach(zone => {
-            zone.addEventListener('dragover', (e) => {
-                e.preventDefault();
-                zone.classList.add('drag-over');
-            });
-
-            zone.addEventListener('dragleave', () => {
-                zone.classList.remove('drag-over');
-            });
-
-            zone.addEventListener('drop', function(e) {
-                e.preventDefault();
-                this.classList.remove('drag-over');
-                
-                if (draggedLetter) {
-                    const person = this.getAttribute('data-person');
-                    this.innerHTML = `<span class="dropped-letter">${draggedLetter}</span>`;
-                    this.classList.add('filled');
-                    answers[person] = draggedLetter;
-                    
-                    // Update visual feedback and progress
-                    markQuestionAsAnswered(parseInt(person));
-                    updateProgress();
+        // Click on job to match with active person
+        document.querySelectorAll('.job-item').forEach(item => {
+            item.addEventListener('click', function() {
+                if (!activePerson) {
+                    // Show hint to select a person first
+                    const hint = document.querySelector('.instruction-hint');
+                    hint.style.background = 'linear-gradient(to right, rgba(220, 38, 38, 0.1), transparent)';
+                    hint.style.borderLeftColor = '#dc2626';
+                    setTimeout(() => {
+                        hint.style.background = 'linear-gradient(to right, rgba(102, 126, 234, 0.1), transparent)';
+                        hint.style.borderLeftColor = '#667eea';
+                    }, 1000);
+                    return;
                 }
+                
+                const letter = this.getAttribute('data-letter');
+                const personItem = document.querySelector(`.person-item[data-person="${activePerson}"]`);
+                const letterBox = document.querySelector(`.selected-letter[data-person="${activePerson}"]`);
+                
+                // Remove old letter from used set if exists
+                const oldLetter = answers[activePerson];
+                if (oldLetter) {
+                    usedLetters.delete(oldLetter);
+                    // Re-enable old job item
+                    document.querySelector(`.job-item[data-letter="${oldLetter}"]`).classList.remove('used');
+                }
+                
+                // Set new answer
+                answers[activePerson] = letter;
+                usedLetters.add(letter);
+                
+                // Update UI
+                letterBox.textContent = letter;
+                letterBox.classList.remove('empty');
+                this.classList.add('used');
+                
+                // Update visual feedback and progress
+                markQuestionAsAnswered(parseInt(activePerson));
+                updateProgress();
+                
+                // Remove active state
+                personItem.classList.remove('active');
+                activePerson = null;
+                
+                // Add animation
+                letterBox.style.transform = 'scale(1.2)';
+                setTimeout(() => {
+                    letterBox.style.transform = 'scale(1)';
+                }, 200);
             });
         });
 
