@@ -1,0 +1,1847 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EDUNEST A2 Listening Test</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #dc2626 0%, #ffffff 100%);
+            min-height: 100vh;
+        }
+
+        /* Welcome Screen */
+        #welcomeScreen {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+            background: linear-gradient(135deg, #dc2626 0%, #ffffff 50%, #dc2626 100%);
+        }
+
+        .welcome-container {
+            background: white;
+            padding: 50px 40px;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(220, 38, 38, 0.4);
+            max-width: 550px;
+            width: 100%;
+            text-align: center;
+            border: 4px solid #dc2626;
+            animation: fadeIn 0.5s ease-in;
+            position: relative;
+        }
+
+        .welcome-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 8px;
+            background: linear-gradient(90deg, #dc2626, #667eea, white, #667eea, #dc2626);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .logo {
+            max-width: 220px;
+            height: auto;
+            margin-bottom: 20px;
+        }
+
+        .welcome-title {
+            font-size: 32px;
+            font-weight: bold;
+            background: linear-gradient(135deg, #dc2626, #667eea);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+        }
+
+        .welcome-subtitle {
+            font-size: 18px;
+            color: #6b7280;
+            margin-bottom: 20px;
+            font-weight: 500;
+        }
+
+        .test-level {
+            display: inline-block;
+            background: linear-gradient(135deg, #dc2626 0%, #667eea 100%);
+            color: white;
+            padding: 8px 25px;
+            border-radius: 20px;
+            font-size: 16px;
+            margin-bottom: 15px;
+            box-shadow: 0 4px 10px rgba(102, 126, 234, 0.3);
+            font-weight: 600;
+        }
+
+        .owner-badge {
+            display: inline-block;
+            background: white;
+            border: 2px solid #667eea;
+            color: #667eea;
+            padding: 6px 18px;
+            border-radius: 15px;
+            font-size: 13px;
+            margin-bottom: 30px;
+            font-weight: 600;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .input-label {
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 8px;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 14px;
+            border: 2px solid #dc2626;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: all 0.3s;
+            background: #f9fafb;
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-color: #667eea;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .start-btn {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #dc2626 0%, #667eea 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 10px;
+        }
+
+        .start-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .start-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .error-message {
+            color: #dc2626;
+            font-size: 14px;
+            margin-top: 10px;
+            display: none;
+            font-weight: 500;
+        }
+
+        /* Test Container */
+        #testContainer {
+            display: none;
+            min-height: 100vh;
+            background: white;
+        }
+
+        .test-header {
+            background: linear-gradient(135deg, #dc2626 0%, #667eea 100%);
+            color: white;
+            padding: 15px 25px;
+            border-bottom: 4px solid #dc2626;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .header-left {
+            flex: 1;
+        }
+
+        .test-header h1 {
+            font-size: 20px;
+            margin-bottom: 5px;
+        }
+
+        .student-info {
+            font-size: 13px;
+            opacity: 0.95;
+        }
+
+        .owner-info {
+            font-size: 11px;
+            opacity: 0.85;
+            font-style: italic;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .progress-circle {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            background: conic-gradient(#10b981 0deg, rgba(255,255,255,0.3) 0deg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+
+        .progress-circle::before {
+            content: '';
+            position: absolute;
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #dc2626 0%, #667eea 100%);
+        }
+
+        .progress-number {
+            position: relative;
+            z-index: 1;
+            font-size: 16px;
+            font-weight: bold;
+            color: white;
+        }
+
+        .header-logo {
+            width: 60px;
+            height: auto;
+        }
+
+        .test-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 30px 15px;
+        }
+
+        .section {
+            background: white;
+            border: 3px solid #dc2626;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.15);
+        }
+
+        .section-title {
+            font-size: 24px;
+            font-weight: bold;
+            background: linear-gradient(135deg, #dc2626 0%, #667eea 100%);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 10px rgba(102, 126, 234, 0.2);
+        }
+
+        .section-instructions {
+            background: linear-gradient(to right, rgba(102, 126, 234, 0.05), transparent);
+            border-left: 4px solid #667eea;
+            padding: 15px 20px;
+            margin-bottom: 25px;
+            border-radius: 5px;
+            color: #374151;
+            line-height: 1.6;
+        }
+
+        /* Part 1 - Picture First */
+        .image-question {
+            background: linear-gradient(to bottom, #f9fafb, white);
+            padding: 25px;
+            margin-bottom: 25px;
+            border-radius: 12px;
+            border: 2px solid #e5e7eb;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .image-question:hover {
+            border-color: #667eea;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.15);
+        }
+
+        .image-question.answered {
+            border-color: #10b981;
+            background: linear-gradient(to bottom, rgba(16, 185, 129, 0.05), white);
+        }
+
+        .image-question.answered::after {
+            content: '✓';
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            width: 35px;
+            height: 35px;
+            background: #10b981;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            font-weight: bold;
+            animation: checkmark 0.3s ease-in;
+        }
+
+        @keyframes checkmark {
+            0% { transform: scale(0); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+
+        .question-number {
+            display: inline-block;
+            background: linear-gradient(135deg, #dc2626 0%, #667eea 100%);
+            color: white;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .question-text {
+            font-size: 18px;
+            color: #1f2937;
+            margin-bottom: 25px;
+            font-weight: 600;
+        }
+
+        .question-image-container {
+            text-align: center;
+            margin-bottom: 25px;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            border: 2px solid #667eea;
+        }
+
+        .question-image {
+            max-width: 100%;
+            max-height: 300px;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .text-options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .text-option {
+            padding: 15px 20px;
+            border: 2px solid #dc2626;
+            border-radius: 10px;
+            background: white;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 16px;
+            color: #374151;
+            font-weight: 500;
+            text-align: center;
+        }
+
+        .text-option:hover {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), white);
+            border-color: #667eea;
+            transform: translateX(5px);
+        }
+
+        .text-option.selected {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-color: #667eea;
+            box-shadow: 0 4px 10px rgba(102, 126, 234, 0.3);
+        }
+
+        /* Part 2 - Split Screen */
+        .split-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+            margin-top: 25px;
+        }
+
+        .questions-column {
+            background: linear-gradient(to bottom, #f9fafb, white);
+            padding: 25px;
+            border-radius: 12px;
+            border: 2px solid #dc2626;
+            max-height: 600px;
+            overflow-y: auto;
+        }
+
+        .choices-column {
+            background: linear-gradient(to bottom, rgba(102, 126, 234, 0.05), white);
+            padding: 25px;
+            border-radius: 12px;
+            border: 2px solid #667eea;
+            max-height: 600px;
+            overflow-y: auto;
+        }
+
+        .column-title {
+            font-size: 20px;
+            font-weight: bold;
+            color: white;
+            margin-bottom: 20px;
+            padding: 12px 20px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .questions-column .column-title {
+            background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%);
+        }
+
+        .choices-column .column-title {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .person-item {
+            background: white;
+            border: 2px solid #dc2626;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            min-height: 70px;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .person-item:hover {
+            box-shadow: 0 4px 12px rgba(220, 38, 38, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .person-item.answered {
+            border-color: #10b981;
+            background: linear-gradient(to right, rgba(16, 185, 129, 0.05), white);
+        }
+
+        .person-item.answered::after {
+            content: '✓';
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            width: 25px;
+            height: 25px;
+            background: #10b981;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            font-weight: bold;
+            animation: checkmark 0.3s ease-in;
+        }
+
+        .person-name {
+            font-weight: 600;
+            color: #1f2937;
+            font-size: 16px;
+        }
+
+        .drop-zone {
+            width: 60px;
+            height: 60px;
+            border: 3px dashed #dc2626;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #f9fafb;
+            transition: all 0.3s;
+        }
+
+        .drop-zone.drag-over {
+            background: rgba(102, 126, 234, 0.2);
+            border-color: #667eea;
+            border-style: solid;
+            transform: scale(1.1);
+        }
+
+        .drop-zone.filled {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-style: solid;
+            border-color: #667eea;
+        }
+
+        .job-item {
+            background: white;
+            border: 2px solid #667eea;
+            border-radius: 10px;
+            padding: 15px 20px;
+            margin-bottom: 12px;
+            cursor: move;
+            transition: all 0.3s;
+            user-select: none;
+            font-weight: 500;
+            color: #1f2937;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .job-item:hover {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            transform: translateX(8px);
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .job-item:hover .job-letter {
+            background: white;
+            color: #667eea;
+        }
+
+        .job-item.dragging {
+            opacity: 0.5;
+            transform: rotate(5deg);
+        }
+
+        .job-letter {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            font-weight: bold;
+            font-size: 16px;
+            flex-shrink: 0;
+        }
+
+        .dropped-letter {
+            color: white;
+            font-weight: bold;
+            font-size: 22px;
+        }
+
+        /* Part 3 - Multiple Choice */
+        .mc-question {
+            background: linear-gradient(to bottom, #f9fafb, white);
+            padding: 25px;
+            margin-bottom: 20px;
+            border-radius: 12px;
+            border: 2px solid #e5e7eb;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .mc-question:hover {
+            border-color: #667eea;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.1);
+        }
+
+        .mc-question.answered {
+            border-color: #10b981;
+            background: linear-gradient(to bottom, rgba(16, 185, 129, 0.05), white);
+        }
+
+        .mc-question.answered::after {
+            content: '✓';
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            width: 35px;
+            height: 35px;
+            background: #10b981;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            font-weight: bold;
+            animation: checkmark 0.3s ease-in;
+        }
+
+        .mc-options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 15px;
+        }
+
+        .mc-option {
+            padding: 15px 20px;
+            border: 2px solid #dc2626;
+            border-radius: 10px;
+            background: white;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 16px;
+            color: #374151;
+            font-weight: 500;
+        }
+
+        .mc-option:hover {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.05), white);
+            border-color: #667eea;
+            transform: translateX(5px);
+        }
+
+        .mc-option.selected {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-color: #667eea;
+            box-shadow: 0 4px 10px rgba(102, 126, 234, 0.3);
+        }
+
+        /* Gap Filling */
+        .gap-filling-box {
+            background: linear-gradient(to right, rgba(102, 126, 234, 0.03), white);
+            border: 2px solid #667eea;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 20px;
+        }
+
+        .form-row {
+            display: flex;
+            align-items: center;
+            margin-bottom: 18px;
+            gap: 15px;
+            position: relative;
+        }
+
+        .form-row.answered::after {
+            content: '✓';
+            position: absolute;
+            right: -35px;
+            width: 25px;
+            height: 25px;
+            background: #10b981;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: bold;
+            animation: checkmark 0.3s ease-in;
+        }
+
+        .form-label {
+            font-weight: 600;
+            color: #1f2937;
+            min-width: 180px;
+            font-size: 16px;
+        }
+
+        .gap-input {
+            flex: 1;
+            padding: 12px 15px;
+            border: 2px solid #dc2626;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: all 0.3s;
+            background: white;
+        }
+
+        .gap-input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        /* Submit */
+        .submit-container {
+            text-align: center;
+            padding: 40px 20px;
+            background: linear-gradient(to bottom, white, rgba(102, 126, 234, 0.05));
+            border-top: 3px solid #667eea;
+            margin-top: 40px;
+        }
+
+        .submit-btn {
+            padding: 18px 80px;
+            background: linear-gradient(135deg, #dc2626 0%, #667eea 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 20px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 30px rgba(102, 126, 234, 0.4);
+        }
+
+        /* Proctoring Modal */
+        #proctoringModal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.98);
+            z-index: 10000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .proctoring-content {
+            background: white;
+            padding: 50px 40px;
+            border-radius: 20px;
+            text-align: center;
+            max-width: 500px;
+            width: 90%;
+            border: 4px solid #dc2626;
+            box-shadow: 0 20px 60px rgba(220, 38, 38, 0.5);
+            animation: shake 0.5s;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+
+        .warning-icon {
+            font-size: 70px;
+            color: #dc2626;
+            margin-bottom: 20px;
+        }
+
+        .proctoring-title {
+            font-size: 26px;
+            font-weight: bold;
+            color: #dc2626;
+            margin-bottom: 15px;
+        }
+
+        .proctoring-message {
+            font-size: 16px;
+            color: #6b7280;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+
+        /* Results Modal */
+        #resultsModal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            z-index: 9999;
+            overflow-y: auto;
+            padding: 20px;
+        }
+
+        .results-content {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            max-width: 900px;
+            width: 100%;
+            border: 4px solid #667eea;
+            box-shadow: 0 20px 60px rgba(102, 126, 234, 0.4);
+            margin: 20px auto;
+        }
+
+        .results-header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 3px solid #667eea;
+        }
+
+        .results-title {
+            font-size: 30px;
+            font-weight: bold;
+            background: linear-gradient(135deg, #dc2626, #667eea);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+        }
+
+        .answer-sheet {
+            background: linear-gradient(to bottom, #f9fafb, white);
+            padding: 30px;
+            border-radius: 12px;
+            border: 2px solid #e5e7eb;
+            margin-bottom: 25px;
+        }
+
+        .answer-section {
+            margin-bottom: 25px;
+        }
+
+        .answer-section-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: white;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            margin-bottom: 12px;
+            padding: 10px 15px;
+            border-radius: 8px;
+        }
+
+        .answer-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 15px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .answer-label {
+            font-weight: 600;
+            color: #374151;
+        }
+
+        .answer-value {
+            color: #667eea;
+            font-weight: 600;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .action-btn {
+            padding: 14px 35px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .copy-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .download-btn {
+            background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%);
+            color: white;
+        }
+
+        .action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .copy-notification {
+            display: none;
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #10b981;
+            color: white;
+            padding: 15px 25px;
+            border-radius: 10px;
+            box-shadow: 0 8px 20px rgba(16, 185, 129, 0.3);
+            z-index: 10001;
+        }
+
+        .restart-note {
+            margin-top: 20px;
+            color: #6b7280;
+            font-size: 14px;
+            text-align: center;
+            font-style: italic;
+        }
+
+        /* Mobile */
+        @media (max-width: 768px) {
+            .split-container {
+                grid-template-columns: 1fr;
+            }
+
+            .questions-column, .choices-column {
+                max-height: none;
+            }
+
+            .form-row {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .form-label {
+                min-width: 100%;
+            }
+
+            .test-header h1 {
+                font-size: 16px;
+            }
+
+            .section {
+                padding: 20px 15px;
+            }
+
+            .header-right {
+                flex-direction: row;
+                gap: 10px;
+            }
+
+            .progress-circle {
+                width: 55px;
+                height: 55px;
+            }
+
+            .progress-circle::before {
+                width: 43px;
+                height: 43px;
+            }
+
+            .progress-number {
+                font-size: 13px;
+            }
+
+            .header-logo {
+                width: 50px;
+            }
+
+            .form-row.answered::after {
+                right: -30px;
+                width: 20px;
+                height: 20px;
+                font-size: 12px;
+            }
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div id="welcomeScreen">
+        <div class="welcome-container">
+            <img src="https://image2url.com/r2/default/images/1769700366134-01db5cda-e300-4af6-8039-9c7cad80199a.png" alt="EDUNEST Logo" class="logo">
+            <h1 class="welcome-title">A2 Listening Test</h1>
+            <p class="welcome-subtitle">Practice English Listening Test</p>
+            <div class="test-level">Pre-Intermediate Level</div>
+            <div class="owner-badge">Created by JONY</div>
+            
+            <div class="input-group">
+                <label class="input-label">Student Name</label>
+                <input type="text" id="studentName" class="input-field" placeholder="Enter your full name">
+            </div>
+            
+            <div class="input-group">
+                <label class="input-label">Access Password</label>
+                <input type="password" id="password" class="input-field" placeholder="Enter password">
+            </div>
+            
+            <div class="error-message" id="errorMessage">❌ Incorrect password. Please try again.</div>
+            
+            <button class="start-btn" id="startBtn" disabled>🎧 Start Listening Test</button>
+        </div>
+    </div>
+
+    <div id="testContainer">
+        <div class="test-header">
+            <div class="header-content">
+                <div class="header-left">
+                    <h1>🎧 EDUNEST A2 Listening Test</h1>
+                    <div class="student-info">Student: <span id="displayStudentName"></span></div>
+                    <div class="owner-info">Test Owner: JONY</div>
+                </div>
+                <div class="header-right">
+                    <div class="progress-circle" id="progressCircle">
+                        <span class="progress-number" id="progressNumber">0/25</span>
+                    </div>
+                    <img src="https://image2url.com/r2/default/images/1769700366134-01db5cda-e300-4af6-8039-9c7cad80199a.png" alt="EDUNEST" class="header-logo">
+                </div>
+            </div>
+        </div>
+
+        <div class="test-content">
+            <!-- Part 1 -->
+            <div class="section">
+                <div class="section-title">📍 Part 1: Questions 1-5</div>
+                <div class="section-instructions">
+                    <strong>Instructions:</strong> Look at the picture and choose the correct answer (A, B, or C).
+                </div>
+
+                <div class="image-question">
+                    <div class="question-number">Question 1</div>
+                    <div class="question-text">What have they forgotten?</div>
+                    <div class="question-image-container">
+                        <img src="https://englishpracticetest.net/wp-content/uploads/2022/11/test-1-01.jpg" alt="Question 1" class="question-image">
+                    </div>
+                    <div class="text-options">
+                        <div class="text-option" data-question="1" data-value="A">A</div>
+                        <div class="text-option" data-question="1" data-value="B">B</div>
+                        <div class="text-option" data-question="1" data-value="C">C</div>
+                    </div>
+                </div>
+
+                <div class="image-question">
+                    <div class="question-number">Question 2</div>
+                    <div class="question-text">What time does the train go?</div>
+                    <div class="question-image-container">
+                        <img src="https://englishpracticetest.net/wp-content/uploads/2022/11/test-1-02.jpg" alt="Question 2" class="question-image">
+                    </div>
+                    <div class="text-options">
+                        <div class="text-option" data-question="2" data-value="A">A</div>
+                        <div class="text-option" data-question="2" data-value="B">B</div>
+                        <div class="text-option" data-question="2" data-value="C">C</div>
+                    </div>
+                </div>
+
+                <div class="image-question">
+                    <div class="question-number">Question 3</div>
+                    <div class="question-text">Where is Room 22?</div>
+                    <div class="question-image-container">
+                        <img src="https://englishpracticetest.net/wp-content/uploads/2022/11/test-1-03.jpg" alt="Question 3" class="question-image">
+                    </div>
+                    <div class="text-options">
+                        <div class="text-option" data-question="3" data-value="A">A</div>
+                        <div class="text-option" data-question="3" data-value="B">B</div>
+                        <div class="text-option" data-question="3" data-value="C">C</div>
+                    </div>
+                </div>
+
+                <div class="image-question">
+                    <div class="question-number">Question 4</div>
+                    <div class="question-text">Which man wants to see him?</div>
+                    <div class="question-image-container">
+                        <img src="https://englishpracticetest.net/wp-content/uploads/2022/11/test-1-04.jpg" alt="Question 4" class="question-image">
+                    </div>
+                    <div class="text-options">
+                        <div class="text-option" data-question="4" data-value="A">A</div>
+                        <div class="text-option" data-question="4" data-value="B">B</div>
+                        <div class="text-option" data-question="4" data-value="C">C</div>
+                    </div>
+                </div>
+
+                <div class="image-question">
+                    <div class="question-number">Question 5</div>
+                    <div class="question-text">How did the woman get to work?</div>
+                    <div class="question-image-container">
+                        <img src="https://englishpracticetest.net/wp-content/uploads/2022/11/test-1-05.jpg" alt="Question 5" class="question-image">
+                    </div>
+                    <div class="text-options">
+                        <div class="text-option" data-question="5" data-value="A">A</div>
+                        <div class="text-option" data-question="5" data-value="B">B</div>
+                        <div class="text-option" data-question="5" data-value="C">C</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Part 2 -->
+            <div class="section">
+                <div class="section-title">📍 Part 2: Questions 6-10</div>
+                <div class="section-instructions">
+                    <strong>Instructions:</strong> Drag and drop the correct letter (A-H) to match each person with their job.
+                </div>
+
+                <div class="split-container">
+                    <div class="questions-column">
+                        <div class="column-title">👥 PEOPLE</div>
+                        
+                        <div class="person-item">
+                            <span class="person-name"><strong>6.</strong> Bill</span>
+                            <div class="drop-zone" data-person="6"></div>
+                        </div>
+                        
+                        <div class="person-item">
+                            <span class="person-name"><strong>7.</strong> David</span>
+                            <div class="drop-zone" data-person="7"></div>
+                        </div>
+                        
+                        <div class="person-item">
+                            <span class="person-name"><strong>8.</strong> Paul's mother</span>
+                            <div class="drop-zone" data-person="8"></div>
+                        </div>
+                        
+                        <div class="person-item">
+                            <span class="person-name"><strong>9.</strong> Paul's father</span>
+                            <div class="drop-zone" data-person="9"></div>
+                        </div>
+                        
+                        <div class="person-item">
+                            <span class="person-name"><strong>10.</strong> Paul</span>
+                            <div class="drop-zone" data-person="10"></div>
+                        </div>
+                    </div>
+
+                    <div class="choices-column">
+                        <div class="column-title">💼 JOBS (Drag to match)</div>
+                        
+                        <div class="job-item" draggable="true" data-letter="A">
+                            <span class="job-letter">A</span> bank clerk
+                        </div>
+                        <div class="job-item" draggable="true" data-letter="B">
+                            <span class="job-letter">B</span> doctor
+                        </div>
+                        <div class="job-item" draggable="true" data-letter="C">
+                            <span class="job-letter">C</span> farmer
+                        </div>
+                        <div class="job-item" draggable="true" data-letter="D">
+                            <span class="job-letter">D</span> shop assistant
+                        </div>
+                        <div class="job-item" draggable="true" data-letter="E">
+                            <span class="job-letter">E</span> stopped work
+                        </div>
+                        <div class="job-item" draggable="true" data-letter="F">
+                            <span class="job-letter">F</span> student
+                        </div>
+                        <div class="job-item" draggable="true" data-letter="G">
+                            <span class="job-letter">G</span> teacher
+                        </div>
+                        <div class="job-item" draggable="true" data-letter="H">
+                            <span class="job-letter">H</span> writer
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Part 3 -->
+            <div class="section">
+                <div class="section-title">📍 Part 3: Questions 11-15</div>
+                <div class="section-instructions">
+                    <strong>Instructions:</strong> Choose the correct answer (A, B or C).
+                </div>
+
+                <div class="mc-question">
+                    <div class="question-number">Question 11</div>
+                    <div class="question-text">When is the football match?</div>
+                    <div class="mc-options">
+                        <div class="mc-option" data-question="11" data-value="A">A - Saturday morning</div>
+                        <div class="mc-option" data-question="11" data-value="B">B - Saturday afternoon</div>
+                        <div class="mc-option" data-question="11" data-value="C">C - Sunday afternoon</div>
+                    </div>
+                </div>
+
+                <div class="mc-question">
+                    <div class="question-number">Question 12</div>
+                    <div class="question-text">Where are they going to eat on Saturday evening?</div>
+                    <div class="mc-options">
+                        <div class="mc-option" data-question="12" data-value="A">A - at home</div>
+                        <div class="mc-option" data-question="12" data-value="B">B - in an Italian restaurant</div>
+                        <div class="mc-option" data-question="12" data-value="C">C - in a Chinese restaurant</div>
+                    </div>
+                </div>
+
+                <div class="mc-question">
+                    <div class="question-number">Question 13</div>
+                    <div class="question-text">What are they going to do on Sunday morning?</div>
+                    <div class="mc-options">
+                        <div class="mc-option" data-question="13" data-value="A">A - go for a drive</div>
+                        <div class="mc-option" data-question="13" data-value="B">B - get up late</div>
+                        <div class="mc-option" data-question="13" data-value="C">C - go to the cinema</div>
+                    </div>
+                </div>
+
+                <div class="mc-question">
+                    <div class="question-number">Question 14</div>
+                    <div class="question-text">Where are they going to have lunch on Sunday?</div>
+                    <div class="mc-options">
+                        <div class="mc-option" data-question="14" data-value="A">A - in a café</div>
+                        <div class="mc-option" data-question="14" data-value="B">B - in a pub</div>
+                        <div class="mc-option" data-question="14" data-value="C">C - at home</div>
+                    </div>
+                </div>
+
+                <div class="mc-question">
+                    <div class="question-number">Question 15</div>
+                    <div class="question-text">They can't go to the cinema on Sunday afternoon because</div>
+                    <div class="mc-options">
+                        <div class="mc-option" data-question="15" data-value="A">A - Carlos doesn't like films.</div>
+                        <div class="mc-option" data-question="15" data-value="B">B - Eric doesn't like films.</div>
+                        <div class="mc-option" data-question="15" data-value="C">C - they don't have time.</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Part 4 -->
+            <div class="section">
+                <div class="section-title">📍 Part 4: Questions 16-20</div>
+                <div class="section-instructions">
+                    <strong>Instructions:</strong> Listen and complete the phone message.
+                </div>
+
+                <div class="gap-filling-box">
+                    <h3 style="text-align: center; color: #667eea; margin-bottom: 25px; font-size: 20px;">📞 Phone Message</h3>
+                    
+                    <div class="form-row">
+                        <label class="form-label">To:</label>
+                        <input type="text" value="Martin" disabled style="background: #e5e7eb; cursor: not-allowed;" class="gap-input">
+                    </div>
+
+                    <div class="form-row">
+                        <label class="form-label">16. From:</label>
+                        <input type="text" class="gap-input" data-question="16" placeholder="Type your answer">
+                    </div>
+
+                    <div class="form-row">
+                        <label class="form-label">17. Party at:</label>
+                        <input type="text" class="gap-input" data-question="17" placeholder="Type your answer">
+                    </div>
+
+                    <div class="form-row">
+                        <label class="form-label">18. Time:</label>
+                        <input type="text" class="gap-input" data-question="18" placeholder="Type your answer">
+                    </div>
+
+                    <div class="form-row">
+                        <label class="form-label">19. Please bring:</label>
+                        <input type="text" class="gap-input" data-question="19" placeholder="Type your answer">
+                    </div>
+
+                    <div class="form-row">
+                        <label class="form-label">20. Her phone number:</label>
+                        <input type="text" class="gap-input" data-question="20" placeholder="Type your answer">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Part 5 -->
+            <div class="section">
+                <div class="section-title">📍 Part 5: Questions 21-25</div>
+                <div class="section-instructions">
+                    <strong>Instructions:</strong> Listen and complete the information.
+                </div>
+
+                <div class="gap-filling-box">
+                    <h3 style="text-align: center; color: #667eea; margin-bottom: 25px; font-size: 20px;">✈️ South Seas Travel Agency</h3>
+                    
+                    <div class="form-row">
+                        <label class="form-label">New phone number:</label>
+                        <input type="text" value="847 2296" disabled style="background: #e5e7eb; cursor: not-allowed;" class="gap-input">
+                    </div>
+
+                    <div class="form-row">
+                        <label class="form-label">21. New address:</label>
+                        <input type="text" class="gap-input" data-question="21" placeholder="98 __________ Road">
+                    </div>
+
+                    <div class="form-row">
+                        <label class="form-label">22. Opposite:</label>
+                        <input type="text" class="gap-input" data-question="22" placeholder="Type your answer">
+                    </div>
+
+                    <div class="form-row">
+                        <label class="form-label">23. Opens on:</label>
+                        <input type="text" class="gap-input" data-question="23" placeholder="Type your answer">
+                    </div>
+
+                    <div class="form-row">
+                        <label class="form-label">24. Book a holiday for:</label>
+                        <input type="text" class="gap-input" data-question="24" placeholder="£__________">
+                    </div>
+
+                    <div class="form-row">
+                        <label class="form-label">25. and get a free:</label>
+                        <input type="text" class="gap-input" data-question="25" placeholder="Type your answer">
+                    </div>
+                </div>
+            </div>
+
+            <div class="submit-container">
+                <button class="submit-btn" id="submitBtn">📤 Submit Test</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="proctoringModal">
+        <div class="proctoring-content">
+            <div class="warning-icon">⚠️</div>
+            <div class="proctoring-title">Security Alert!</div>
+            <div class="proctoring-message">
+                You have left the test window. Please enter the reactivation code to continue.
+            </div>
+            <div class="input-group">
+                <input type="password" id="reactivationCode" class="input-field" placeholder="Enter reactivation code">
+            </div>
+            <div class="error-message" id="reactivationError">❌ Incorrect code. Please try again.</div>
+            <button class="start-btn" id="reactivateBtn">Reactivate Test</button>
+        </div>
+    </div>
+
+    <div id="resultsModal">
+        <div class="results-content">
+            <div class="results-header">
+                <div class="results-title">✅ Test Submitted Successfully</div>
+                <div class="student-info" style="font-size: 16px; color: #6b7280;">Student: <span id="resultStudentName"></span></div>
+            </div>
+            
+            <div class="answer-sheet" id="answerSheet"></div>
+            
+            <div class="button-group">
+                <button class="action-btn copy-btn" id="copyAnswersBtn">📋 Copy Answers</button>
+                <button class="action-btn download-btn" id="downloadPdfBtn">📄 Download PDF</button>
+            </div>
+
+            <p class="restart-note">💡 To start a new test, please close and reopen this file.</p>
+        </div>
+    </div>
+
+    <div class="copy-notification" id="copyNotification">
+        ✓ Answers copied to clipboard!
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script>
+        let answers = {};
+        let studentName = '';
+        let testActive = false;
+
+        // Progress Tracking
+        function updateProgress() {
+            const answered = Object.keys(answers).length;
+            const total = 25;
+            const percentage = (answered / total) * 100;
+            const degrees = (percentage / 100) * 360;
+            
+            document.getElementById('progressNumber').textContent = `${answered}/${total}`;
+            document.getElementById('progressCircle').style.background = 
+                `conic-gradient(#10b981 ${degrees}deg, rgba(255,255,255,0.3) ${degrees}deg)`;
+        }
+
+        // Visual Feedback for Questions
+        function markQuestionAsAnswered(questionNumber) {
+            // For Part 1 (questions 1-5)
+            if (questionNumber <= 5) {
+                const questions = document.querySelectorAll('.image-question');
+                if (questions[questionNumber - 1]) {
+                    questions[questionNumber - 1].classList.add('answered');
+                }
+            }
+            // For Part 2 (questions 6-10)
+            else if (questionNumber >= 6 && questionNumber <= 10) {
+                const items = document.querySelectorAll('.person-item');
+                const index = questionNumber - 6;
+                if (items[index]) {
+                    items[index].classList.add('answered');
+                }
+            }
+            // For Part 3 (questions 11-15)
+            else if (questionNumber >= 11 && questionNumber <= 15) {
+                const questions = document.querySelectorAll('.mc-question');
+                const index = questionNumber - 11;
+                if (questions[index]) {
+                    questions[index].classList.add('answered');
+                }
+            }
+            // For Parts 4 & 5 (questions 16-25)
+            else if (questionNumber >= 16 && questionNumber <= 25) {
+                const inputs = document.querySelectorAll(`.gap-input[data-question="${questionNumber}"]`);
+                if (inputs[0]) {
+                    inputs[0].closest('.form-row').classList.add('answered');
+                }
+            }
+        }
+
+        const studentNameInput = document.getElementById('studentName');
+        const passwordInput = document.getElementById('password');
+        const startBtn = document.getElementById('startBtn');
+        const errorMessage = document.getElementById('errorMessage');
+
+        function checkInputs() {
+            startBtn.disabled = !(studentNameInput.value.trim() && passwordInput.value);
+        }
+
+        studentNameInput.addEventListener('input', checkInputs);
+        passwordInput.addEventListener('input', checkInputs);
+
+        startBtn.addEventListener('click', function() {
+            if (passwordInput.value === '0101') {
+                studentName = studentNameInput.value.trim();
+                document.getElementById('displayStudentName').textContent = studentName;
+                document.getElementById('welcomeScreen').style.display = 'none';
+                document.getElementById('testContainer').style.display = 'block';
+                enterFullscreen();
+                testActive = true;
+                setupProctoring();
+                
+                // Request landscape orientation on mobile
+                if (screen.orientation && screen.orientation.lock) {
+                    screen.orientation.lock('landscape').catch(() => {});
+                }
+            } else {
+                errorMessage.style.display = 'block';
+                passwordInput.value = '';
+                passwordInput.focus();
+            }
+        });
+
+        function enterFullscreen() {
+            const elem = document.documentElement;
+            if (elem.requestFullscreen) {
+                elem.requestFullscreen();
+            } else if (elem.webkitRequestFullscreen) {
+                elem.webkitRequestFullscreen();
+            }
+        }
+
+        function setupProctoring() {
+            window.addEventListener('blur', () => testActive && showProctoringModal());
+            
+            document.addEventListener('fullscreenchange', () => {
+                if (!document.fullscreenElement && testActive) showProctoringModal();
+            });
+
+            document.addEventListener('visibilitychange', () => {
+                if (document.hidden && testActive) showProctoringModal();
+            });
+        }
+
+        function showProctoringModal() {
+            document.getElementById('proctoringModal').style.display = 'flex';
+            document.getElementById('reactivationCode').value = '';
+            document.getElementById('reactivationError').style.display = 'none';
+        }
+
+        document.getElementById('reactivateBtn').addEventListener('click', function() {
+            if (document.getElementById('reactivationCode').value === '1010') {
+                document.getElementById('proctoringModal').style.display = 'none';
+                enterFullscreen();
+            } else {
+                document.getElementById('reactivationError').style.display = 'block';
+                document.getElementById('reactivationCode').value = '';
+            }
+        });
+
+        // Part 1: Text options
+        document.querySelectorAll('.text-option').forEach(option => {
+            option.addEventListener('click', function() {
+                const question = this.getAttribute('data-question');
+                const value = this.getAttribute('data-value');
+                
+                document.querySelectorAll(`.text-option[data-question="${question}"]`).forEach(opt => {
+                    opt.classList.remove('selected');
+                });
+                
+                this.classList.add('selected');
+                answers[question] = value;
+                
+                // Update visual feedback and progress
+                markQuestionAsAnswered(parseInt(question));
+                updateProgress();
+            });
+        });
+
+        // Part 2: Drag and Drop
+        let draggedLetter = null;
+
+        document.querySelectorAll('.job-item').forEach(item => {
+            item.addEventListener('dragstart', function() {
+                draggedLetter = this.getAttribute('data-letter');
+                this.classList.add('dragging');
+            });
+
+            item.addEventListener('dragend', function() {
+                this.classList.remove('dragging');
+            });
+        });
+
+        document.querySelectorAll('.drop-zone').forEach(zone => {
+            zone.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                zone.classList.add('drag-over');
+            });
+
+            zone.addEventListener('dragleave', () => {
+                zone.classList.remove('drag-over');
+            });
+
+            zone.addEventListener('drop', function(e) {
+                e.preventDefault();
+                this.classList.remove('drag-over');
+                
+                if (draggedLetter) {
+                    const person = this.getAttribute('data-person');
+                    this.innerHTML = `<span class="dropped-letter">${draggedLetter}</span>`;
+                    this.classList.add('filled');
+                    answers[person] = draggedLetter;
+                    
+                    // Update visual feedback and progress
+                    markQuestionAsAnswered(parseInt(person));
+                    updateProgress();
+                }
+            });
+        });
+
+        // Part 3: Multiple Choice
+        document.querySelectorAll('.mc-option').forEach(option => {
+            option.addEventListener('click', function() {
+                const question = this.getAttribute('data-question');
+                const value = this.getAttribute('data-value');
+                
+                document.querySelectorAll(`.mc-option[data-question="${question}"]`).forEach(opt => {
+                    opt.classList.remove('selected');
+                });
+                
+                this.classList.add('selected');
+                answers[question] = value;
+                
+                // Update visual feedback and progress
+                markQuestionAsAnswered(parseInt(question));
+                updateProgress();
+            });
+        });
+
+        // Gap Filling
+        document.querySelectorAll('.gap-input:not([disabled])').forEach(input => {
+            input.addEventListener('input', function() {
+                const question = this.getAttribute('data-question');
+                const value = this.value.trim();
+                
+                if (value) {
+                    answers[question] = value;
+                    markQuestionAsAnswered(parseInt(question));
+                } else {
+                    delete answers[question];
+                    this.closest('.form-row').classList.remove('answered');
+                }
+                
+                updateProgress();
+            });
+        });
+
+        // Submit
+        document.getElementById('submitBtn').addEventListener('click', function() {
+            testActive = false;
+            showResults();
+        });
+
+        function showResults() {
+            const answerSheet = document.getElementById('answerSheet');
+            document.getElementById('resultStudentName').textContent = studentName;
+            
+            let html = '';
+            
+            for (let i = 1; i <= 5; i++) {
+                if (i === 1) html += '<div class="answer-section"><div class="answer-section-title">Part 1: Questions 1-5</div>';
+                html += `<div class="answer-row"><div class="answer-label">Question ${i}:</div><div class="answer-value">${answers[i] || '(Not answered)'}</div></div>`;
+                if (i === 5) html += '</div>';
+            }
+            
+            html += '<div class="answer-section"><div class="answer-section-title">Part 2: Questions 6-10</div>';
+            for (let i = 6; i <= 10; i++) {
+                html += `<div class="answer-row"><div class="answer-label">Question ${i}:</div><div class="answer-value">${answers[i] || '(Not answered)'}</div></div>`;
+            }
+            html += '</div>';
+            
+            html += '<div class="answer-section"><div class="answer-section-title">Part 3: Questions 11-15</div>';
+            for (let i = 11; i <= 15; i++) {
+                html += `<div class="answer-row"><div class="answer-label">Question ${i}:</div><div class="answer-value">${answers[i] || '(Not answered)'}</div></div>`;
+            }
+            html += '</div>';
+            
+            html += '<div class="answer-section"><div class="answer-section-title">Part 4: Questions 16-20</div>';
+            for (let i = 16; i <= 20; i++) {
+                html += `<div class="answer-row"><div class="answer-label">Question ${i}:</div><div class="answer-value">${answers[i] || '(Not answered)'}</div></div>`;
+            }
+            html += '</div>';
+            
+            html += '<div class="answer-section"><div class="answer-section-title">Part 5: Questions 21-25</div>';
+            for (let i = 21; i <= 25; i++) {
+                html += `<div class="answer-row"><div class="answer-label">Question ${i}:</div><div class="answer-value">${answers[i] || '(Not answered)'}</div></div>`;
+            }
+            html += '</div>';
+            
+            answerSheet.innerHTML = html;
+            document.getElementById('resultsModal').style.display = 'flex';
+        }
+
+        // Copy Answers - Enhanced for all devices
+        document.getElementById('copyAnswersBtn').addEventListener('click', function() {
+            let text = `EDUNEST A2 Listening Test - Answer Sheet\nStudent: ${studentName}\nDate: ${new Date().toLocaleDateString()}\nTest Owner: JONY\n${'='.repeat(60)}\n\n`;
+            
+            text += `PART 1: Questions 1-5\n`;
+            for (let i = 1; i <= 5; i++) text += `Question ${i}: ${answers[i] || '(Not answered)'}\n`;
+            text += `\nPART 2: Questions 6-10\n`;
+            for (let i = 6; i <= 10; i++) text += `Question ${i}: ${answers[i] || '(Not answered)'}\n`;
+            text += `\nPART 3: Questions 11-15\n`;
+            for (let i = 11; i <= 15; i++) text += `Question ${i}: ${answers[i] || '(Not answered)'}\n`;
+            text += `\nPART 4: Questions 16-20\n`;
+            for (let i = 16; i <= 20; i++) text += `Question ${i}: ${answers[i] || '(Not answered)'}\n`;
+            text += `\nPART 5: Questions 21-25\n`;
+            for (let i = 21; i <= 25; i++) text += `Question ${i}: ${answers[i] || '(Not answered)'}\n`;
+            
+            // Try multiple methods for maximum compatibility
+            const copyToClipboard = (text) => {
+                // Method 1: Modern Clipboard API (works on most modern browsers)
+                if (navigator.clipboard && navigator.clipboard.writeText) {
+                    navigator.clipboard.writeText(text).then(() => {
+                        showCopyNotification();
+                    }).catch(() => {
+                        // If Clipboard API fails, try fallback
+                        fallbackCopy(text);
+                    });
+                } else {
+                    // Method 2: Fallback for older browsers and some mobile devices
+                    fallbackCopy(text);
+                }
+            };
+
+            const fallbackCopy = (text) => {
+                // Create temporary textarea
+                const textArea = document.createElement('textarea');
+                textArea.value = text;
+                
+                // Make it invisible and non-interactive
+                textArea.style.position = 'fixed';
+                textArea.style.top = '-9999px';
+                textArea.style.left = '-9999px';
+                textArea.style.opacity = '0';
+                textArea.style.pointerEvents = 'none';
+                textArea.setAttribute('readonly', '');
+                
+                // Add to DOM
+                document.body.appendChild(textArea);
+                
+                // Select and copy
+                textArea.focus();
+                textArea.select();
+                
+                // iOS-specific handling
+                if (navigator.userAgent.match(/ipad|ipod|iphone/i)) {
+                    const range = document.createRange();
+                    range.selectNodeContents(textArea);
+                    const selection = window.getSelection();
+                    selection.removeAllRanges();
+                    selection.addRange(range);
+                    textArea.setSelectionRange(0, 999999);
+                }
+                
+                try {
+                    const successful = document.execCommand('copy');
+                    if (successful) {
+                        showCopyNotification();
+                    } else {
+                        // If execCommand fails, show manual copy option
+                        showManualCopyOption(text);
+                    }
+                } catch (err) {
+                    showManualCopyOption(text);
+                }
+                
+                // Remove the textarea
+                document.body.removeChild(textArea);
+            };
+
+            const showManualCopyOption = (text) => {
+                // For devices where automatic copy fails
+                const modal = document.createElement('div');
+                modal.style.cssText = `
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    right: 0;
+                    bottom: 0;
+                    background: rgba(0,0,0,0.8);
+                    z-index: 10002;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    padding: 20px;
+                `;
+                
+                const content = document.createElement('div');
+                content.style.cssText = `
+                    background: white;
+                    padding: 30px;
+                    border-radius: 15px;
+                    max-width: 600px;
+                    width: 100%;
+                    max-height: 80vh;
+                    overflow-y: auto;
+                `;
+                
+                content.innerHTML = `
+                    <h3 style="color: #dc2626; margin-bottom: 15px;">Copy Your Answers</h3>
+                    <p style="margin-bottom: 15px; color: #6b7280;">Press and hold the text below, then select "Copy":</p>
+                    <textarea readonly style="
+                        width: 100%;
+                        min-height: 300px;
+                        padding: 15px;
+                        border: 2px solid #667eea;
+                        border-radius: 8px;
+                        font-family: monospace;
+                        font-size: 14px;
+                        margin-bottom: 15px;
+                    ">${text}</textarea>
+                    <button onclick="this.closest('div').parentElement.remove()" style="
+                        width: 100%;
+                        padding: 12px;
+                        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                        color: white;
+                        border: none;
+                        border-radius: 8px;
+                        font-size: 16px;
+                        font-weight: 600;
+                        cursor: pointer;
+                    ">Close</button>
+                `;
+                
+                modal.appendChild(content);
+                document.body.appendChild(modal);
+                
+                // Auto-select text
+                const textarea = content.querySelector('textarea');
+                textarea.focus();
+                textarea.select();
+            };
+
+            copyToClipboard(text);
+        });
+
+        function showCopyNotification() {
+            const notification = document.getElementById('copyNotification');
+            notification.style.display = 'block';
+            setTimeout(() => notification.style.display = 'none', 3000);
+        }
+
+        // Download PDF
+        document.getElementById('downloadPdfBtn').addEventListener('click', function() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            
+            doc.setFontSize(22);
+            doc.setFont(undefined, 'bold');
+            doc.text('EDUNEST A2 Listening Test', 105, 20, { align: 'center' });
+            
+            doc.setFontSize(12);
+            doc.setFont(undefined, 'normal');
+            doc.text(`Student: ${studentName}`, 20, 35);
+            doc.text(`Date: ${new Date().toLocaleDateString()}`, 20, 42);
+            doc.text(`Test Owner: JONY`, 20, 49);
+            
+            doc.line(20, 54, 190, 54);
+            
+            let y = 65;
+            
+            doc.setFontSize(14);
+            doc.setFont(undefined, 'bold');
+            doc.text('PART 1: Questions 1-5', 20, y);
+            y += 8;
+            
+            doc.setFontSize(11);
+            doc.setFont(undefined, 'normal');
+            for (let i = 1; i <= 5; i++) {
+                doc.text(`Question ${i}: ${answers[i] || '(Not answered)'}`, 20, y);
+                y += 7;
+            }
+            y += 3;
+            
+            doc.setFontSize(14);
+            doc.setFont(undefined, 'bold');
+            doc.text('PART 2: Questions 6-10', 20, y);
+            y += 8;
+            
+            doc.setFontSize(11);
+            doc.setFont(undefined, 'normal');
+            for (let i = 6; i <= 10; i++) {
+                doc.text(`Question ${i}: ${answers[i] || '(Not answered)'}`, 20, y);
+                y += 7;
+            }
+            y += 3;
+            
+            doc.setFontSize(14);
+            doc.setFont(undefined, 'bold');
+            doc.text('PART 3: Questions 11-15', 20, y);
+            y += 8;
+            
+            doc.setFontSize(11);
+            doc.setFont(undefined, 'normal');
+            for (let i = 11; i <= 15; i++) {
+                doc.text(`Question ${i}: ${answers[i] || '(Not answered)'}`, 20, y);
+                y += 7;
+            }
+            y += 3;
+            
+            doc.setFontSize(14);
+            doc.setFont(undefined, 'bold');
+            doc.text('PART 4: Questions 16-20', 20, y);
+            y += 8;
+            
+            doc.setFontSize(11);
+            doc.setFont(undefined, 'normal');
+            for (let i = 16; i <= 20; i++) {
+                doc.text(`Question ${i}: ${answers[i] || '(Not answered)'}`, 20, y);
+                y += 7;
+            }
+            
+            doc.addPage();
+            y = 20;
+            
+            doc.setFontSize(14);
+            doc.setFont(undefined, 'bold');
+            doc.text('PART 5: Questions 21-25', 20, y);
+            y += 8;
+            
+            doc.setFontSize(11);
+            doc.setFont(undefined, 'normal');
+            for (let i = 21; i <= 25; i++) {
+                doc.text(`Question ${i}: ${answers[i] || '(Not answered)'}`, 20, y);
+                y += 7;
+            }
+            
+            doc.save(`${studentName}_A2_Listening_Test.pdf`);
+        });
+    </script>
+</body>
+</html>
