@@ -1,0 +1,808 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EDUNEST Dictation Test</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .welcome-screen {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .welcome-card {
+            background: white;
+            border: 3px solid #e53e3e;
+            border-radius: 15px;
+            padding: 40px;
+            max-width: 500px;
+            width: 100%;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            text-align: center;
+        }
+
+        .brand-title {
+            color: #e53e3e;
+            font-size: 2.5em;
+            font-weight: bold;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
+
+        .welcome-subtitle {
+            color: #333;
+            font-size: 1.3em;
+            margin-bottom: 30px;
+        }
+
+        .input-group {
+            margin-bottom: 25px;
+        }
+
+        .input-group label {
+            display: block;
+            text-align: left;
+            margin-bottom: 8px;
+            color: #555;
+            font-weight: bold;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e53e3e;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+
+        .input-group input:focus {
+            outline: none;
+            border-color: #c53030;
+            box-shadow: 0 0 0 3px rgba(229, 62, 62, 0.1);
+        }
+
+        .start-button {
+            background: #e53e3e;
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.2em;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .start-button:hover {
+            background: #c53030;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(229, 62, 62, 0.3);
+        }
+
+        .start-button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .test-container {
+            display: none;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            background: white;
+            min-height: 100vh;
+        }
+
+        .test-header {
+            background: white;
+            border: 3px solid #e53e3e;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .test-header h1 {
+            color: #e53e3e;
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+
+        .dictation-icon {
+            color: #e53e3e;
+            font-size: 1.5em;
+            margin-bottom: 10px;
+        }
+
+        .student-info {
+            color: #555;
+            font-size: 1.1em;
+            margin-top: 10px;
+        }
+
+        .task-section {
+            background: white;
+            border: 3px solid #e53e3e;
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 30px;
+        }
+
+        .task-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .task-icon {
+            color: #e53e3e;
+            font-size: 1.3em;
+        }
+
+        .task-title {
+            color: #e53e3e;
+            font-size: 1.5em;
+            font-weight: bold;
+        }
+
+        .task-subtitle {
+            color: #e53e3e;
+            font-size: 1em;
+            margin-bottom: 15px;
+        }
+
+        .instruction-box {
+            background: #fff5f5;
+            border: 2px solid #e53e3e;
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 20px;
+        }
+
+        .instruction-box p {
+            color: #333;
+            font-size: 1em;
+            line-height: 1.6;
+        }
+
+        .conversation-item {
+            background: #f7fafc;
+            border: 2px solid #e53e3e;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .conversation-label {
+            color: #e53e3e;
+            font-weight: bold;
+            font-size: 1.1em;
+            margin-bottom: 10px;
+        }
+
+        .sentence-line {
+            margin-bottom: 15px;
+            line-height: 2;
+            font-size: 1.05em;
+            color: #333;
+        }
+
+        .sentence-line:last-child {
+            margin-bottom: 0;
+        }
+
+        .gap-input {
+            border: none;
+            border-bottom: 2px solid #e53e3e;
+            background: white;
+            padding: 4px 8px;
+            font-size: 1em;
+            color: #333;
+            min-width: 120px;
+            margin: 0 5px;
+            transition: all 0.3s;
+        }
+
+        .gap-input:focus {
+            outline: none;
+            border-bottom-color: #c53030;
+            background: #fff5f5;
+        }
+
+        .gap-input::placeholder {
+            color: #cbd5e0;
+        }
+
+        .submit-button {
+            background: #e53e3e;
+            color: white;
+            border: none;
+            padding: 15px 50px;
+            font-size: 1.2em;
+            border-radius: 8px;
+            cursor: pointer;
+            display: block;
+            margin: 30px auto;
+            font-weight: bold;
+            text-transform: uppercase;
+            transition: all 0.3s;
+        }
+
+        .submit-button:hover {
+            background: #c53030;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(229, 62, 62, 0.3);
+        }
+
+        .results-container {
+            display: none;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            background: white;
+            min-height: 100vh;
+        }
+
+        .results-header {
+            background: white;
+            border: 3px solid #e53e3e;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .results-header h2 {
+            color: #e53e3e;
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+
+        .answer-sheet {
+            background: white;
+            border: 2px solid #e53e3e;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .answer-section {
+            margin-bottom: 25px;
+        }
+
+        .answer-section h3 {
+            color: #e53e3e;
+            font-size: 1.3em;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #e53e3e;
+        }
+
+        .answer-item {
+            padding: 10px;
+            border-bottom: 1px solid #e2e8f0;
+            display: flex;
+            gap: 10px;
+        }
+
+        .answer-item:last-child {
+            border-bottom: none;
+        }
+
+        .answer-label {
+            font-weight: bold;
+            color: #e53e3e;
+            min-width: 80px;
+        }
+
+        .answer-value {
+            color: #333;
+            flex: 1;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .action-button {
+            background: #e53e3e;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            font-size: 1em;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+
+        .action-button:hover {
+            background: #c53030;
+            transform: translateY(-2px);
+        }
+
+        .action-button.secondary {
+            background: #4a5568;
+        }
+
+        .action-button.secondary:hover {
+            background: #2d3748;
+        }
+
+        .proctor-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: black;
+            z-index: 10000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .proctor-modal {
+            background: white;
+            border: 3px solid #e53e3e;
+            border-radius: 15px;
+            padding: 40px;
+            max-width: 400px;
+            width: 90%;
+            text-align: center;
+        }
+
+        .proctor-modal h3 {
+            color: #e53e3e;
+            font-size: 1.8em;
+            margin-bottom: 15px;
+        }
+
+        .proctor-modal p {
+            color: #555;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .proctor-modal input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e53e3e;
+            border-radius: 8px;
+            font-size: 16px;
+            margin-bottom: 15px;
+        }
+
+        .proctor-modal button {
+            background: #e53e3e;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            font-size: 1.1em;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .proctor-modal button:hover {
+            background: #c53030;
+        }
+
+        .error-message {
+            color: #e53e3e;
+            margin-top: 10px;
+            font-size: 0.9em;
+        }
+
+        @media (max-width: 768px) {
+            .brand-title {
+                font-size: 2em;
+            }
+
+            .welcome-card {
+                padding: 30px 20px;
+            }
+
+            .test-header h1 {
+                font-size: 1.5em;
+            }
+
+            .conversation-item {
+                padding: 15px;
+            }
+
+            .sentence-line {
+                font-size: 0.95em;
+            }
+
+            .gap-input {
+                min-width: 100px;
+                font-size: 0.95em;
+            }
+
+            .submit-button {
+                padding: 12px 30px;
+                font-size: 1em;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+
+            .action-button {
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .brand-title {
+                font-size: 1.6em;
+            }
+
+            .welcome-subtitle {
+                font-size: 1.1em;
+            }
+
+            .test-container,
+            .results-container {
+                padding: 10px;
+            }
+
+            .gap-input {
+                min-width: 80px;
+                font-size: 0.9em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Welcome Screen -->
+    <div class="welcome-screen" id="welcomeScreen">
+        <div class="welcome-card">
+            <h1 class="brand-title">EDUNEST</h1>
+            <h2 class="welcome-subtitle">Dictation Test</h2>
+            <div class="input-group">
+                <label for="studentName">Enter Your Name:</label>
+                <input type="text" id="studentName" placeholder="Your full name" autocomplete="off">
+            </div>
+            <button class="start-button" id="startButton" disabled>Start Test</button>
+        </div>
+    </div>
+
+    <!-- Test Container -->
+    <div class="test-container" id="testContainer">
+        <div class="test-header">
+            <div class="dictation-icon">📝 Dictation</div>
+            <h1>EDUNEST DICTATION TEST</h1>
+            <p class="student-info">Student: <span id="studentNameDisplay"></span></p>
+        </div>
+
+        <!-- Task 1 -->
+        <div class="task-section">
+            <div class="task-header">
+                <span class="task-icon">▶</span>
+                <h2 class="task-title">Task 1</h2>
+            </div>
+            <div class="task-subtitle">CD 14</div>
+            <div class="instruction-box">
+                <p><strong>Listen to the conversation. Write the missing words.</strong></p>
+            </div>
+
+            <div class="conversation-item">
+                <div class="conversation-label">A: Hi, Amy. What did you do this weekend?</div>
+                <div class="sentence-line">
+                    B: Oh, not much. I <input type="text" class="gap-input" id="gap1" placeholder="________"> home and <input type="text" class="gap-input" id="gap2" placeholder="________"> on a project.
+                </div>
+            </div>
+
+            <div class="conversation-item">
+                <div class="conversation-label">A: Is that all?</div>
+                <div class="sentence-line">
+                    B: No. I also finished a good book. Later, I <input type="text" class="gap-input" id="gap3" placeholder="________"> <input type="text" class="gap-input" id="gap4" placeholder="________">. What about you?
+                </div>
+            </div>
+
+            <div class="conversation-item">
+                <div class="conversation-label">A: I played tennis. The courts were crowded. I <input type="text" class="gap-input" id="gap5" placeholder="________"> a long time to play!</div>
+            </div>
+
+            <div class="conversation-item">
+                <div class="conversation-label">B: What else did you do?</div>
+                <div class="sentence-line">
+                    A: Some friends <input type="text" class="gap-input" id="gap6" placeholder="________"> <input type="text" class="gap-input" id="gap7" placeholder="________"> to dinner. Later, we went to a club and met a lot of <input type="text" class="gap-input" id="gap8" placeholder="________">.
+                </div>
+            </div>
+        </div>
+
+        <button class="submit-button" id="submitButton">Submit Test</button>
+    </div>
+
+    <!-- Results Container -->
+    <div class="results-container" id="resultsContainer">
+        <div class="results-header">
+            <h2>EDUNEST - Answer Sheet</h2>
+            <p class="student-info">Student: <span id="studentNameResults"></span></p>
+        </div>
+
+        <div class="answer-sheet">
+            <div class="answer-section">
+                <h3>Dictation - Task 1</h3>
+                <div id="answersDisplay"></div>
+            </div>
+        </div>
+
+        <div class="action-buttons">
+            <button class="action-button" id="copyAnswersButton">Copy Answers</button>
+            <button class="action-button secondary" id="downloadPDFButton">Download PDF</button>
+        </div>
+    </div>
+
+    <!-- Proctor Overlay -->
+    <div class="proctor-overlay" id="proctorOverlay">
+        <div class="proctor-modal">
+            <h3>⚠️ Alert!</h3>
+            <p>You have left the test window. Please enter the reactivation code to continue.</p>
+            <input type="text" id="reactivationCode" placeholder="Enter code">
+            <div class="error-message" id="errorMessage"></div>
+            <button id="reactivateButton">Reactivate</button>
+        </div>
+    </div>
+
+    <script>
+        // Gap labels for reference
+        const gapLabels = [
+            'Gap 1',
+            'Gap 2',
+            'Gap 3',
+            'Gap 4',
+            'Gap 5',
+            'Gap 6',
+            'Gap 7',
+            'Gap 8'
+        ];
+
+        let studentName = '';
+        let answers = {};
+        let testActive = false;
+
+        // Elements
+        const welcomeScreen = document.getElementById('welcomeScreen');
+        const studentNameInput = document.getElementById('studentName');
+        const startButton = document.getElementById('startButton');
+        const testContainer = document.getElementById('testContainer');
+        const studentNameDisplay = document.getElementById('studentNameDisplay');
+        const submitButton = document.getElementById('submitButton');
+        const resultsContainer = document.getElementById('resultsContainer');
+        const studentNameResults = document.getElementById('studentNameResults');
+        const proctorOverlay = document.getElementById('proctorOverlay');
+        const reactivationCode = document.getElementById('reactivationCode');
+        const reactivateButton = document.getElementById('reactivateButton');
+        const errorMessage = document.getElementById('errorMessage');
+        const copyAnswersButton = document.getElementById('copyAnswersButton');
+        const downloadPDFButton = document.getElementById('downloadPDFButton');
+
+        // Enable start button when name is entered
+        studentNameInput.addEventListener('input', () => {
+            startButton.disabled = studentNameInput.value.trim() === '';
+        });
+
+        // Start test
+        startButton.addEventListener('click', () => {
+            studentName = studentNameInput.value.trim();
+            if (studentName) {
+                welcomeScreen.style.display = 'none';
+                testContainer.style.display = 'block';
+                studentNameDisplay.textContent = studentName;
+                setupInputListeners();
+                enterFullscreen();
+                testActive = true;
+                setupProctoring();
+            }
+        });
+
+        // Setup input listeners
+        function setupInputListeners() {
+            for (let i = 1; i <= 8; i++) {
+                const input = document.getElementById(`gap${i}`);
+                input.addEventListener('input', (e) => {
+                    answers[`gap${i}`] = e.target.value.trim();
+                });
+            }
+        }
+
+        // Submit test
+        submitButton.addEventListener('click', () => {
+            // Collect any remaining values
+            for (let i = 1; i <= 8; i++) {
+                const input = document.getElementById(`gap${i}`);
+                answers[`gap${i}`] = input.value.trim();
+            }
+            
+            testActive = false;
+            testContainer.style.display = 'none';
+            resultsContainer.style.display = 'block';
+            studentNameResults.textContent = studentName;
+            displayAnswers();
+            exitFullscreen();
+        });
+
+        // Display answers
+        function displayAnswers() {
+            const answersDiv = document.getElementById('answersDisplay');
+            answersDiv.innerHTML = '';
+            
+            for (let i = 1; i <= 8; i++) {
+                const answerItem = document.createElement('div');
+                answerItem.className = 'answer-item';
+                
+                const answerLabel = document.createElement('span');
+                answerLabel.className = 'answer-label';
+                answerLabel.textContent = `Gap ${i}:`;
+                
+                const answerValue = document.createElement('span');
+                answerValue.className = 'answer-value';
+                answerValue.textContent = answers[`gap${i}`] || '(not answered)';
+                
+                answerItem.appendChild(answerLabel);
+                answerItem.appendChild(answerValue);
+                answersDiv.appendChild(answerItem);
+            }
+        }
+
+        // Copy answers
+        copyAnswersButton.addEventListener('click', () => {
+            let text = `EDUNEST Dictation Test - Answer Sheet\nStudent: ${studentName}\n\n`;
+            text += `Task 1:\n`;
+            for (let i = 1; i <= 8; i++) {
+                text += `Gap ${i}: ${answers[`gap${i}`] || '(not answered)'}\n`;
+            }
+            
+            navigator.clipboard.writeText(text).then(() => {
+                alert('Answers copied to clipboard!');
+            });
+        });
+
+        // Download PDF
+        downloadPDFButton.addEventListener('click', () => {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            
+            // Title
+            doc.setFontSize(20);
+            doc.setTextColor(229, 62, 62);
+            doc.text('EDUNEST Dictation Test', 105, 20, { align: 'center' });
+            
+            // Student name
+            doc.setFontSize(12);
+            doc.setTextColor(0, 0, 0);
+            doc.text(`Student: ${studentName}`, 20, 35);
+            
+            // Task 1
+            doc.setFontSize(14);
+            doc.setTextColor(229, 62, 62);
+            doc.text('Task 1:', 20, 50);
+            
+            doc.setFontSize(11);
+            doc.setTextColor(0, 0, 0);
+            let yPos = 60;
+            for (let i = 1; i <= 8; i++) {
+                doc.text(`Gap ${i}: ${answers[`gap${i}`] || '(not answered)'}`, 25, yPos);
+                yPos += 8;
+            }
+            
+            doc.save(`${studentName}_EDUNEST_Dictation_Test.pdf`);
+        });
+
+        // Fullscreen functions
+        function enterFullscreen() {
+            const elem = document.documentElement;
+            if (elem.requestFullscreen) {
+                elem.requestFullscreen();
+            } else if (elem.webkitRequestFullscreen) {
+                elem.webkitRequestFullscreen();
+            } else if (elem.msRequestFullscreen) {
+                elem.msRequestFullscreen();
+            }
+        }
+
+        function exitFullscreen() {
+            if (document.exitFullscreen) {
+                document.exitFullscreen();
+            } else if (document.webkitExitFullscreen) {
+                document.webkitExitFullscreen();
+            } else if (document.msExitFullscreen) {
+                document.msExitFullscreen();
+            }
+        }
+
+        // Proctoring system
+        function setupProctoring() {
+            // Detect window blur (switching applications)
+            window.addEventListener('blur', handleProctorViolation);
+            
+            // Detect fullscreen exit
+            document.addEventListener('fullscreenchange', handleFullscreenChange);
+            document.addEventListener('webkitfullscreenchange', handleFullscreenChange);
+            document.addEventListener('msfullscreenchange', handleFullscreenChange);
+            
+            // Detect visibility change (tab switching)
+            document.addEventListener('visibilitychange', handleVisibilityChange);
+        }
+
+        function handleProctorViolation() {
+            if (testActive) {
+                showProctorOverlay();
+            }
+        }
+
+        function handleFullscreenChange() {
+            if (testActive && !document.fullscreenElement && !document.webkitFullscreenElement && !document.msFullscreenElement) {
+                showProctorOverlay();
+            }
+        }
+
+        function handleVisibilityChange() {
+            if (testActive && document.hidden) {
+                showProctorOverlay();
+            }
+        }
+
+        function showProctorOverlay() {
+            proctorOverlay.style.display = 'flex';
+            reactivationCode.value = '';
+            errorMessage.textContent = '';
+        }
+
+        function hideProctorOverlay() {
+            proctorOverlay.style.display = 'none';
+            enterFullscreen();
+        }
+
+        // Reactivation
+        reactivateButton.addEventListener('click', () => {
+            if (reactivationCode.value === '0429') {
+                hideProctorOverlay();
+            } else {
+                errorMessage.textContent = 'Incorrect code. Please try again.';
+            }
+        });
+
+        reactivationCode.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                reactivateButton.click();
+            }
+        });
+
+        // Prevent right-click during test
+        document.addEventListener('contextmenu', (e) => {
+            if (testActive) {
+                e.preventDefault();
+            }
+        });
+    </script>
+</body>
+</html>
