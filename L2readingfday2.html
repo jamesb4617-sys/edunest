@@ -1,0 +1,1255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EDUNEST A1 Reading Test</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #fff 0%, #ffe5e5 100%);
+            overflow: hidden;
+        }
+
+        /* Welcome Screen */
+        #welcomeScreen {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: linear-gradient(135deg, #ff4444 0%, #cc0000 100%);
+        }
+
+        .welcome-card {
+            background: white;
+            padding: 50px;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            max-width: 500px;
+            width: 90%;
+            border: 3px solid #ff4444;
+        }
+
+        .logo {
+            font-size: 48px;
+            font-weight: bold;
+            color: #ff4444;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .subtitle {
+            font-size: 18px;
+            color: #666;
+            margin-bottom: 30px;
+        }
+
+        .input-group {
+            margin-bottom: 25px;
+            text-align: left;
+        }
+
+        .input-group label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 8px;
+            color: #333;
+            font-size: 16px;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #ff4444;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+
+        .input-group input:focus {
+            outline: none;
+            border-color: #cc0000;
+            box-shadow: 0 0 10px rgba(255, 68, 68, 0.3);
+        }
+
+        .start-btn {
+            width: 100%;
+            padding: 15px;
+            background: #ff4444;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 20px;
+        }
+
+        .start-btn:hover:not(:disabled) {
+            background: #cc0000;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 68, 68, 0.4);
+        }
+
+        .start-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        .error-message {
+            color: #ff4444;
+            font-size: 14px;
+            margin-top: 10px;
+            display: none;
+        }
+
+        .creator-label {
+            margin-top: 30px;
+            font-size: 12px;
+            color: #999;
+            font-style: italic;
+        }
+
+        /* Test Interface */
+        #testInterface {
+            display: none;
+            height: 100vh;
+            flex-direction: column;
+        }
+
+        /* Header - Compact Design */
+        .test-header {
+            background: linear-gradient(135deg, #ff4444 0%, #cc0000 100%);
+            color: white;
+            padding: 8px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            flex-shrink: 0;
+            min-height: 50px;
+        }
+
+        .brand-info h1 {
+            font-size: 18px;
+            margin-bottom: 0;
+            font-weight: 600;
+        }
+
+        .brand-info p {
+            font-size: 11px;
+            opacity: 0.85;
+            margin-top: 2px;
+        }
+
+        .student-info {
+            text-align: right;
+        }
+
+        .student-info p {
+            font-size: 12px;
+            opacity: 0.85;
+            line-height: 1.3;
+        }
+
+        /* Main Content */
+        .test-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .passage-container {
+            display: flex;
+            flex: 1;
+            flex-direction: row;
+            overflow: hidden;
+        }
+
+        /* Split Screen Layout - Reading LEFT, Questions RIGHT */
+        .reading-section {
+            flex: 0 0 50%;
+            overflow-y: auto;
+            padding: 20px 25px;
+            background: white;
+            order: 1;
+        }
+
+        .reading-section h2 {
+            color: #ff4444;
+            margin-bottom: 15px;
+            font-size: 19px;
+            border-bottom: 2px solid #ff4444;
+            padding-bottom: 6px;
+            font-weight: 600;
+        }
+
+        .reading-section h3 {
+            color: #ff4444;
+            margin-top: 15px;
+            margin-bottom: 8px;
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .reading-section p {
+            line-height: 1.7;
+            margin-bottom: 12px;
+            color: #333;
+            font-size: 15px;
+        }
+
+        .questions-section {
+            flex: 0 0 50%;
+            overflow-y: auto;
+            padding: 20px 25px;
+            background: #fff;
+            border-left: 3px solid #000;
+            order: 2;
+        }
+
+        .question {
+            background: white;
+            padding: 18px;
+            margin-bottom: 15px;
+            border-radius: 10px;
+            border: 2px solid #ff4444;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s;
+        }
+
+        .question:hover {
+            box-shadow: 0 4px 12px rgba(255, 68, 68, 0.2);
+        }
+
+        .question-number {
+            color: #ff4444;
+            font-weight: bold;
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+
+        .question-text {
+            font-size: 15px;
+            margin-bottom: 12px;
+            color: #333;
+            font-weight: 500;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .option {
+            display: flex;
+            align-items: center;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            background: white;
+        }
+
+        .option:hover {
+            border-color: #ff4444;
+            background: #fff5f5;
+            transform: translateX(5px);
+        }
+
+        .option.selected {
+            border-color: #ff4444;
+            background: #ffe5e5;
+            box-shadow: 0 0 10px rgba(255, 68, 68, 0.3);
+        }
+
+        .option input[type="radio"] {
+            width: 20px;
+            height: 20px;
+            margin-right: 12px;
+            cursor: pointer;
+            accent-color: #ff4444;
+        }
+
+        .option label {
+            cursor: pointer;
+            font-size: 15px;
+            color: #333;
+            flex: 1;
+        }
+
+        /* Gap Filling Inputs */
+        .gap-input-wrapper {
+            margin-top: 10px;
+        }
+
+        .gap-input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 15px;
+            transition: all 0.3s;
+            background: white;
+        }
+
+        .gap-input:focus {
+            outline: none;
+            border-color: #ff4444;
+            background: #fff5f5;
+            box-shadow: 0 0 10px rgba(255, 68, 68, 0.2);
+        }
+
+        .gap-input:not(:placeholder-shown) {
+            border-color: #ff4444;
+            background: #ffe5e5;
+        }
+
+        /* Submit Section */
+        .submit-section {
+            padding: 15px 30px;
+            text-align: center;
+            background: white;
+            border-top: 3px solid #ff4444;
+            flex-shrink: 0;
+        }
+
+        .submit-btn {
+            padding: 12px 45px;
+            background: #ff4444;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .submit-btn:hover {
+            background: #cc0000;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 68, 68, 0.4);
+        }
+
+        /* Results Screen */
+        #resultsScreen {
+            display: none;
+            flex-direction: column;
+            height: 100vh;
+            background: white;
+        }
+
+        .results-header {
+            background: linear-gradient(135deg, #ff4444 0%, #cc0000 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .results-header h1 {
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+
+        .results-content {
+            flex: 1;
+            padding: 40px;
+            overflow-y: auto;
+        }
+
+        .answer-sheet {
+            background: white;
+            border: 3px solid #ff4444;
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .passage-results {
+            margin-bottom: 30px;
+        }
+
+        .passage-title {
+            color: #ff4444;
+            font-size: 22px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #ff4444;
+            padding-bottom: 10px;
+        }
+
+        .answer-item {
+            padding: 15px;
+            margin-bottom: 10px;
+            background: #f9f9f9;
+            border-left: 4px solid #ff4444;
+            border-radius: 4px;
+        }
+
+        .answer-item strong {
+            color: #ff4444;
+        }
+
+        .results-actions {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .action-btn {
+            padding: 15px 40px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .save-pdf-btn {
+            background: #ff4444;
+            color: white;
+        }
+
+        .save-pdf-btn:hover {
+            background: #cc0000;
+            transform: translateY(-2px);
+        }
+
+        .copy-btn {
+            background: white;
+            color: #ff4444;
+            border: 2px solid #ff4444;
+        }
+
+        .copy-btn:hover {
+            background: #ff4444;
+            color: white;
+        }
+
+        /* Proctoring System */
+        #proctoringModal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: black;
+            z-index: 10000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .proctoring-content {
+            background: white;
+            padding: 50px;
+            border-radius: 20px;
+            text-align: center;
+            max-width: 500px;
+            border: 3px solid #ff4444;
+        }
+
+        .proctoring-content h2 {
+            color: #ff4444;
+            margin-bottom: 20px;
+            font-size: 28px;
+        }
+
+        .proctoring-content p {
+            margin-bottom: 30px;
+            color: #333;
+            font-size: 16px;
+        }
+
+        .proctoring-content input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #ff4444;
+            border-radius: 8px;
+            font-size: 16px;
+            margin-bottom: 20px;
+        }
+
+        .proctoring-content button {
+            width: 100%;
+            padding: 15px;
+            background: #ff4444;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .proctoring-content button:hover {
+            background: #cc0000;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .welcome-card {
+                padding: 30px 20px;
+            }
+
+            .logo {
+                font-size: 36px;
+            }
+
+            .test-header {
+                flex-direction: column;
+                gap: 10px;
+                padding: 10px 15px;
+            }
+
+            .brand-info h1 {
+                font-size: 16px;
+            }
+
+            .brand-info p {
+                font-size: 10px;
+            }
+
+            .student-info p {
+                font-size: 11px;
+            }
+
+            .passage-container {
+                flex-direction: column;
+            }
+
+            .reading-section {
+                flex: 0 0 50%;
+                padding: 15px;
+                order: 1;
+            }
+
+            .reading-section h2 {
+                font-size: 17px;
+                margin-bottom: 10px;
+            }
+
+            .reading-section h3 {
+                font-size: 15px;
+                margin-top: 12px;
+            }
+
+            .reading-section p {
+                font-size: 14px;
+                line-height: 1.6;
+            }
+
+            .questions-section {
+                flex: 0 0 50%;
+                padding: 15px;
+                order: 2;
+                border-top: 3px solid #000;
+                border-left: none;
+            }
+
+            .question {
+                padding: 15px;
+                margin-bottom: 12px;
+            }
+
+            .question-number {
+                font-size: 15px;
+            }
+
+            .question-text {
+                font-size: 14px;
+            }
+
+            .option {
+                padding: 10px;
+            }
+
+            .option label {
+                font-size: 13px;
+            }
+
+            .submit-section {
+                padding: 12px 20px;
+            }
+
+            .submit-btn {
+                padding: 10px 35px;
+                font-size: 15px;
+            }
+
+            .results-content {
+                padding: 20px;
+            }
+
+            .answer-sheet {
+                padding: 20px;
+            }
+
+            .action-btn {
+                width: 100%;
+            }
+        }
+
+        /* Scrollbar Styling */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #ff4444;
+            border-radius: 5px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #cc0000;
+        }
+    </style>
+</head>
+<body>
+    <!-- Welcome Screen -->
+    <div id="welcomeScreen">
+        <div class="welcome-card">
+            <div class="logo">EDUNEST</div>
+            <div class="subtitle">A1 English Reading Test</div>
+            
+            <div class="input-group">
+                <label for="studentName">Student Name:</label>
+                <input type="text" id="studentName" placeholder="Enter your name" required>
+            </div>
+            
+            <div class="input-group">
+                <label for="password">Password:</label>
+                <input type="password" id="password" placeholder="Enter password" required>
+            </div>
+            
+            <div class="error-message" id="errorMessage">Incorrect password. Please try again.</div>
+            
+            <button class="start-btn" id="startBtn" disabled>Start Test</button>
+            
+            <div class="creator-label">Created by: Muslima</div>
+        </div>
+    </div>
+
+    <!-- Test Interface -->
+    <div id="testInterface">
+        <!-- Header -->
+        <div class="test-header">
+            <div class="brand-info">
+                <h1>EDUNEST</h1>
+                <p>A1 English Reading Test</p>
+            </div>
+            <div class="student-info">
+                <p><strong>Student:</strong> <span id="studentNameDisplay"></span></p>
+            </div>
+        </div>
+
+        <!-- Test Content -->
+        <div class="test-content">
+            <div class="passage-container">
+                <div class="reading-section">
+                    <h2>Guess who?</h2>
+                    
+                    <h3>Maria</h3>
+                    <p>Hello! My name is Maria and I'm from Spain. I am a teacher. I work with young children. In my free time, I like to read books and cook Spanish food for my family. At the weekend, I enjoy meeting friends. We often visit museums and sometimes go to concerts.</p>
+
+                    <h3>Tom</h3>
+                    <p>Hi! I'm Tom and I come from the United States. I'm a doctor. I love basketball; I often play with my friends on the weekend. In the evenings, I usually watch films at home with my friends. On Sundays, I often go hiking in the mountains to take pictures. I have a younger sister. She lives with my parents.</p>
+
+                    <h3>Aiko</h3>
+                    <p>Good morning! I'm Aiko and I'm from Japan. I don't work because I'm a student studying medicine. I'd like to be a doctor and work in a big hospital. I don't go out a lot because I like to spend time by myself. I even travel alone. I don't have brothers or sisters, and my friends don't like traveling. I don't like watching TV, so I always play video games after dinner.</p>
+
+                    <h3>Luis</h3>
+                    <p>Hey, how are you? I'm Luis from Brazil but I live in Australia. I'm a chef, and cooking is my passion. When I'm not at work, I always order take-away food…I love pizza! Football is my favourite sport, but I don't play it; I watch it on TV at the weekend. I have a big family, but I never see them because they are in Brazil. I miss them very much.</p>
+                </div>
+
+                <div class="questions-section">
+                    <div class="question">
+                        <div class="question-number">Question 1</div>
+                        <div class="question-text">Who likes to cook at home?</div>
+                        <div class="options">
+                            <div class="option" onclick="selectOption(this)">
+                                <input type="radio" name="q1" value="A" id="q1a">
+                                <label for="q1a">A. Maria</label>
+                            </div>
+                            <div class="option" onclick="selectOption(this)">
+                                <input type="radio" name="q1" value="B" id="q1b">
+                                <label for="q1b">B. Tom</label>
+                            </div>
+                            <div class="option" onclick="selectOption(this)">
+                                <input type="radio" name="q1" value="C" id="q1c">
+                                <label for="q1c">C. Aiko</label>
+                            </div>
+                            <div class="option" onclick="selectOption(this)">
+                                <input type="radio" name="q1" value="D" id="q1d">
+                                <label for="q1d">D. Luis</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question">
+                        <div class="question-number">Question 2</div>
+                        <div class="question-text">Who doesn't have a job?</div>
+                        <div class="options">
+                            <div class="option" onclick="selectOption(this)">
+                                <input type="radio" name="q2" value="A" id="q2a">
+                                <label for="q2a">A. Maria</label>
+                            </div>
+                            <div class="option" onclick="selectOption(this)">
+                                <input type="radio" name="q2" value="B" id="q2b">
+                                <label for="q2b">B. Tom</label>
+                            </div>
+                            <div class="option" onclick="selectOption(this)">
+                                <input type="radio" name="q2" value="C" id="q2c">
+                                <label for="q2c">C. Aiko</label>
+                            </div>
+                            <div class="option" onclick="selectOption(this)">
+                                <input type="radio" name="q2" value="D" id="q2d">
+                                <label for="q2d">D. Luis</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question">
+                        <div class="question-number">Question 3</div>
+                        <div class="question-text">Who works in a school?</div>
+                        <div class="options">
+                            <div class="option" onclick="selectOption(this)">
+                                <input type="radio" name="q3" value="A" id="q3a">
+                                <label for="q3a">A. Maria</label>
+                            </div>
+                            <div class="option" onclick="selectOption(this)">
+                                <input type="radio" name="q3" value="B" id="q3b">
+                                <label for="q3b">B. Tom</label>
+                            </div>
+                            <div class="option" onclick="selectOption(this)">
+                                <input type="radio" name="q3" value="C" id="q3c">
+                                <label for="q3c">C. Aiko</label>
+                            </div>
+                            <div class="option" onclick="selectOption(this)">
+                                <input type="radio" name="q3" value="D" id="q3d">
+                                <label for="q3d">D. Luis</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question">
+                        <div class="question-number">Question 4</div>
+                        <div class="question-text">Who lives far from their family?</div>
+                        <div class="options">
+                            <div class="option" onclick="selectOption(this)">
+                                <input type="radio" name="q4" value="A" id="q4a">
+                                <label for="q4a">A. Maria</label>
+                            </div>
+                            <div class="option" onclick="selectOption(this)">
+                                <input type="radio" name="q4" value="B" id="q4b">
+                                <label for="q4b">B. Tom</label>
+                            </div>
+                            <div class="option" onclick="selectOption(this)">
+                                <input type="radio" name="q4" value="C" id="q4c">
+                                <label for="q4c">C. Aiko</label>
+                            </div>
+                            <div class="option" onclick="selectOption(this)">
+                                <input type="radio" name="q4" value="D" id="q4d">
+                                <label for="q4d">D. Luis</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question">
+                        <div class="question-number">Question 5</div>
+                        <div class="question-text">Who works in a hospital?</div>
+                        <div class="options">
+                            <div class="option" onclick="selectOption(this)">
+                                <input type="radio" name="q5" value="A" id="q5a">
+                                <label for="q5a">A. Maria</label>
+                            </div>
+                            <div class="option" onclick="selectOption(this)">
+                                <input type="radio" name="q5" value="B" id="q5b">
+                                <label for="q5b">B. Tom</label>
+                            </div>
+                            <div class="option" onclick="selectOption(this)">
+                                <input type="radio" name="q5" value="C" id="q5c">
+                                <label for="q5c">C. Aiko</label>
+                            </div>
+                            <div class="option" onclick="selectOption(this)">
+                                <input type="radio" name="q5" value="D" id="q5d">
+                                <label for="q5d">D. Luis</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question">
+                        <div class="question-number">Question 6</div>
+                        <div class="question-text">Who likes playing sports?</div>
+                        <div class="options">
+                            <div class="option" onclick="selectOption(this)">
+                                <input type="radio" name="q6" value="A" id="q6a">
+                                <label for="q6a">A. Maria</label>
+                            </div>
+                            <div class="option" onclick="selectOption(this)">
+                                <input type="radio" name="q6" value="B" id="q6b">
+                                <label for="q6b">B. Tom</label>
+                            </div>
+                            <div class="option" onclick="selectOption(this)">
+                                <input type="radio" name="q6" value="C" id="q6c">
+                                <label for="q6c">C. Aiko</label>
+                            </div>
+                            <div class="option" onclick="selectOption(this)">
+                                <input type="radio" name="q6" value="D" id="q6d">
+                                <label for="q6d">D. Luis</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question">
+                        <div class="question-number">Question 7</div>
+                        <div class="question-text">Who spends a lot of time alone?</div>
+                        <div class="options">
+                            <div class="option" onclick="selectOption(this)">
+                                <input type="radio" name="q7" value="A" id="q7a">
+                                <label for="q7a">A. Maria</label>
+                            </div>
+                            <div class="option" onclick="selectOption(this)">
+                                <input type="radio" name="q7" value="B" id="q7b">
+                                <label for="q7b">B. Tom</label>
+                            </div>
+                            <div class="option" onclick="selectOption(this)">
+                                <input type="radio" name="q7" value="C" id="q7c">
+                                <label for="q7c">C. Aiko</label>
+                            </div>
+                            <div class="option" onclick="selectOption(this)">
+                                <input type="radio" name="q7" value="D" id="q7d">
+                                <label for="q7d">D. Luis</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question">
+                        <div class="question-number">Question 8</div>
+                        <div class="question-text">Who stays at home to watch TV at the weekend?</div>
+                        <div class="options">
+                            <div class="option" onclick="selectOption(this)">
+                                <input type="radio" name="q8" value="A" id="q8a">
+                                <label for="q8a">A. Maria</label>
+                            </div>
+                            <div class="option" onclick="selectOption(this)">
+                                <input type="radio" name="q8" value="B" id="q8b">
+                                <label for="q8b">B. Tom</label>
+                            </div>
+                            <div class="option" onclick="selectOption(this)">
+                                <input type="radio" name="q8" value="C" id="q8c">
+                                <label for="q8c">C. Aiko</label>
+                            </div>
+                            <div class="option" onclick="selectOption(this)">
+                                <input type="radio" name="q8" value="D" id="q8d">
+                                <label for="q8d">D. Luis</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="margin: 30px 0; padding: 15px; background: #ffe5e5; border-left: 4px solid #ff4444; border-radius: 8px;">
+                        <strong style="color: #ff4444; font-size: 16px;">Gap Filling Questions (9-15)</strong>
+                        <p style="margin-top: 8px; color: #666; font-size: 14px;">Complete each sentence with ONE word from the text.</p>
+                    </div>
+
+                    <div class="question">
+                        <div class="question-number">Question 9</div>
+                        <div class="question-text">Maria works with young __________ at her job.</div>
+                        <div class="gap-input-wrapper">
+                            <input type="text" name="q9" id="q9" class="gap-input" placeholder="Type one word">
+                        </div>
+                    </div>
+
+                    <div class="question">
+                        <div class="question-number">Question 10</div>
+                        <div class="question-text">Tom enjoys going to the __________ on Sundays to take pictures.</div>
+                        <div class="gap-input-wrapper">
+                            <input type="text" name="q10" id="q10" class="gap-input" placeholder="Type one word">
+                        </div>
+                    </div>
+
+                    <div class="question">
+                        <div class="question-number">Question 11</div>
+                        <div class="question-text">Aiko wants to work in a big __________ after finishing her studies.</div>
+                        <div class="gap-input-wrapper">
+                            <input type="text" name="q11" id="q11" class="gap-input" placeholder="Type one word">
+                        </div>
+                    </div>
+
+                    <div class="question">
+                        <div class="question-number">Question 12</div>
+                        <div class="question-text">Luis's favourite food to order is __________.</div>
+                        <div class="gap-input-wrapper">
+                            <input type="text" name="q12" id="q12" class="gap-input" placeholder="Type one word">
+                        </div>
+                    </div>
+
+                    <div class="question">
+                        <div class="question-number">Question 13</div>
+                        <div class="question-text">Maria likes to visit __________ with her friends at the weekend.</div>
+                        <div class="gap-input-wrapper">
+                            <input type="text" name="q13" id="q13" class="gap-input" placeholder="Type one word">
+                        </div>
+                    </div>
+
+                    <div class="question">
+                        <div class="question-number">Question 14</div>
+                        <div class="question-text">Aiko doesn't have any brothers or __________.</div>
+                        <div class="gap-input-wrapper">
+                            <input type="text" name="q14" id="q14" class="gap-input" placeholder="Type one word">
+                        </div>
+                    </div>
+
+                    <div class="question">
+                        <div class="question-number">Question 15</div>
+                        <div class="question-text">Tom has a younger __________ who lives with his parents.</div>
+                        <div class="gap-input-wrapper">
+                            <input type="text" name="q15" id="q15" class="gap-input" placeholder="Type one word">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Submit Section -->
+        <div class="submit-section">
+            <button class="submit-btn" onclick="submitTest()">Submit Test</button>
+        </div>
+    </div>
+
+    <!-- Results Screen -->
+    <div id="resultsScreen">
+        <div class="results-header">
+            <h1>EDUNEST - Test Results</h1>
+            <p>Student: <span id="resultStudentName"></span></p>
+        </div>
+        <div class="results-content">
+            <div class="answer-sheet" id="answerSheet">
+                <!-- Answers will be inserted here -->
+            </div>
+            <div class="results-actions">
+                <button class="action-btn save-pdf-btn" onclick="saveToPDF()">Save as PDF</button>
+                <button class="action-btn copy-btn" onclick="copyAnswers()">Copy Answers</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Proctoring Modal -->
+    <div id="proctoringModal">
+        <div class="proctoring-content">
+            <h2>⚠️ Test Violation Detected</h2>
+            <p>You have left the test window. Please enter the reactivation code to continue.</p>
+            <input type="password" id="reactivationCode" placeholder="Enter reactivation code">
+            <button onclick="validateReactivationCode()">Continue Test</button>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script>
+        // Constants
+        const CORRECT_PASSWORD = '0902';
+        const REACTIVATION_CODE = '0227';
+        let studentName = '';
+        let isTestActive = false;
+
+        // Initialize
+        document.getElementById('studentName').addEventListener('input', updateStartButton);
+        document.getElementById('password').addEventListener('input', updateStartButton);
+        document.getElementById('password').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                document.getElementById('startBtn').click();
+            }
+        });
+
+        function updateStartButton() {
+            const name = document.getElementById('studentName').value.trim();
+            const password = document.getElementById('password').value;
+            document.getElementById('startBtn').disabled = !(name && password);
+        }
+
+        document.getElementById('startBtn').addEventListener('click', function() {
+            const name = document.getElementById('studentName').value.trim();
+            const password = document.getElementById('password').value;
+            
+            if (password === CORRECT_PASSWORD) {
+                studentName = name;
+                startTest();
+            } else {
+                document.getElementById('errorMessage').style.display = 'block';
+                document.getElementById('password').value = '';
+                document.getElementById('password').focus();
+            }
+        });
+
+        function startTest() {
+            document.getElementById('welcomeScreen').style.display = 'none';
+            document.getElementById('testInterface').style.display = 'flex';
+            document.getElementById('studentNameDisplay').textContent = studentName;
+            
+            // Enter fullscreen
+            enterFullscreen();
+            isTestActive = true;
+            
+            // Start proctoring
+            startProctoring();
+        }
+
+        function enterFullscreen() {
+            const elem = document.documentElement;
+            if (elem.requestFullscreen) {
+                elem.requestFullscreen();
+            } else if (elem.webkitRequestFullscreen) {
+                elem.webkitRequestFullscreen();
+            } else if (elem.msRequestFullscreen) {
+                elem.msRequestFullscreen();
+            }
+        }
+
+        // Proctoring System
+        function startProctoring() {
+            // Detect window blur (switching tabs/apps)
+            window.addEventListener('blur', handleViolation);
+            
+            // Detect fullscreen exit
+            document.addEventListener('fullscreenchange', handleFullscreenChange);
+            document.addEventListener('webkitfullscreenchange', handleFullscreenChange);
+            document.addEventListener('mozfullscreenchange', handleFullscreenChange);
+            document.addEventListener('MSFullscreenChange', handleFullscreenChange);
+            
+            // Detect visibility change
+            document.addEventListener('visibilitychange', handleVisibilityChange);
+        }
+
+        function handleViolation() {
+            if (isTestActive && !document.getElementById('proctoringModal').style.display) {
+                showProctoringModal();
+            }
+        }
+
+        function handleFullscreenChange() {
+            if (isTestActive && !document.fullscreenElement && !document.webkitFullscreenElement) {
+                showProctoringModal();
+            }
+        }
+
+        function handleVisibilityChange() {
+            if (isTestActive && document.hidden) {
+                showProctoringModal();
+            }
+        }
+
+        function showProctoringModal() {
+            document.getElementById('proctoringModal').style.display = 'flex';
+            document.getElementById('reactivationCode').value = '';
+            document.getElementById('reactivationCode').focus();
+        }
+
+        function validateReactivationCode() {
+            const code = document.getElementById('reactivationCode').value;
+            if (code === REACTIVATION_CODE) {
+                document.getElementById('proctoringModal').style.display = 'none';
+                enterFullscreen();
+            } else {
+                alert('Incorrect reactivation code. Please try again.');
+                document.getElementById('reactivationCode').value = '';
+                document.getElementById('reactivationCode').focus();
+            }
+        }
+
+        // Option Selection
+        function selectOption(optionElement) {
+            const radio = optionElement.querySelector('input[type="radio"]');
+            radio.checked = true;
+            
+            // Remove selected class from siblings
+            optionElement.parentElement.querySelectorAll('.option').forEach(opt => {
+                opt.classList.remove('selected');
+            });
+            
+            // Add selected class to clicked option
+            optionElement.classList.add('selected');
+        }
+
+        // Submit Test
+        function submitTest() {
+            if (!confirm('Are you sure you want to submit your test?')) {
+                return;
+            }
+            
+            isTestActive = false;
+            
+            // Collect answers
+            const answers = [];
+            
+            // Multiple choice questions (1-8)
+            for (let i = 1; i <= 8; i++) {
+                const selected = document.querySelector(`input[name="q${i}"]:checked`);
+                answers.push({
+                    question: i,
+                    type: 'multiple',
+                    answer: selected ? selected.value : 'Not answered'
+                });
+            }
+            
+            // Gap filling questions (9-15)
+            for (let i = 9; i <= 15; i++) {
+                const input = document.getElementById(`q${i}`);
+                answers.push({
+                    question: i,
+                    type: 'gap',
+                    answer: input.value.trim() || 'Not answered'
+                });
+            }
+            
+            // Show results
+            showResults(answers);
+        }
+
+        function showResults(answers) {
+            document.getElementById('testInterface').style.display = 'none';
+            document.getElementById('resultsScreen').style.display = 'flex';
+            document.getElementById('resultStudentName').textContent = studentName;
+            
+            // Generate answer sheet
+            let html = '<div class="passage-results">';
+            html += '<div class="passage-title">Guess who?</div>';
+            
+            // Multiple choice answers (1-8)
+            html += '<h3 style="color: #ff4444; margin-top: 15px; margin-bottom: 10px;">Multiple Choice Questions (1-8)</h3>';
+            answers.slice(0, 8).forEach((item) => {
+                html += `<div class="answer-item">
+                    <strong>Question ${item.question}:</strong> ${item.answer}
+                </div>`;
+            });
+            
+            // Gap filling answers (9-15)
+            html += '<h3 style="color: #ff4444; margin-top: 20px; margin-bottom: 10px;">Gap Filling Questions (9-15)</h3>';
+            answers.slice(8).forEach((item) => {
+                html += `<div class="answer-item">
+                    <strong>Question ${item.question}:</strong> ${item.answer}
+                </div>`;
+            });
+            
+            html += '</div>';
+            
+            document.getElementById('answerSheet').innerHTML = html;
+            
+            // Exit fullscreen
+            if (document.exitFullscreen) {
+                document.exitFullscreen();
+            }
+        }
+
+        // Save to PDF
+        function saveToPDF() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            
+            // Add content
+            doc.setFontSize(20);
+            doc.setTextColor(255, 68, 68);
+            doc.text('EDUNEST - A1 Reading Test Results', 20, 20);
+            
+            doc.setFontSize(12);
+            doc.setTextColor(0, 0, 0);
+            doc.text(`Student: ${studentName}`, 20, 35);
+            doc.text(`Date: ${new Date().toLocaleDateString()}`, 20, 42);
+            
+            let yPos = 55;
+            
+            doc.setFontSize(14);
+            doc.setTextColor(255, 68, 68);
+            doc.text('Guess who?', 20, yPos);
+            yPos += 10;
+            
+            // Multiple choice answers
+            doc.setFontSize(12);
+            doc.setTextColor(255, 68, 68);
+            doc.text('Multiple Choice Questions (1-8)', 20, yPos);
+            yPos += 8;
+            
+            doc.setFontSize(11);
+            doc.setTextColor(0, 0, 0);
+            
+            for (let i = 1; i <= 8; i++) {
+                const selected = document.querySelector(`input[name="q${i}"]:checked`);
+                const answer = selected ? selected.value : 'Not answered';
+                doc.text(`Question ${i}: ${answer}`, 25, yPos);
+                yPos += 7;
+            }
+            
+            yPos += 5;
+            
+            // Gap filling answers
+            doc.setFontSize(12);
+            doc.setTextColor(255, 68, 68);
+            doc.text('Gap Filling Questions (9-15)', 20, yPos);
+            yPos += 8;
+            
+            doc.setFontSize(11);
+            doc.setTextColor(0, 0, 0);
+            
+            for (let i = 9; i <= 15; i++) {
+                const input = document.getElementById(`q${i}`);
+                const answer = input.value.trim() || 'Not answered';
+                doc.text(`Question ${i}: ${answer}`, 25, yPos);
+                yPos += 7;
+            }
+            
+            // Add footer
+            doc.setFontSize(9);
+            doc.setTextColor(150, 150, 150);
+            doc.text('Created by: Muslima', 20, 285);
+            
+            doc.save(`${studentName}_A1_Reading_Test.pdf`);
+        }
+
+        // Copy Answers
+        function copyAnswers() {
+            let text = `EDUNEST - A1 Reading Test Results\n`;
+            text += `Student: ${studentName}\n`;
+            text += `Date: ${new Date().toLocaleDateString()}\n\n`;
+            
+            text += `Guess who?\n\n`;
+            
+            text += `Multiple Choice Questions (1-8)\n`;
+            for (let i = 1; i <= 8; i++) {
+                const selected = document.querySelector(`input[name="q${i}"]:checked`);
+                const answer = selected ? selected.value : 'Not answered';
+                text += `Question ${i}: ${answer}\n`;
+            }
+            
+            text += `\nGap Filling Questions (9-15)\n`;
+            for (let i = 9; i <= 15; i++) {
+                const input = document.getElementById(`q${i}`);
+                const answer = input.value.trim() || 'Not answered';
+                text += `Question ${i}: ${answer}\n`;
+            }
+            
+            text += `\nCreated by: Muslima`;
+            
+            navigator.clipboard.writeText(text).then(() => {
+                alert('Answers copied to clipboard!');
+            });
+        }
+    </script>
+</body>
+</html>
