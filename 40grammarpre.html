@@ -1,0 +1,800 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EDUNEST Grammar Test</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #fff 0%, #ffe6e6 100%);
+            min-height: 100vh;
+        }
+
+        .welcome-screen {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+            background: linear-gradient(135deg, #dc143c 0%, #8b0000 100%);
+        }
+
+        .welcome-box {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            max-width: 450px;
+            width: 100%;
+            border: 3px solid #dc143c;
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .logo h1 {
+            color: #dc143c;
+            font-size: 2.5em;
+            font-weight: bold;
+            letter-spacing: 2px;
+        }
+
+        .logo p {
+            color: #666;
+            margin-top: 5px;
+            font-size: 0.9em;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 600;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        .input-group input:focus {
+            outline: none;
+            border-color: #dc143c;
+        }
+
+        .start-btn {
+            width: 100%;
+            padding: 15px;
+            background: #dc143c;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s;
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .start-btn.active {
+            opacity: 1;
+            cursor: pointer;
+        }
+
+        .start-btn.active:hover {
+            background: #b01030;
+        }
+
+        .error-message {
+            color: #dc143c;
+            text-align: center;
+            margin-top: 10px;
+            font-weight: 600;
+            display: none;
+        }
+
+        .creator-credit {
+            text-align: center;
+            margin-top: 20px;
+            color: white;
+            font-size: 0.85em;
+        }
+
+        .test-container {
+            display: none;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 15px;
+        }
+
+        .test-header {
+            background: white;
+            padding: 15px 20px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            border: 2px solid #dc143c;
+            box-shadow: 0 2px 10px rgba(220, 20, 60, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .test-title {
+            color: #dc143c;
+            font-size: 1.3em;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .student-info {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 10px;
+        }
+
+        .progress-bar-container {
+            background: #f0f0f0;
+            height: 8px;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 8px;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #dc143c 0%, #ff1744 100%);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .progress-text {
+            text-align: center;
+            color: #666;
+            font-size: 0.85em;
+            font-weight: 600;
+        }
+
+        .question-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            border: 2px solid #dc143c;
+            box-shadow: 0 2px 10px rgba(220, 20, 60, 0.1);
+        }
+
+        .question-number {
+            color: #dc143c;
+            font-weight: bold;
+            font-size: 1.1em;
+            margin-bottom: 12px;
+        }
+
+        .question-text {
+            color: #333;
+            font-size: 1.05em;
+            margin-bottom: 15px;
+            line-height: 1.6;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .option {
+            display: flex;
+            align-items: center;
+            padding: 12px 15px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            background: white;
+        }
+
+        .option:hover {
+            border-color: #dc143c;
+            background: #fff5f5;
+        }
+
+        .option.selected {
+            border-color: #dc143c;
+            background: #ffe6e6;
+        }
+
+        .option input[type="radio"] {
+            width: 20px;
+            height: 20px;
+            margin-right: 12px;
+            cursor: pointer;
+            accent-color: #dc143c;
+        }
+
+        .option label {
+            cursor: pointer;
+            font-size: 1em;
+            color: #333;
+            flex: 1;
+        }
+
+        .submit-section {
+            text-align: center;
+            margin: 30px 0;
+        }
+
+        .submit-btn {
+            padding: 15px 50px;
+            background: #dc143c;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .submit-btn:hover {
+            background: #b01030;
+        }
+
+        .results-screen {
+            display: none;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+        }
+
+        .results-box {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            border: 3px solid #dc143c;
+            box-shadow: 0 5px 20px rgba(220, 20, 60, 0.2);
+        }
+
+        .results-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .results-header h2 {
+            color: #dc143c;
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+
+        .answer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+            gap: 10px;
+            margin: 20px 0;
+        }
+
+        .answer-item {
+            background: #f8f8f8;
+            padding: 10px;
+            border-radius: 8px;
+            text-align: center;
+            border: 2px solid #dc143c;
+        }
+
+        .answer-item strong {
+            color: #dc143c;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+
+        .action-btn {
+            padding: 12px 30px;
+            background: #dc143c;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .action-btn:hover {
+            background: #b01030;
+        }
+
+        .proctoring-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: black;
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .proctoring-box {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            max-width: 400px;
+            text-align: center;
+            border: 3px solid #dc143c;
+        }
+
+        .proctoring-box h2 {
+            color: #dc143c;
+            margin-bottom: 20px;
+        }
+
+        .proctoring-box p {
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        .proctoring-box input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            margin-bottom: 20px;
+        }
+
+        .proctoring-box button {
+            width: 100%;
+            padding: 12px;
+            background: #dc143c;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .footer-credit {
+            text-align: center;
+            margin-top: 20px;
+            color: #999;
+            font-size: 0.85em;
+        }
+
+        @media (max-width: 768px) {
+            .welcome-box {
+                padding: 30px 20px;
+            }
+
+            .logo h1 {
+                font-size: 2em;
+            }
+
+            .test-header {
+                padding: 12px 15px;
+            }
+
+            .test-title {
+                font-size: 1.1em;
+            }
+
+            .question-card {
+                padding: 15px;
+            }
+
+            .answer-grid {
+                grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+
+            .action-btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Welcome Screen -->
+    <div class="welcome-screen" id="welcomeScreen">
+        <div class="welcome-box">
+            <div class="logo">
+                <h1>EDUNEST</h1>
+                <p>Grammar Assessment Test</p>
+            </div>
+            <div class="input-group">
+                <label for="studentName">Student Name</label>
+                <input type="text" id="studentName" placeholder="Enter your full name" required>
+            </div>
+            <div class="input-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" placeholder="Enter password" required>
+            </div>
+            <button class="start-btn" id="startBtn">Start Test</button>
+            <div class="error-message" id="errorMessage">Invalid password. Please try again.</div>
+        </div>
+        <div class="creator-credit">Created by Muslima</div>
+    </div>
+
+    <!-- Test Container -->
+    <div class="test-container" id="testContainer">
+        <div class="test-header">
+            <div class="test-title">EDUNEST Grammar Test</div>
+            <div class="student-info" id="studentInfo"></div>
+            <div class="progress-bar-container">
+                <div class="progress-bar" id="progressBar"></div>
+            </div>
+            <div class="progress-text" id="progressText">0 of 40 answered</div>
+        </div>
+
+        <div id="questionsContainer"></div>
+
+        <div class="submit-section">
+            <button class="submit-btn" id="submitBtn">Submit Test</button>
+        </div>
+
+        <div class="footer-credit">Created by Muslima | EDUNEST © 2024</div>
+    </div>
+
+    <!-- Results Screen -->
+    <div class="results-screen" id="resultsScreen">
+        <div class="results-box">
+            <div class="results-header">
+                <h2>Test Completed</h2>
+                <p id="resultsStudentName"></p>
+            </div>
+            <h3 style="color: #dc143c; margin-bottom: 15px;">Your Answers:</h3>
+            <div class="answer-grid" id="answerGrid"></div>
+            <div class="action-buttons">
+                <button class="action-btn" id="copyAnswersBtn">Copy Answers</button>
+                <button class="action-btn" id="downloadPdfBtn">Download as PDF</button>
+            </div>
+        </div>
+        <div class="footer-credit">Created by Muslima | EDUNEST © 2024</div>
+    </div>
+
+    <!-- Proctoring Overlay -->
+    <div class="proctoring-overlay" id="proctoringOverlay">
+        <div class="proctoring-box">
+            <h2>⚠️ Test Interrupted</h2>
+            <p>You left the test window. Please enter the reactivation code to continue.</p>
+            <input type="password" id="reactivationCode" placeholder="Enter reactivation code">
+            <button id="reactivateBtn">Reactivate Test</button>
+            <div class="error-message" id="proctoringError" style="display: none; margin-top: 10px;">Invalid code. Please try again.</div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script>
+        const CORRECT_PASSWORD = '3322';
+        const REACTIVATION_CODE = '0227';
+        
+        const questions = [
+            {num: 1, text: "She usually ___ early, but today she ___ late.", options: ["A) arrives / comes", "B) arrives / is coming", "C) is arriving / comes", "D) arrived / is coming"]},
+            {num: 2, text: "I ___ my homework already, so I'm free now.", options: ["A) finish", "B) finished", "C) have finished", "D) am finishing"]},
+            {num: 3, text: "They ___ TV when I called them.", options: ["A) watch", "B) watched", "C) were watching", "D) have watched"]},
+            {num: 4, text: "We ___ in this city for many years.", options: ["A) live", "B) lived", "C) have lived", "D) are living"]},
+            {num: 5, text: "At this time tomorrow, I ___ to my teacher.", options: ["A) talk", "B) talked", "C) will talk", "D) will be talking"]},
+            {num: 6, text: "He ___ tired recently because he ___ too much.", options: ["A) feels / works", "B) felt / worked", "C) has felt / has been working", "D) is feeling / worked"]},
+            {num: 7, text: "She ___ the message yet, but she ___ it earlier.", options: ["A) doesn't read / sends", "B) didn't read / sent", "C) hasn't read / sent", "D) isn't reading / sent"]},
+            {num: 8, text: "While we ___ dinner, the lights went out.", options: ["A) prepare", "B) prepared", "C) were preparing", "D) have prepared"]},
+            {num: 9, text: "He ___ in this company since 2020.", options: ["A) works", "B) worked", "C) has worked", "D) is working"]},
+            {num: 10, text: "She ___ her keys before she left the house.", options: ["A) forgets", "B) forgot", "C) has forgotten", "D) had forgotten"]},
+            {num: 11, text: "We ___ a lot yesterday, so we were very tired.", options: ["A) walk", "B) walked", "C) have walked", "D) are walking"]},
+            {num: 12, text: "She usually ___ coffee, but today she ___ tea.", options: ["A) drinks / drinks", "B) drinks / is drinking", "C) is drinking / drinks", "D) drank / is drinking"]},
+            {num: 13, text: "I ___ a shower when you knocked on the door.", options: ["A) take", "B) took", "C) was taking", "D) have taken"]},
+            {num: 14, text: "They ___ this movie before.", options: ["A) see", "B) saw", "C) have seen", "D) are seeing"]},
+            {num: 15, text: "By the time we arrived, the lesson ___.", options: ["A) starts", "B) started", "C) has started", "D) had started"]},
+            {num: 16, text: "He usually ___ very carefully.", options: ["A) drives", "B) is driving", "C) drove", "D) has driven"]},
+            {num: 17, text: "We ___ a lot of progress this month.", options: ["A) make", "B) made", "C) have made", "D) had made"]},
+            {num: 18, text: "At the moment, she ___ for a new job.", options: ["A) looks", "B) looked", "C) is looking", "D) has looked"]},
+            {num: 19, text: "He ___ the test before the bell rang.", options: ["A) finishes", "B) finished", "C) has finished", "D) had finished"]},
+            {num: 20, text: "I ___ all morning, so my eyes hurt.", options: ["A) study", "B) studied", "C) have studied", "D) have been studying"]},
+            {num: 21, text: "She ___ the room before the guests arrived.", options: ["A) cleans", "B) cleaned", "C) has cleaned", "D) had cleaned"]},
+            {num: 22, text: "This week, we ___ very busy at work.", options: ["A) are", "B) were", "C) have been", "D) had been"]},
+            {num: 23, text: "When I got there, they ___ already ___.", options: ["A) have / leave", "B) had / left", "C) are / leaving", "D) were / leaving"]},
+            {num: 24, text: "He usually ___ his phone at home.", options: ["A) leaves", "B) is leaving", "C) left", "D) has left"]},
+            {num: 25, text: "She ___ English for five years.", options: ["A) learns", "B) learned", "C) has learned", "D) is learning"]},
+            {num: 26, text: "While the children ___ outside, it started to rain.", options: ["A) play", "B) played", "C) were playing", "D) have played"]},
+            {num: 27, text: "We ___ this problem many times before.", options: ["A) face", "B) faced", "C) have faced", "D) had faced"]},
+            {num: 28, text: "He ___ attention when the teacher explained it.", options: ["A) doesn't pay", "B) isn't paying", "C) didn't pay", "D) hasn't paid"]},
+            {num: 29, text: "At this time next week, I ___ on holiday.", options: ["A) am", "B) was", "C) will be", "D) am being"]},
+            {num: 30, text: "They ___ the plan before the meeting started.", options: ["A) discuss", "B) discussed", "C) have discussed", "D) had discussed"]},
+            {num: 31, text: "I ___ that book twice already.", options: ["A) read", "B) am reading", "C) have read", "D) had read"]},
+            {num: 32, text: "She ___ nervous before her first lesson.", options: ["A) feels", "B) felt", "C) has felt", "D) is feeling"]},
+            {num: 33, text: "We ___ the same mistake again and again.", options: ["A) make", "B) made", "C) have made", "D) had made"]},
+            {num: 34, text: "He ___ music while he ___ his homework.", options: ["A) listens / does", "B) listened / did", "C) was listening / was doing", "D) has listened / has done"]},
+            {num: 35, text: "The weather ___ much colder this week.", options: ["A) gets", "B) got", "C) has gotten", "D) had gotten"]},
+            {num: 36, text: "She ___ a mistake but corrected it quickly.", options: ["A) makes", "B) made", "C) has made", "D) had made"]},
+            {num: 37, text: "At the moment, we ___ for the bus.", options: ["A) wait", "B) waited", "C) are waiting", "D) have waited"]},
+            {num: 38, text: "He ___ the email before the manager replied.", options: ["A) reads", "B) read", "C) has read", "D) had read"]},
+            {num: 39, text: "I ___ with this group since September.", options: ["A) work", "B) am working", "C) have worked", "D) have been working"]},
+            {num: 40, text: "By the end of the lesson, everyone ___.", options: ["A) understands", "B) understood", "C) has understood", "D) had understood"]}
+        ];
+
+        let studentName = '';
+        let answers = {};
+        let testStarted = false;
+
+        // Password and Start Test
+        const passwordInput = document.getElementById('password');
+        const studentNameInput = document.getElementById('studentName');
+        const startBtn = document.getElementById('startBtn');
+
+        function checkInputs() {
+            if (studentNameInput.value.trim() && passwordInput.value) {
+                startBtn.classList.add('active');
+            } else {
+                startBtn.classList.remove('active');
+            }
+        }
+
+        studentNameInput.addEventListener('input', checkInputs);
+        passwordInput.addEventListener('input', checkInputs);
+
+        startBtn.addEventListener('click', () => {
+            const name = studentNameInput.value.trim();
+            const password = passwordInput.value;
+
+            if (!name) {
+                document.getElementById('errorMessage').textContent = 'Please enter your name.';
+                document.getElementById('errorMessage').style.display = 'block';
+                return;
+            }
+
+            if (password !== CORRECT_PASSWORD) {
+                document.getElementById('errorMessage').textContent = 'Invalid password. Please try again.';
+                document.getElementById('errorMessage').style.display = 'block';
+                return;
+            }
+
+            studentName = name;
+            startTest();
+        });
+
+        function startTest() {
+            document.getElementById('welcomeScreen').style.display = 'none';
+            document.getElementById('testContainer').style.display = 'block';
+            document.getElementById('studentInfo').textContent = `Student: ${studentName}`;
+            
+            renderQuestions();
+            enterFullscreen();
+            setupProctoring();
+            testStarted = true;
+        }
+
+        function renderQuestions() {
+            const container = document.getElementById('questionsContainer');
+            questions.forEach(q => {
+                const card = document.createElement('div');
+                card.className = 'question-card';
+                card.innerHTML = `
+                    <div class="question-number">${q.num}.</div>
+                    <div class="question-text">${q.text}</div>
+                    <div class="options">
+                        ${q.options.map((opt, idx) => `
+                            <div class="option" onclick="selectOption(${q.num}, '${opt.charAt(0)}', this)">
+                                <input type="radio" name="q${q.num}" id="q${q.num}_${idx}" value="${opt.charAt(0)}">
+                                <label for="q${q.num}_${idx}">${opt}</label>
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function selectOption(questionNum, answer, element) {
+            // Remove selected class from all options in this question
+            const options = element.parentElement.querySelectorAll('.option');
+            options.forEach(opt => opt.classList.remove('selected'));
+            
+            // Add selected class to clicked option
+            element.classList.add('selected');
+            
+            // Check the radio button
+            element.querySelector('input[type="radio"]').checked = true;
+            
+            // Store answer
+            answers[questionNum] = answer;
+            updateProgress();
+        }
+
+        function updateProgress() {
+            const answered = Object.keys(answers).length;
+            const total = questions.length;
+            const percentage = (answered / total) * 100;
+            
+            document.getElementById('progressBar').style.width = percentage + '%';
+            document.getElementById('progressText').textContent = `${answered} of ${total} answered`;
+        }
+
+        // Submit Test
+        document.getElementById('submitBtn').addEventListener('click', () => {
+            if (Object.keys(answers).length < questions.length) {
+                if (!confirm('You have not answered all questions. Do you want to submit anyway?')) {
+                    return;
+                }
+            }
+            showResults();
+        });
+
+        function showResults() {
+            document.getElementById('testContainer').style.display = 'none';
+            document.getElementById('resultsScreen').style.display = 'block';
+            document.getElementById('resultsStudentName').textContent = `Student: ${studentName}`;
+            
+            const answerGrid = document.getElementById('answerGrid');
+            answerGrid.innerHTML = '';
+            
+            for (let i = 1; i <= questions.length; i++) {
+                const answerItem = document.createElement('div');
+                answerItem.className = 'answer-item';
+                answerItem.innerHTML = `<strong>${i}.</strong> ${answers[i] || '-'}`;
+                answerGrid.appendChild(answerItem);
+            }
+            
+            exitFullscreen();
+        }
+
+        // Copy Answers
+        document.getElementById('copyAnswersBtn').addEventListener('click', () => {
+            let text = `EDUNEST Grammar Test - Answer Sheet\nStudent: ${studentName}\n\n`;
+            for (let i = 1; i <= questions.length; i++) {
+                text += `${i}. ${answers[i] || '-'}\n`;
+            }
+            
+            navigator.clipboard.writeText(text).then(() => {
+                alert('Answers copied to clipboard!');
+            });
+        });
+
+        // Download PDF
+        document.getElementById('downloadPdfBtn').addEventListener('click', () => {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            
+            // Header
+            doc.setFontSize(20);
+            doc.setTextColor(220, 20, 60);
+            doc.text('EDUNEST', 105, 20, { align: 'center' });
+            
+            doc.setFontSize(14);
+            doc.setTextColor(0, 0, 0);
+            doc.text('Grammar Test - Answer Sheet', 105, 30, { align: 'center' });
+            
+            doc.setFontSize(12);
+            doc.text(`Student: ${studentName}`, 20, 45);
+            doc.text(`Date: ${new Date().toLocaleDateString()}`, 20, 52);
+            
+            // Answers
+            doc.setFontSize(11);
+            let y = 65;
+            let col = 0;
+            
+            for (let i = 1; i <= questions.length; i++) {
+                const x = col === 0 ? 20 : 110;
+                doc.text(`${i}. ${answers[i] || '-'}`, x, y);
+                
+                col++;
+                if (col === 2) {
+                    col = 0;
+                    y += 8;
+                }
+                
+                if (y > 270) {
+                    doc.addPage();
+                    y = 20;
+                }
+            }
+            
+            // Footer
+            doc.setFontSize(9);
+            doc.setTextColor(150, 150, 150);
+            doc.text('Created by Muslima | EDUNEST © 2024', 105, 285, { align: 'center' });
+            
+            doc.save(`${studentName}_Grammar_Test_Answers.pdf`);
+        });
+
+        // Fullscreen
+        function enterFullscreen() {
+            const elem = document.documentElement;
+            if (elem.requestFullscreen) {
+                elem.requestFullscreen();
+            } else if (elem.webkitRequestFullscreen) {
+                elem.webkitRequestFullscreen();
+            } else if (elem.msRequestFullscreen) {
+                elem.msRequestFullscreen();
+            }
+        }
+
+        function exitFullscreen() {
+            if (document.exitFullscreen) {
+                document.exitFullscreen();
+            } else if (document.webkitExitFullscreen) {
+                document.webkitExitFullscreen();
+            } else if (document.msExitFullscreen) {
+                document.msExitFullscreen();
+            }
+        }
+
+        // Proctoring System
+        function setupProctoring() {
+            // Detect window blur (losing focus)
+            window.addEventListener('blur', () => {
+                if (testStarted && document.getElementById('testContainer').style.display === 'block') {
+                    showProctoringOverlay();
+                }
+            });
+
+            // Detect fullscreen exit
+            document.addEventListener('fullscreenchange', () => {
+                if (!document.fullscreenElement && testStarted && document.getElementById('testContainer').style.display === 'block') {
+                    showProctoringOverlay();
+                }
+            });
+
+            document.addEventListener('webkitfullscreenchange', () => {
+                if (!document.webkitFullscreenElement && testStarted && document.getElementById('testContainer').style.display === 'block') {
+                    showProctoringOverlay();
+                }
+            });
+
+            // Detect tab visibility change
+            document.addEventListener('visibilitychange', () => {
+                if (document.hidden && testStarted && document.getElementById('testContainer').style.display === 'block') {
+                    showProctoringOverlay();
+                }
+            });
+        }
+
+        function showProctoringOverlay() {
+            document.getElementById('proctoringOverlay').style.display = 'flex';
+            document.getElementById('reactivationCode').value = '';
+            document.getElementById('proctoringError').style.display = 'none';
+        }
+
+        document.getElementById('reactivateBtn').addEventListener('click', () => {
+            const code = document.getElementById('reactivationCode').value;
+            if (code === REACTIVATION_CODE) {
+                document.getElementById('proctoringOverlay').style.display = 'none';
+                enterFullscreen();
+            } else {
+                document.getElementById('proctoringError').style.display = 'block';
+            }
+        });
+
+        // Prevent right-click
+        document.addEventListener('contextmenu', e => e.preventDefault());
+    </script>
+</body>
+</html>
