@@ -1,0 +1,1076 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EDUNEST Listening Test 3</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .welcome-screen {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .welcome-card {
+            background: white;
+            border: 3px solid #e53e3e;
+            border-radius: 15px;
+            padding: 40px;
+            max-width: 500px;
+            width: 100%;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            text-align: center;
+        }
+
+        .brand-title {
+            color: #e53e3e;
+            font-size: 2.5em;
+            font-weight: bold;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
+
+        .welcome-subtitle {
+            color: #333;
+            font-size: 1.3em;
+            margin-bottom: 30px;
+        }
+
+        .input-group {
+            margin-bottom: 25px;
+        }
+
+        .input-group label {
+            display: block;
+            text-align: left;
+            margin-bottom: 8px;
+            color: #555;
+            font-weight: bold;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e53e3e;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+
+        .input-group input:focus {
+            outline: none;
+            border-color: #c53030;
+            box-shadow: 0 0 0 3px rgba(229, 62, 62, 0.1);
+        }
+
+        .start-button {
+            background: #e53e3e;
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.2em;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .start-button:hover {
+            background: #c53030;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(229, 62, 62, 0.3);
+        }
+
+        .start-button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .test-container {
+            display: none;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+            background: white;
+            min-height: 100vh;
+        }
+
+        .test-header {
+            background: white;
+            border: 3px solid #e53e3e;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .test-header h1 {
+            color: #e53e3e;
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+
+        .listening-icon {
+            color: #e53e3e;
+            font-size: 1.5em;
+            margin-bottom: 10px;
+        }
+
+        .student-info {
+            color: #555;
+            font-size: 1.1em;
+            margin-top: 10px;
+        }
+
+        .task-section {
+            background: white;
+            border: 3px solid #e53e3e;
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 30px;
+        }
+
+        .task-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .task-icon {
+            color: #e53e3e;
+            font-size: 1.3em;
+        }
+
+        .task-title {
+            color: #e53e3e;
+            font-size: 1.5em;
+            font-weight: bold;
+        }
+
+        .task-subtitle {
+            color: #e53e3e;
+            font-size: 1em;
+            margin-bottom: 15px;
+        }
+
+        .task1-image-container {
+            text-align: center;
+            margin-bottom: 20px;
+            padding: 15px;
+            background: #f7fafc;
+            border: 2px solid #e53e3e;
+            border-radius: 10px;
+        }
+
+        .task1-image {
+            max-width: 100%;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        .instruction-box {
+            background: #fff5f5;
+            border: 2px solid #e53e3e;
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 20px;
+        }
+
+        .instruction-box p {
+            color: #333;
+            font-size: 1em;
+            line-height: 1.6;
+        }
+
+        .task1-questions {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        .question-box {
+            background: #f7fafc;
+            border: 2px solid #e53e3e;
+            border-radius: 10px;
+            padding: 15px;
+        }
+
+        .question-header {
+            color: #e53e3e;
+            font-weight: bold;
+            font-size: 1.1em;
+            margin-bottom: 10px;
+        }
+
+        .square-options {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+        }
+
+        .square-option {
+            background: white;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 12px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.95em;
+            min-height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .square-option:hover {
+            background: #fff5f5;
+            border-color: #e53e3e;
+        }
+
+        .square-option.selected {
+            background: #fff5f5;
+            border-color: #e53e3e;
+            border-width: 3px;
+            font-weight: bold;
+        }
+
+        .checkbox-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        .checkbox-table thead {
+            background: #e53e3e;
+            color: white;
+        }
+
+        .checkbox-table th {
+            padding: 12px;
+            text-align: left;
+            font-weight: bold;
+        }
+
+        .checkbox-table th:nth-child(2),
+        .checkbox-table th:nth-child(3) {
+            text-align: center;
+            width: 80px;
+        }
+
+        .checkbox-table td {
+            padding: 12px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .checkbox-table td:first-child {
+            font-size: 0.95em;
+            color: #333;
+        }
+
+        .checkbox-table td:nth-child(2),
+        .checkbox-table td:nth-child(3) {
+            text-align: center;
+        }
+
+        .checkbox-wrapper {
+            display: inline-block;
+        }
+
+        .checkbox-wrapper input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+            accent-color: #e53e3e;
+        }
+
+        .submit-button {
+            background: #e53e3e;
+            color: white;
+            border: none;
+            padding: 15px 50px;
+            font-size: 1.2em;
+            border-radius: 8px;
+            cursor: pointer;
+            display: block;
+            margin: 30px auto;
+            font-weight: bold;
+            text-transform: uppercase;
+            transition: all 0.3s;
+        }
+
+        .submit-button:hover {
+            background: #c53030;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(229, 62, 62, 0.3);
+        }
+
+        .results-container {
+            display: none;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            background: white;
+            min-height: 100vh;
+        }
+
+        .results-header {
+            background: white;
+            border: 3px solid #e53e3e;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .results-header h2 {
+            color: #e53e3e;
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+
+        .answer-sheet {
+            background: white;
+            border: 2px solid #e53e3e;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .task-answers {
+            margin-bottom: 25px;
+        }
+
+        .task-answers h3 {
+            color: #e53e3e;
+            font-size: 1.3em;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #e53e3e;
+        }
+
+        .answer-item {
+            padding: 10px;
+            border-bottom: 1px solid #e2e8f0;
+            display: flex;
+            gap: 10px;
+        }
+
+        .answer-item:last-child {
+            border-bottom: none;
+        }
+
+        .answer-number {
+            font-weight: bold;
+            color: #e53e3e;
+            min-width: 30px;
+        }
+
+        .answer-value {
+            color: #333;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .action-button {
+            background: #e53e3e;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            font-size: 1em;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+
+        .action-button:hover {
+            background: #c53030;
+            transform: translateY(-2px);
+        }
+
+        .action-button.secondary {
+            background: #4a5568;
+        }
+
+        .action-button.secondary:hover {
+            background: #2d3748;
+        }
+
+        .proctor-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: black;
+            z-index: 10000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .proctor-modal {
+            background: white;
+            border: 3px solid #e53e3e;
+            border-radius: 15px;
+            padding: 40px;
+            max-width: 400px;
+            width: 90%;
+            text-align: center;
+        }
+
+        .proctor-modal h3 {
+            color: #e53e3e;
+            font-size: 1.8em;
+            margin-bottom: 15px;
+        }
+
+        .proctor-modal p {
+            color: #555;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .proctor-modal input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e53e3e;
+            border-radius: 8px;
+            font-size: 16px;
+            margin-bottom: 15px;
+        }
+
+        .proctor-modal button {
+            background: #e53e3e;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            font-size: 1.1em;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .proctor-modal button:hover {
+            background: #c53030;
+        }
+
+        .error-message {
+            color: #e53e3e;
+            margin-top: 10px;
+            font-size: 0.9em;
+        }
+
+        @media (max-width: 768px) {
+            .brand-title {
+                font-size: 2em;
+            }
+
+            .welcome-card {
+                padding: 30px 20px;
+            }
+
+            .test-header h1 {
+                font-size: 1.5em;
+            }
+
+            .task1-questions {
+                grid-template-columns: 1fr;
+            }
+
+            .square-options {
+                grid-template-columns: 1fr;
+            }
+
+            .square-option {
+                min-height: 50px;
+            }
+
+            .checkbox-table {
+                font-size: 0.9em;
+            }
+
+            .checkbox-table th,
+            .checkbox-table td {
+                padding: 8px 4px;
+            }
+
+            .submit-button {
+                padding: 12px 30px;
+                font-size: 1em;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+
+            .action-button {
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .brand-title {
+                font-size: 1.6em;
+            }
+
+            .welcome-subtitle {
+                font-size: 1.1em;
+            }
+
+            .test-container,
+            .results-container {
+                padding: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Welcome Screen -->
+    <div class="welcome-screen" id="welcomeScreen">
+        <div class="welcome-card">
+            <h1 class="brand-title">EDUNEST</h1>
+            <h2 class="welcome-subtitle">Listening Test 3</h2>
+            <div class="input-group">
+                <label for="studentName">Enter Your Name:</label>
+                <input type="text" id="studentName" placeholder="Your full name" autocomplete="off">
+            </div>
+            <button class="start-button" id="startButton" disabled>Start Test</button>
+        </div>
+    </div>
+
+    <!-- Test Container -->
+    <div class="test-container" id="testContainer">
+        <div class="test-header">
+            <div class="listening-icon">🎧 Listening 3</div>
+            <h1>EDUNEST LISTENING TEST 3</h1>
+            <p class="student-info">Student: <span id="studentNameDisplay"></span></p>
+        </div>
+
+        <!-- Task 1 -->
+        <div class="task-section">
+            <div class="task-header">
+                <span class="task-icon">▶</span>
+                <h2 class="task-title">Task 1</h2>
+            </div>
+            <div class="task-subtitle">CD 14</div>
+
+            <div class="task1-image-container">
+                <img src="/mnt/user-data/uploads/1770305735708_image.png" alt="Las Vegas Trip" class="task1-image" style="display: none;" id="task1OriginalImage">
+                <canvas id="task1ImageCanvas" class="task1-image"></canvas>
+            </div>
+
+            <div class="instruction-box">
+                <p><strong>How was each person's weekend? Listen and circle the correct answer.</strong></p>
+            </div>
+
+            <div class="task1-questions" id="task1Container"></div>
+        </div>
+
+        <!-- Task 2 -->
+        <div class="task-section">
+            <div class="task-header">
+                <span class="task-icon">▶</span>
+                <h2 class="task-title">Task 2</h2>
+            </div>
+            <div class="task-subtitle">CD 14</div>
+            <div class="instruction-box">
+                <p><strong>Listen again. Are these statements true or false? Check (✓) the correct answer.</strong></p>
+            </div>
+
+            <table class="checkbox-table">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>True</th>
+                        <th>False</th>
+                    </tr>
+                </thead>
+                <tbody id="task2Table">
+                </tbody>
+            </table>
+        </div>
+
+        <button class="submit-button" id="submitButton">Submit Test</button>
+    </div>
+
+    <!-- Results Container -->
+    <div class="results-container" id="resultsContainer">
+        <div class="results-header">
+            <h2>EDUNEST - Answer Sheet</h2>
+            <p class="student-info">Student: <span id="studentNameResults"></span></p>
+        </div>
+
+        <div class="answer-sheet">
+            <div class="task-answers">
+                <h3>Task 1</h3>
+                <div id="task1Answers"></div>
+            </div>
+            <div class="task-answers">
+                <h3>Task 2</h3>
+                <div id="task2Answers"></div>
+            </div>
+        </div>
+
+        <div class="action-buttons">
+            <button class="action-button" id="copyAnswersButton">Copy Answers</button>
+            <button class="action-button secondary" id="downloadPDFButton">Download PDF</button>
+        </div>
+    </div>
+
+    <!-- Proctor Overlay -->
+    <div class="proctor-overlay" id="proctorOverlay">
+        <div class="proctor-modal">
+            <h3>⚠️ Alert!</h3>
+            <p>You have left the test window. Please enter the reactivation code to continue.</p>
+            <input type="text" id="reactivationCode" placeholder="Enter code">
+            <div class="error-message" id="errorMessage"></div>
+            <button id="reactivateButton">Reactivate</button>
+        </div>
+    </div>
+
+    <script>
+        // Task 1 questions (square options format)
+        const task1Questions = [
+            {
+                number: 1,
+                letter: "a",
+                options: ["so-so", "terrible", "great"]
+            },
+            {
+                number: 2,
+                letter: "a",
+                options: ["disappointing", "pleasant", "boring"]
+            },
+            {
+                number: 3,
+                letter: "a",
+                options: ["tiring", "terrible", "wonderful"]
+            },
+            {
+                number: 4,
+                letter: "a",
+                options: ["awful", "quiet", "enjoyable"]
+            }
+        ];
+
+        // Task 2 questions (True/False checkboxes)
+        const task2Questions = [
+            { number: 1, letter: "a", text: "She won a contest in a music store." },
+            { number: 1, letter: "b", text: "She won a trip to Las Vegas." },
+            { number: 2, letter: "a", text: "They went out to dinner." },
+            { number: 2, letter: "b", text: "His friend had a very interesting job." },
+            { number: 3, letter: "a", text: "The place was very far from town." },
+            { number: 3, letter: "b", text: "They didn't see any wild birds or butterflies on the trip." },
+            { number: 4, letter: "a", text: "There were a lot of interesting people at the party." },
+            { number: 4, letter: "b", text: "The party ended early." }
+        ];
+
+        let studentName = '';
+        let task1Answers = {};
+        let task2Answers = {};
+        let testActive = false;
+
+        // Elements
+        const welcomeScreen = document.getElementById('welcomeScreen');
+        const studentNameInput = document.getElementById('studentName');
+        const startButton = document.getElementById('startButton');
+        const testContainer = document.getElementById('testContainer');
+        const studentNameDisplay = document.getElementById('studentNameDisplay');
+        const submitButton = document.getElementById('submitButton');
+        const resultsContainer = document.getElementById('resultsContainer');
+        const studentNameResults = document.getElementById('studentNameResults');
+        const proctorOverlay = document.getElementById('proctorOverlay');
+        const reactivationCode = document.getElementById('reactivationCode');
+        const reactivateButton = document.getElementById('reactivateButton');
+        const errorMessage = document.getElementById('errorMessage');
+        const copyAnswersButton = document.getElementById('copyAnswersButton');
+        const downloadPDFButton = document.getElementById('downloadPDFButton');
+
+        // Enable start button when name is entered
+        studentNameInput.addEventListener('input', () => {
+            startButton.disabled = studentNameInput.value.trim() === '';
+        });
+
+        // Start test
+        startButton.addEventListener('click', () => {
+            studentName = studentNameInput.value.trim();
+            if (studentName) {
+                welcomeScreen.style.display = 'none';
+                testContainer.style.display = 'block';
+                studentNameDisplay.textContent = studentName;
+                loadTask1Image();
+                renderTask1();
+                renderTask2();
+                enterFullscreen();
+                testActive = true;
+                setupProctoring();
+            }
+        });
+
+        // Load and crop Task 1 image
+        function loadTask1Image() {
+            const img = document.getElementById('task1OriginalImage');
+            const canvas = document.getElementById('task1ImageCanvas');
+            const ctx = canvas.getContext('2d');
+            
+            img.onload = function() {
+                // Crop to show just the "WIN A TRIP TO LAS VEGAS" banner image
+                // Approximate coordinates from the screenshot
+                const cropX = 40;
+                const cropY = 80;
+                const cropWidth = 420;
+                const cropHeight = 190;
+                
+                canvas.width = cropWidth;
+                canvas.height = cropHeight;
+                
+                ctx.drawImage(img, cropX, cropY, cropWidth, cropHeight, 0, 0, cropWidth, cropHeight);
+            };
+            
+            img.src = '/mnt/user-data/uploads/1770305735708_image.png';
+        }
+
+        // Render Task 1 (square options)
+        function renderTask1() {
+            const container = document.getElementById('task1Container');
+            container.innerHTML = '';
+            
+            task1Questions.forEach(q => {
+                const questionBox = document.createElement('div');
+                questionBox.className = 'question-box';
+                
+                const questionHeader = document.createElement('div');
+                questionHeader.className = 'question-header';
+                questionHeader.textContent = `${q.number}. ${q.letter}.`;
+                
+                const optionsDiv = document.createElement('div');
+                optionsDiv.className = 'square-options';
+                
+                q.options.forEach((option, index) => {
+                    const squareOption = document.createElement('div');
+                    squareOption.className = 'square-option';
+                    squareOption.textContent = option;
+                    squareOption.dataset.question = `${q.number}${q.letter}`;
+                    squareOption.dataset.answer = option;
+                    
+                    squareOption.addEventListener('click', () => selectTask1Answer(`${q.number}${q.letter}`, option, squareOption));
+                    
+                    optionsDiv.appendChild(squareOption);
+                });
+                
+                questionBox.appendChild(questionHeader);
+                questionBox.appendChild(optionsDiv);
+                container.appendChild(questionBox);
+            });
+        }
+
+        // Select Task 1 answer
+        function selectTask1Answer(questionId, answer, element) {
+            // Remove previous selection
+            const allOptions = document.querySelectorAll(`[data-question="${questionId}"]`);
+            allOptions.forEach(opt => opt.classList.remove('selected'));
+            
+            // Add selection to clicked option
+            element.classList.add('selected');
+            task1Answers[questionId] = answer;
+        }
+
+        // Render Task 2 (True/False checkboxes)
+        function renderTask2() {
+            const tableBody = document.getElementById('task2Table');
+            tableBody.innerHTML = '';
+            
+            task2Questions.forEach(q => {
+                const row = document.createElement('tr');
+                
+                // Question text cell
+                const textCell = document.createElement('td');
+                textCell.textContent = `${q.number}. ${q.letter}. ${q.text}`;
+                row.appendChild(textCell);
+                
+                // True checkbox cell
+                const trueCell = document.createElement('td');
+                const trueCheckbox = document.createElement('input');
+                trueCheckbox.type = 'checkbox';
+                trueCheckbox.dataset.question = `${q.number}${q.letter}`;
+                trueCheckbox.dataset.answer = 'True';
+                trueCheckbox.addEventListener('change', (e) => handleTask2Change(`${q.number}${q.letter}`, 'True', e.target));
+                const trueWrapper = document.createElement('div');
+                trueWrapper.className = 'checkbox-wrapper';
+                trueWrapper.appendChild(trueCheckbox);
+                trueCell.appendChild(trueWrapper);
+                row.appendChild(trueCell);
+                
+                // False checkbox cell
+                const falseCell = document.createElement('td');
+                const falseCheckbox = document.createElement('input');
+                falseCheckbox.type = 'checkbox';
+                falseCheckbox.dataset.question = `${q.number}${q.letter}`;
+                falseCheckbox.dataset.answer = 'False';
+                falseCheckbox.addEventListener('change', (e) => handleTask2Change(`${q.number}${q.letter}`, 'False', e.target));
+                const falseWrapper = document.createElement('div');
+                falseWrapper.className = 'checkbox-wrapper';
+                falseWrapper.appendChild(falseCheckbox);
+                falseCell.appendChild(falseWrapper);
+                row.appendChild(falseCell);
+                
+                tableBody.appendChild(row);
+            });
+        }
+
+        // Handle Task 2 checkbox changes (only one can be selected per question)
+        function handleTask2Change(questionId, answer, checkbox) {
+            if (checkbox.checked) {
+                // Uncheck other checkbox in the same row
+                const allCheckboxes = document.querySelectorAll(`input[type="checkbox"][data-question="${questionId}"]`);
+                allCheckboxes.forEach(cb => {
+                    if (cb !== checkbox) {
+                        cb.checked = false;
+                    }
+                });
+                task2Answers[questionId] = answer;
+            } else {
+                delete task2Answers[questionId];
+            }
+        }
+
+        // Submit test
+        submitButton.addEventListener('click', () => {
+            testActive = false;
+            testContainer.style.display = 'none';
+            resultsContainer.style.display = 'block';
+            studentNameResults.textContent = studentName;
+            displayAnswers();
+            exitFullscreen();
+        });
+
+        // Display answers
+        function displayAnswers() {
+            // Task 1 answers
+            const task1AnswersDiv = document.getElementById('task1Answers');
+            task1AnswersDiv.innerHTML = '';
+            task1Questions.forEach(q => {
+                const questionId = `${q.number}${q.letter}`;
+                const answerItem = document.createElement('div');
+                answerItem.className = 'answer-item';
+                
+                const answerNumber = document.createElement('span');
+                answerNumber.className = 'answer-number';
+                answerNumber.textContent = `${q.number}. ${q.letter}.`;
+                
+                const answerValue = document.createElement('span');
+                answerValue.className = 'answer-value';
+                answerValue.textContent = task1Answers[questionId] || 'Not answered';
+                
+                answerItem.appendChild(answerNumber);
+                answerItem.appendChild(answerValue);
+                task1AnswersDiv.appendChild(answerItem);
+            });
+
+            // Task 2 answers
+            const task2AnswersDiv = document.getElementById('task2Answers');
+            task2AnswersDiv.innerHTML = '';
+            task2Questions.forEach(q => {
+                const questionId = `${q.number}${q.letter}`;
+                const answerItem = document.createElement('div');
+                answerItem.className = 'answer-item';
+                
+                const answerNumber = document.createElement('span');
+                answerNumber.className = 'answer-number';
+                answerNumber.textContent = `${q.number}. ${q.letter}.`;
+                
+                const answerValue = document.createElement('span');
+                answerValue.className = 'answer-value';
+                answerValue.textContent = task2Answers[questionId] || 'Not answered';
+                
+                answerItem.appendChild(answerNumber);
+                answerItem.appendChild(answerValue);
+                task2AnswersDiv.appendChild(answerItem);
+            });
+        }
+
+        // Copy answers
+        copyAnswersButton.addEventListener('click', () => {
+            let text = `EDUNEST Listening Test 3 - Answer Sheet\nStudent: ${studentName}\n\n`;
+            text += `Task 1:\n`;
+            task1Questions.forEach(q => {
+                const questionId = `${q.number}${q.letter}`;
+                text += `${q.number}. ${q.letter}. ${task1Answers[questionId] || 'Not answered'}\n`;
+            });
+            text += `\nTask 2:\n`;
+            task2Questions.forEach(q => {
+                const questionId = `${q.number}${q.letter}`;
+                text += `${q.number}. ${q.letter}. ${task2Answers[questionId] || 'Not answered'}\n`;
+            });
+            
+            navigator.clipboard.writeText(text).then(() => {
+                alert('Answers copied to clipboard!');
+            });
+        });
+
+        // Download PDF
+        downloadPDFButton.addEventListener('click', () => {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            
+            // Title
+            doc.setFontSize(20);
+            doc.setTextColor(229, 62, 62);
+            doc.text('EDUNEST Listening Test 3', 105, 20, { align: 'center' });
+            
+            // Student name
+            doc.setFontSize(12);
+            doc.setTextColor(0, 0, 0);
+            doc.text(`Student: ${studentName}`, 20, 35);
+            
+            // Task 1
+            doc.setFontSize(14);
+            doc.setTextColor(229, 62, 62);
+            doc.text('Task 1:', 20, 50);
+            
+            doc.setFontSize(11);
+            doc.setTextColor(0, 0, 0);
+            let yPos = 60;
+            task1Questions.forEach(q => {
+                const questionId = `${q.number}${q.letter}`;
+                doc.text(`${q.number}. ${q.letter}. ${task1Answers[questionId] || 'Not answered'}`, 25, yPos);
+                yPos += 8;
+            });
+            
+            // Task 2
+            yPos += 10;
+            doc.setFontSize(14);
+            doc.setTextColor(229, 62, 62);
+            doc.text('Task 2:', 20, yPos);
+            
+            yPos += 10;
+            doc.setFontSize(11);
+            doc.setTextColor(0, 0, 0);
+            task2Questions.forEach(q => {
+                if (yPos > 270) {
+                    doc.addPage();
+                    yPos = 20;
+                }
+                const questionId = `${q.number}${q.letter}`;
+                doc.text(`${q.number}. ${q.letter}. ${task2Answers[questionId] || 'Not answered'}`, 25, yPos);
+                yPos += 8;
+            });
+            
+            doc.save(`${studentName}_EDUNEST_Listening_Test_3.pdf`);
+        });
+
+        // Fullscreen functions
+        function enterFullscreen() {
+            const elem = document.documentElement;
+            if (elem.requestFullscreen) {
+                elem.requestFullscreen();
+            } else if (elem.webkitRequestFullscreen) {
+                elem.webkitRequestFullscreen();
+            } else if (elem.msRequestFullscreen) {
+                elem.msRequestFullscreen();
+            }
+        }
+
+        function exitFullscreen() {
+            if (document.exitFullscreen) {
+                document.exitFullscreen();
+            } else if (document.webkitExitFullscreen) {
+                document.webkitExitFullscreen();
+            } else if (document.msExitFullscreen) {
+                document.msExitFullscreen();
+            }
+        }
+
+        // Proctoring system
+        function setupProctoring() {
+            // Detect window blur (switching applications)
+            window.addEventListener('blur', handleProctorViolation);
+            
+            // Detect fullscreen exit
+            document.addEventListener('fullscreenchange', handleFullscreenChange);
+            document.addEventListener('webkitfullscreenchange', handleFullscreenChange);
+            document.addEventListener('msfullscreenchange', handleFullscreenChange);
+            
+            // Detect visibility change (tab switching)
+            document.addEventListener('visibilitychange', handleVisibilityChange);
+        }
+
+        function handleProctorViolation() {
+            if (testActive) {
+                showProctorOverlay();
+            }
+        }
+
+        function handleFullscreenChange() {
+            if (testActive && !document.fullscreenElement && !document.webkitFullscreenElement && !document.msFullscreenElement) {
+                showProctorOverlay();
+            }
+        }
+
+        function handleVisibilityChange() {
+            if (testActive && document.hidden) {
+                showProctorOverlay();
+            }
+        }
+
+        function showProctorOverlay() {
+            proctorOverlay.style.display = 'flex';
+            reactivationCode.value = '';
+            errorMessage.textContent = '';
+        }
+
+        function hideProctorOverlay() {
+            proctorOverlay.style.display = 'none';
+            enterFullscreen();
+        }
+
+        // Reactivation
+        reactivateButton.addEventListener('click', () => {
+            if (reactivationCode.value === '0429') {
+                hideProctorOverlay();
+            } else {
+                errorMessage.textContent = 'Incorrect code. Please try again.';
+            }
+        });
+
+        reactivationCode.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                reactivateButton.click();
+            }
+        });
+
+        // Prevent right-click during test
+        document.addEventListener('contextmenu', (e) => {
+            if (testActive) {
+                e.preventDefault();
+            }
+        });
+    </script>
+</body>
+</html>
