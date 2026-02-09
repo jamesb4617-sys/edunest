@@ -1,0 +1,1479 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EDUNEST Reading Test - Day 49</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #dc2626 0%, #ffffff 100%);
+            min-height: 100vh;
+        }
+
+        /* Welcome Screen */
+        #welcomeScreen {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+            background: linear-gradient(135deg, #dc2626 0%, #ffffff 50%, #dc2626 100%);
+        }
+
+        .welcome-container {
+            background: white;
+            padding: 50px 40px;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(220, 38, 38, 0.4);
+            max-width: 550px;
+            width: 100%;
+            text-align: center;
+            border: 4px solid #dc2626;
+            animation: fadeIn 0.5s ease-in;
+            position: relative;
+        }
+
+        .welcome-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 8px;
+            background: linear-gradient(90deg, #dc2626, #667eea, white, #667eea, #dc2626);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .logo {
+            max-width: 220px;
+            height: auto;
+            margin-bottom: 20px;
+        }
+
+        .welcome-title {
+            font-size: 32px;
+            font-weight: bold;
+            background: linear-gradient(135deg, #dc2626, #667eea);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+        }
+
+        .welcome-subtitle {
+            font-size: 18px;
+            color: #6b7280;
+            margin-bottom: 20px;
+            font-weight: 500;
+        }
+
+        .test-level {
+            display: inline-block;
+            background: linear-gradient(135deg, #dc2626 0%, #667eea 100%);
+            color: white;
+            padding: 8px 25px;
+            border-radius: 20px;
+            font-size: 16px;
+            margin-bottom: 15px;
+            box-shadow: 0 4px 10px rgba(102, 126, 234, 0.3);
+            font-weight: 600;
+        }
+
+        .owner-badge {
+            display: inline-block;
+            background: white;
+            border: 2px solid #667eea;
+            color: #667eea;
+            padding: 6px 18px;
+            border-radius: 15px;
+            font-size: 13px;
+            margin-bottom: 30px;
+            font-weight: 600;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .input-label {
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 8px;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 14px;
+            border: 2px solid #dc2626;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: all 0.3s;
+            background: #f9fafb;
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-color: #667eea;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .start-btn {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #dc2626 0%, #667eea 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 10px;
+        }
+
+        .start-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .start-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .error-message {
+            color: #dc2626;
+            font-size: 14px;
+            margin-top: 10px;
+            display: none;
+            font-weight: 500;
+        }
+
+        /* Test Container */
+        #testContainer {
+            display: none;
+            min-height: 100vh;
+            background: white;
+        }
+
+        .test-header {
+            background: linear-gradient(135deg, #dc2626 0%, #667eea 100%);
+            color: white;
+            padding: 15px 25px;
+            border-bottom: 4px solid #dc2626;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .header-left {
+            flex: 1;
+        }
+
+        .test-header h1 {
+            font-size: 20px;
+            margin-bottom: 5px;
+        }
+
+        .student-info {
+            font-size: 13px;
+            opacity: 0.95;
+        }
+
+        .owner-info {
+            font-size: 11px;
+            opacity: 0.85;
+            font-style: italic;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .timer-display {
+            font-size: 24px;
+            font-weight: bold;
+            padding: 8px 20px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            font-family: 'Courier New', monospace;
+        }
+
+        .timer-display.warning {
+            background: rgba(255, 165, 0, 0.3);
+            border-color: #ffa500;
+            animation: pulse 1s infinite;
+        }
+
+        .timer-display.critical {
+            background: rgba(220, 38, 38, 0.3);
+            border-color: #dc2626;
+            animation: pulse 0.5s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        .progress-circle {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            background: conic-gradient(#10b981 0deg, rgba(255,255,255,0.3) 0deg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+
+        .progress-circle::before {
+            content: '';
+            position: absolute;
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #dc2626 0%, #667eea 100%);
+        }
+
+        .progress-number {
+            position: relative;
+            z-index: 1;
+            font-size: 16px;
+            font-weight: bold;
+            color: white;
+        }
+
+        .header-logo {
+            width: 60px;
+            height: auto;
+        }
+
+        .test-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0;
+            min-height: calc(100vh - 90px);
+        }
+
+        .passage-panel {
+            padding: 30px;
+            background: linear-gradient(to bottom, #f9fafb, white);
+            border-right: 3px solid #dc2626;
+            overflow-y: auto;
+            max-height: calc(100vh - 90px);
+        }
+
+        .questions-panel {
+            padding: 30px;
+            background: white;
+            overflow-y: auto;
+            max-height: calc(100vh - 90px);
+        }
+
+        .passage-title {
+            font-size: 28px;
+            font-weight: bold;
+            color: #1f2937;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 3px solid #dc2626;
+            background: linear-gradient(135deg, #dc2626, #667eea);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .passage-content {
+            line-height: 1.8;
+            color: #374151;
+            font-size: 16px;
+        }
+
+        .passage-content p {
+            margin-bottom: 20px;
+        }
+
+        .section {
+            background: linear-gradient(to bottom, #f9fafb, white);
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.1);
+        }
+
+        .section-title {
+            font-size: 22px;
+            font-weight: bold;
+            background: linear-gradient(135deg, #dc2626 0%, #667eea 100%);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 10px rgba(102, 126, 234, 0.2);
+        }
+
+        .question {
+            background: white;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-radius: 10px;
+            border: 2px solid #e5e7eb;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .question:hover {
+            border-color: #667eea;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.15);
+        }
+
+        .question.answered {
+            border-color: #10b981;
+            background: linear-gradient(to right, rgba(16, 185, 129, 0.05), white);
+        }
+
+        .question.answered::after {
+            content: '✓';
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            width: 30px;
+            height: 30px;
+            background: #10b981;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            font-weight: bold;
+            animation: checkmark 0.3s ease-in;
+        }
+
+        @keyframes checkmark {
+            0% { transform: scale(0); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+
+        .question-number {
+            display: inline-block;
+            background: linear-gradient(135deg, #dc2626 0%, #667eea 100%);
+            color: white;
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 15px;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+
+        .question-text {
+            font-size: 16px;
+            color: #1f2937;
+            margin-bottom: 15px;
+            font-weight: 500;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .option {
+            padding: 14px 18px;
+            border: 2px solid #dc2626;
+            border-radius: 8px;
+            background: white;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 15px;
+            color: #374151;
+            font-weight: 500;
+        }
+
+        .option:hover {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.05), white);
+            border-color: #667eea;
+            transform: translateX(5px);
+        }
+
+        .option.selected {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-color: #667eea;
+            box-shadow: 0 4px 10px rgba(102, 126, 234, 0.3);
+        }
+
+        .gap-input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #dc2626;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: all 0.3s;
+            background: white;
+            margin-top: 10px;
+        }
+
+        .gap-input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .submit-container {
+            text-align: center;
+            padding: 30px 20px;
+            background: linear-gradient(to top, rgba(102, 126, 234, 0.05), white);
+            border-top: 3px solid #667eea;
+            margin-top: 30px;
+        }
+
+        .submit-btn {
+            padding: 16px 70px;
+            background: linear-gradient(135deg, #dc2626 0%, #667eea 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 20px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 30px rgba(102, 126, 234, 0.4);
+        }
+
+        /* Proctoring Modal */
+        #proctoringModal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.98);
+            z-index: 10000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .proctoring-content {
+            background: white;
+            padding: 50px 40px;
+            border-radius: 20px;
+            text-align: center;
+            max-width: 500px;
+            width: 90%;
+            border: 4px solid #dc2626;
+            box-shadow: 0 20px 60px rgba(220, 38, 38, 0.5);
+            animation: shake 0.5s;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+
+        .warning-icon {
+            font-size: 70px;
+            color: #dc2626;
+            margin-bottom: 20px;
+        }
+
+        .proctoring-title {
+            font-size: 26px;
+            font-weight: bold;
+            color: #dc2626;
+            margin-bottom: 15px;
+        }
+
+        .proctoring-message {
+            font-size: 16px;
+            color: #6b7280;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+
+        /* Time's Up Modal */
+        #timesUpModal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 10001;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .timesup-content {
+            background: white;
+            padding: 50px 40px;
+            border-radius: 20px;
+            text-align: center;
+            max-width: 500px;
+            width: 90%;
+            border: 4px solid #dc2626;
+            box-shadow: 0 20px 60px rgba(220, 38, 38, 0.5);
+            animation: shake 0.5s;
+        }
+
+        .timesup-icon {
+            font-size: 80px;
+            margin-bottom: 20px;
+        }
+
+        .timesup-title {
+            font-size: 32px;
+            font-weight: bold;
+            color: #dc2626;
+            margin-bottom: 15px;
+        }
+
+        .timesup-message {
+            font-size: 18px;
+            color: #6b7280;
+            margin-bottom: 30px;
+        }
+
+        /* Results Modal */
+        #resultsModal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            z-index: 9999;
+            overflow-y: auto;
+            padding: 20px;
+        }
+
+        .results-content {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            max-width: 900px;
+            width: 100%;
+            border: 4px solid #667eea;
+            box-shadow: 0 20px 60px rgba(102, 126, 234, 0.4);
+            margin: 20px auto;
+        }
+
+        .results-header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 3px solid #667eea;
+        }
+
+        .results-title {
+            font-size: 30px;
+            font-weight: bold;
+            background: linear-gradient(135deg, #dc2626, #667eea);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+        }
+
+        .answer-sheet {
+            background: linear-gradient(to bottom, #f9fafb, white);
+            padding: 30px;
+            border-radius: 12px;
+            border: 2px solid #e5e7eb;
+            margin-bottom: 25px;
+        }
+
+        .answer-section {
+            margin-bottom: 25px;
+        }
+
+        .answer-section-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: white;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            margin-bottom: 12px;
+            padding: 10px 15px;
+            border-radius: 8px;
+        }
+
+        .answer-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 15px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .answer-label {
+            font-weight: 600;
+            color: #374151;
+        }
+
+        .answer-value {
+            color: #667eea;
+            font-weight: 600;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .action-btn {
+            padding: 14px 35px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .copy-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .download-btn {
+            background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%);
+            color: white;
+        }
+
+        .action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .copy-notification {
+            display: none;
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #10b981;
+            color: white;
+            padding: 15px 25px;
+            border-radius: 10px;
+            box-shadow: 0 8px 20px rgba(16, 185, 129, 0.3);
+            z-index: 10002;
+        }
+
+        .restart-note {
+            margin-top: 20px;
+            color: #6b7280;
+            font-size: 14px;
+            text-align: center;
+            font-style: italic;
+        }
+
+        /* Mobile Portrait */
+        @media (max-width: 768px) and (orientation: portrait) {
+            .test-layout {
+                grid-template-columns: 1fr;
+                grid-template-rows: auto auto;
+            }
+
+            .passage-panel {
+                border-right: none;
+                border-bottom: 3px solid #dc2626;
+                max-height: none;
+                min-height: 40vh;
+            }
+
+            .questions-panel {
+                max-height: none;
+                min-height: 60vh;
+            }
+
+            .header-right {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .timer-display {
+                font-size: 20px;
+                padding: 6px 15px;
+            }
+
+            .progress-circle {
+                width: 55px;
+                height: 55px;
+            }
+
+            .progress-circle::before {
+                width: 43px;
+                height: 43px;
+            }
+
+            .progress-number {
+                font-size: 13px;
+            }
+        }
+
+        /* Mobile Landscape */
+        @media (max-width: 1024px) and (orientation: landscape) {
+            .test-layout {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .passage-panel {
+                border-right: 3px solid #dc2626;
+                border-bottom: none;
+            }
+
+            .test-header h1 {
+                font-size: 16px;
+            }
+
+            .timer-display {
+                font-size: 18px;
+                padding: 6px 12px;
+            }
+
+            .progress-circle {
+                width: 50px;
+                height: 50px;
+            }
+
+            .progress-circle::before {
+                width: 38px;
+                height: 38px;
+            }
+
+            .progress-number {
+                font-size: 12px;
+            }
+        }
+
+        /* Desktop */
+        @media (min-width: 1025px) {
+            .test-layout {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .passage-panel {
+                border-right: 3px solid #dc2626;
+            }
+        }
+
+        /* General Mobile */
+        @media (max-width: 768px) {
+            .welcome-container {
+                padding: 30px 25px;
+            }
+
+            .welcome-title {
+                font-size: 26px;
+            }
+
+            .section {
+                padding: 20px 15px;
+            }
+
+            .test-header h1 {
+                font-size: 16px;
+            }
+
+            .header-logo {
+                width: 50px;
+            }
+        }
+
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div id="welcomeScreen">
+        <div class="welcome-container">
+            <img src="https://image2url.com/r2/default/images/1769700366134-01db5cda-e300-4af6-8039-9c7cad80199a.png" alt="EDUNEST Logo" class="logo">
+            <h1 class="welcome-title">Reading Test - Day 49</h1>
+            <p class="welcome-subtitle">Intermediate Level Assessment</p>
+            <div class="test-level">Intermediate Level</div>
+            <div class="owner-badge">Created by JONY</div>
+            
+            <div class="input-group">
+                <label class="input-label">Student Name</label>
+                <input type="text" id="studentName" class="input-field" placeholder="Enter your full name">
+            </div>
+            
+            <div class="input-group">
+                <label class="input-label">Access Password</label>
+                <input type="password" id="password" class="input-field" placeholder="Enter password">
+            </div>
+            
+            <div class="error-message" id="errorMessage">❌ Incorrect password. Please try again.</div>
+            
+            <button class="start-btn" id="startBtn" disabled>📖 Start Reading Test</button>
+        </div>
+    </div>
+
+    <div id="testContainer">
+        <div class="test-header">
+            <div class="header-content">
+                <div class="header-left">
+                    <h1>📖 EDUNEST Reading Test - Day 49</h1>
+                    <div class="student-info">Student: <span id="displayStudentName"></span></div>
+                    <div class="owner-info">Test Owner: JONY</div>
+                </div>
+                <div class="header-right">
+                    <div class="timer-display" id="timerDisplay">20:00</div>
+                    <div class="progress-circle" id="progressCircle">
+                        <span class="progress-number" id="progressNumber">0/20</span>
+                    </div>
+                    <img src="https://image2url.com/r2/default/images/1769700366134-01db5cda-e300-4af6-8039-9c7cad80199a.png" alt="EDUNEST" class="header-logo">
+                </div>
+            </div>
+        </div>
+
+        <div class="test-layout">
+            <div class="passage-panel">
+                <h2 class="passage-title">Three experiences I have had</h2>
+                <div class="passage-content">
+                    <p><strong>Dear Sir / Madam,</strong></p>
+                    
+                    <p>I would like to apply for the job of tour leader for your Overland Africa tours. I have had lots of useful experience for this role.</p>
+                    
+                    <p>I have spent five months backpacking around Africa. In 2018, I visited Ethiopia, Kenya and Tanzania. I used local transport and organised my own accommodation, food and visas. I enjoyed meeting local people, learning about local traditions and visiting natural parks. I read and learned a lot about the culture and wildlife, and I even learned some Swahili and Afrikaans. This trip taught me to be independent and to organise travel arrangements.</p>
+                    
+                    <p>I have also worked as a leader at a children's summer camp in the south of England. I worked there in 2017. I led activities for children aged 9-12, including football, climbing and campfire songs and games. For this work, I received training in climbing instruction and first aid. During this time, I developed many useful skills. For example, I had to ensure the children were always safe and happy. I learned how to be helpful and positive, and I also learned ways to entertain people and help them make friends when they are with strangers.</p>
+                    
+                    <p>Finally, I have completed the Active Youth Challenge. I did this while I was at high school in 2016. To complete this challenge, I firstly had to volunteer with a local organisation. I helped at a social club for the elderly, where I chatted and played games with the members. The experience taught me to be patient and friendly. Secondly, I had to learn something by myself. I learned car mechanics. This taught me some useful, practical skills. Thirdly, I organised a four-day camping and hiking trip in the Scottish mountains with other students from my school. This experience taught me about camping equipment and how to deal with problems like bad weather and getting lost.</p>
+                    
+                    <p>I believe I have lots of useful experience to work as an Overland Tour Guide. I would love the opportunity to tell you more about my skills at an interview.</p>
+                    
+                    <p><strong>Yours faithfully,</strong></p>
+                    <p><strong>Nicholas Rigby</strong></p>
+                </div>
+            </div>
+
+            <div class="questions-panel">
+                <div class="section">
+                    <div class="section-title">Questions 1-10: Choose A, B or C</div>
+                    
+                    <div class="question">
+                        <div class="question-number">Question 1</div>
+                        <div class="question-text">2016</div>
+                        <div class="options">
+                            <div class="option" data-question="1" data-value="A">A - Learn languages</div>
+                            <div class="option" data-question="1" data-value="B">B - Learn how to fix a vehicle</div>
+                            <div class="option" data-question="1" data-value="C">C - Learn to care for people who have an accident</div>
+                        </div>
+                    </div>
+
+                    <div class="question">
+                        <div class="question-number">Question 2</div>
+                        <div class="question-text">2017</div>
+                        <div class="options">
+                            <div class="option" data-question="2" data-value="A">A - Talk to old people</div>
+                            <div class="option" data-question="2" data-value="B">B - Organize a trip around different countries</div>
+                            <div class="option" data-question="2" data-value="C">C - Learn how to teach a sport</div>
+                        </div>
+                    </div>
+
+                    <div class="question">
+                        <div class="question-number">Question 3</div>
+                        <div class="question-text">2018</div>
+                        <div class="options">
+                            <div class="option" data-question="3" data-value="A">A - Sleep outdoors</div>
+                            <div class="option" data-question="3" data-value="B">B - Learn about animals</div>
+                            <div class="option" data-question="3" data-value="C">C - Use a map while walking in the countryside</div>
+                        </div>
+                    </div>
+
+                    <div class="question">
+                        <div class="question-number">Question 4</div>
+                        <div class="question-text">Learn languages</div>
+                        <div class="options">
+                            <div class="option" data-question="4" data-value="A">A - 2016</div>
+                            <div class="option" data-question="4" data-value="B">B - 2017</div>
+                            <div class="option" data-question="4" data-value="C">C - 2018</div>
+                        </div>
+                    </div>
+
+                    <div class="question">
+                        <div class="question-number">Question 5</div>
+                        <div class="question-text">Learn how to fix a vehicle</div>
+                        <div class="options">
+                            <div class="option" data-question="5" data-value="A">A - 2016</div>
+                            <div class="option" data-question="5" data-value="B">B - 2017</div>
+                            <div class="option" data-question="5" data-value="C">C - 2018</div>
+                        </div>
+                    </div>
+
+                    <div class="question">
+                        <div class="question-number">Question 6</div>
+                        <div class="question-text">Learn to care for people who have an accident</div>
+                        <div class="options">
+                            <div class="option" data-question="6" data-value="A">A - 2016</div>
+                            <div class="option" data-question="6" data-value="B">B - 2017</div>
+                            <div class="option" data-question="6" data-value="C">C - 2018</div>
+                        </div>
+                    </div>
+
+                    <div class="question">
+                        <div class="question-number">Question 7</div>
+                        <div class="question-text">Talk to old people</div>
+                        <div class="options">
+                            <div class="option" data-question="7" data-value="A">A - 2016</div>
+                            <div class="option" data-question="7" data-value="B">B - 2017</div>
+                            <div class="option" data-question="7" data-value="C">C - 2018</div>
+                        </div>
+                    </div>
+
+                    <div class="question">
+                        <div class="question-number">Question 8</div>
+                        <div class="question-text">Sleep outdoors</div>
+                        <div class="options">
+                            <div class="option" data-question="8" data-value="A">A - 2016</div>
+                            <div class="option" data-question="8" data-value="B">B - 2017</div>
+                            <div class="option" data-question="8" data-value="C">C - 2018</div>
+                        </div>
+                    </div>
+
+                    <div class="question">
+                        <div class="question-number">Question 9</div>
+                        <div class="question-text">Use a map while walking in the countryside</div>
+                        <div class="options">
+                            <div class="option" data-question="9" data-value="A">A - 2016</div>
+                            <div class="option" data-question="9" data-value="B">B - 2017</div>
+                            <div class="option" data-question="9" data-value="C">C - 2018</div>
+                        </div>
+                    </div>
+
+                    <div class="question">
+                        <div class="question-number">Question 10</div>
+                        <div class="question-text">Make sure that other people aren't in danger</div>
+                        <div class="options">
+                            <div class="option" data-question="10" data-value="A">A - 2016</div>
+                            <div class="option" data-question="10" data-value="B">B - 2017</div>
+                            <div class="option" data-question="10" data-value="C">C - 2018</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <div class="section-title">Questions 11-16: TRUE / FALSE / NOT GIVEN</div>
+                    
+                    <div class="question">
+                        <div class="question-number">Question 11</div>
+                        <div class="question-text">Nicholas travelled around Africa for five months using local transport.</div>
+                        <div class="options">
+                            <div class="option" data-question="11" data-value="TRUE">TRUE</div>
+                            <div class="option" data-question="11" data-value="FALSE">FALSE</div>
+                            <div class="option" data-question="11" data-value="NOT GIVEN">NOT GIVEN</div>
+                        </div>
+                    </div>
+
+                    <div class="question">
+                        <div class="question-number">Question 12</div>
+                        <div class="question-text">During his trip to Africa, Nicholas stayed only in hotels.</div>
+                        <div class="options">
+                            <div class="option" data-question="12" data-value="TRUE">TRUE</div>
+                            <div class="option" data-question="12" data-value="FALSE">FALSE</div>
+                            <div class="option" data-question="12" data-value="NOT GIVEN">NOT GIVEN</div>
+                        </div>
+                    </div>
+
+                    <div class="question">
+                        <div class="question-number">Question 13</div>
+                        <div class="question-text">Nicholas learned some basic Swahili and Afrikaans during his travels.</div>
+                        <div class="options">
+                            <div class="option" data-question="13" data-value="TRUE">TRUE</div>
+                            <div class="option" data-question="13" data-value="FALSE">FALSE</div>
+                            <div class="option" data-question="13" data-value="NOT GIVEN">NOT GIVEN</div>
+                        </div>
+                    </div>
+
+                    <div class="question">
+                        <div class="question-number">Question 14</div>
+                        <div class="question-text">At the summer camp, Nicholas worked with children younger than nine years old.</div>
+                        <div class="options">
+                            <div class="option" data-question="14" data-value="TRUE">TRUE</div>
+                            <div class="option" data-question="14" data-value="FALSE">FALSE</div>
+                            <div class="option" data-question="14" data-value="NOT GIVEN">NOT GIVEN</div>
+                        </div>
+                    </div>
+
+                    <div class="question">
+                        <div class="question-number">Question 15</div>
+                        <div class="question-text">Nicholas received first aid training while working at the children's camp.</div>
+                        <div class="options">
+                            <div class="option" data-question="15" data-value="TRUE">TRUE</div>
+                            <div class="option" data-question="15" data-value="FALSE">FALSE</div>
+                            <div class="option" data-question="15" data-value="NOT GIVEN">NOT GIVEN</div>
+                        </div>
+                    </div>
+
+                    <div class="question">
+                        <div class="question-number">Question 16</div>
+                        <div class="question-text">Nicholas plans to work as a tour leader only in Europe.</div>
+                        <div class="options">
+                            <div class="option" data-question="16" data-value="TRUE">TRUE</div>
+                            <div class="option" data-question="16" data-value="FALSE">FALSE</div>
+                            <div class="option" data-question="16" data-value="NOT GIVEN">NOT GIVEN</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <div class="section-title">Questions 17-20: Gap Filling (No more than THREE words)</div>
+                    
+                    <div class="question">
+                        <div class="question-number">Question 17</div>
+                        <div class="question-text">Nicholas visited Ethiopia, Kenya and __________ in 2018.</div>
+                        <input type="text" class="gap-input" data-question="17" maxlength="50" placeholder="Type your answer (no more than 3 words)">
+                    </div>
+
+                    <div class="question">
+                        <div class="question-number">Question 18</div>
+                        <div class="question-text">At the summer camp, he led activities such as football, climbing and __________.</div>
+                        <input type="text" class="gap-input" data-question="18" maxlength="50" placeholder="Type your answer (no more than 3 words)">
+                    </div>
+
+                    <div class="question">
+                        <div class="question-number">Question 19</div>
+                        <div class="question-text">For the Active Youth Challenge, Nicholas volunteered at a __________ for elderly people.</div>
+                        <input type="text" class="gap-input" data-question="19" maxlength="50" placeholder="Type your answer (no more than 3 words)">
+                    </div>
+
+                    <div class="question">
+                        <div class="question-number">Question 20</div>
+                        <div class="question-text">He organised a four-day camping and hiking trip in the __________ mountains.</div>
+                        <input type="text" class="gap-input" data-question="20" maxlength="50" placeholder="Type your answer (no more than 3 words)">
+                    </div>
+                </div>
+
+                <div class="submit-container">
+                    <button class="submit-btn" id="submitBtn">📤 Submit Test</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="proctoringModal">
+        <div class="proctoring-content">
+            <div class="warning-icon">⚠️</div>
+            <div class="proctoring-title">Security Alert!</div>
+            <div class="proctoring-message">
+                You have left the test window. Please enter the reactivation code to continue.
+            </div>
+            <div class="input-group">
+                <input type="password" id="reactivationCode" class="input-field" placeholder="Enter reactivation code">
+            </div>
+            <div class="error-message" id="reactivationError">❌ Incorrect code. Please try again.</div>
+            <button class="start-btn" id="reactivateBtn">Reactivate Test</button>
+        </div>
+    </div>
+
+    <div id="timesUpModal">
+        <div class="timesup-content">
+            <div class="timesup-icon">⏰</div>
+            <div class="timesup-title">Time's Up!</div>
+            <div class="timesup-message">
+                The test time has expired. Your answers have been automatically submitted and saved.
+            </div>
+            <button class="start-btn" id="viewResultsBtn">View Results</button>
+        </div>
+    </div>
+
+    <div id="resultsModal">
+        <div class="results-content">
+            <div class="results-header">
+                <div class="results-title">✅ Test Submitted Successfully</div>
+                <div class="student-info" style="font-size: 16px; color: #6b7280;">Student: <span id="resultStudentName"></span></div>
+            </div>
+            
+            <div class="answer-sheet" id="answerSheet"></div>
+            
+            <div class="button-group">
+                <button class="action-btn copy-btn" id="copyAnswersBtn">📋 Copy Answers</button>
+                <button class="action-btn download-btn" id="downloadPdfBtn">📄 Download PDF</button>
+            </div>
+
+            <p class="restart-note">💡 To start a new test, please close and reopen this file.</p>
+        </div>
+    </div>
+
+    <div class="copy-notification" id="copyNotification">
+        ✓ Answers copied to clipboard!
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script>
+        let answers = {};
+        let studentName = '';
+        let testActive = false;
+        let timerInterval = null;
+        let timeRemaining = 20 * 60; // 20 minutes
+
+        const studentNameInput = document.getElementById('studentName');
+        const passwordInput = document.getElementById('password');
+        const startBtn = document.getElementById('startBtn');
+        const errorMessage = document.getElementById('errorMessage');
+
+        function checkInputs() {
+            startBtn.disabled = !(studentNameInput.value.trim() && passwordInput.value);
+        }
+
+        studentNameInput.addEventListener('input', checkInputs);
+        passwordInput.addEventListener('input', checkInputs);
+
+        startBtn.addEventListener('click', function() {
+            if (passwordInput.value === '0404') {
+                studentName = studentNameInput.value.trim();
+                document.getElementById('displayStudentName').textContent = studentName;
+                document.getElementById('welcomeScreen').style.display = 'none';
+                document.getElementById('testContainer').style.display = 'block';
+                enterFullscreen();
+                testActive = true;
+                setupProctoring();
+                startTimer();
+            } else {
+                errorMessage.style.display = 'block';
+                passwordInput.value = '';
+                passwordInput.focus();
+            }
+        });
+
+        function startTimer() {
+            updateTimerDisplay();
+            timerInterval = setInterval(() => {
+                timeRemaining--;
+                updateTimerDisplay();
+                
+                if (timeRemaining <= 0) {
+                    clearInterval(timerInterval);
+                    timeUp();
+                }
+            }, 1000);
+        }
+
+        function updateTimerDisplay() {
+            const minutes = Math.floor(timeRemaining / 60);
+            const seconds = timeRemaining % 60;
+            const display = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+            const timerElement = document.getElementById('timerDisplay');
+            timerElement.textContent = display;
+            
+            if (timeRemaining <= 60) {
+                timerElement.classList.add('critical');
+                timerElement.classList.remove('warning');
+            } else if (timeRemaining <= 300) {
+                timerElement.classList.add('warning');
+                timerElement.classList.remove('critical');
+            } else {
+                timerElement.classList.remove('warning', 'critical');
+            }
+        }
+
+        function timeUp() {
+            testActive = false;
+            downloadPDF(true);
+            document.getElementById('timesUpModal').style.display = 'flex';
+        }
+
+        document.getElementById('viewResultsBtn').addEventListener('click', function() {
+            document.getElementById('timesUpModal').style.display = 'none';
+            showResults();
+        });
+
+        function updateProgress() {
+            const answered = Object.keys(answers).length;
+            const total = 20;
+            const percentage = (answered / total) * 100;
+            const degrees = (percentage / 100) * 360;
+            
+            document.getElementById('progressNumber').textContent = `${answered}/${total}`;
+            document.getElementById('progressCircle').style.background = 
+                `conic-gradient(#10b981 ${degrees}deg, rgba(255,255,255,0.3) ${degrees}deg)`;
+        }
+
+        function markQuestionAsAnswered(questionNumber) {
+            const questions = document.querySelectorAll('.question');
+            const questionIndex = questionNumber - 1;
+            if (questions[questionIndex]) {
+                questions[questionIndex].classList.add('answered');
+            }
+        }
+
+        function enterFullscreen() {
+            const elem = document.documentElement;
+            if (elem.requestFullscreen) {
+                elem.requestFullscreen();
+            } else if (elem.webkitRequestFullscreen) {
+                elem.webkitRequestFullscreen();
+            }
+        }
+
+        function setupProctoring() {
+            window.addEventListener('blur', () => testActive && showProctoringModal());
+            
+            document.addEventListener('fullscreenchange', () => {
+                if (!document.fullscreenElement && testActive) showProctoringModal();
+            });
+
+            document.addEventListener('visibilitychange', () => {
+                if (document.hidden && testActive) showProctoringModal();
+            });
+        }
+
+        function showProctoringModal() {
+            document.getElementById('proctoringModal').style.display = 'flex';
+            document.getElementById('reactivationCode').value = '';
+            document.getElementById('reactivationError').style.display = 'none';
+        }
+
+        document.getElementById('reactivateBtn').addEventListener('click', function() {
+            if (document.getElementById('reactivationCode').value === '4040') {
+                document.getElementById('proctoringModal').style.display = 'none';
+                enterFullscreen();
+            } else {
+                document.getElementById('reactivationError').style.display = 'block';
+                document.getElementById('reactivationCode').value = '';
+            }
+        });
+
+        document.querySelectorAll('.option').forEach(option => {
+            option.addEventListener('click', function() {
+                const question = this.getAttribute('data-question');
+                const value = this.getAttribute('data-value');
+                
+                document.querySelectorAll(`.option[data-question="${question}"]`).forEach(opt => {
+                    opt.classList.remove('selected');
+                });
+                
+                this.classList.add('selected');
+                answers[question] = value;
+                
+                markQuestionAsAnswered(parseInt(question));
+                updateProgress();
+            });
+        });
+
+        document.querySelectorAll('.gap-input').forEach(input => {
+            input.addEventListener('input', function() {
+                const question = this.getAttribute('data-question');
+                const value = this.value.trim();
+                
+                if (value) {
+                    answers[question] = value;
+                    markQuestionAsAnswered(parseInt(question));
+                } else {
+                    delete answers[question];
+                    this.closest('.question').classList.remove('answered');
+                }
+                
+                updateProgress();
+            });
+        });
+
+        document.getElementById('submitBtn').addEventListener('click', function() {
+            testActive = false;
+            if (timerInterval) {
+                clearInterval(timerInterval);
+            }
+            showResults();
+        });
+
+        function showResults() {
+            const answerSheet = document.getElementById('answerSheet');
+            document.getElementById('resultStudentName').textContent = studentName;
+            
+            let html = '';
+            
+            html += '<div class="answer-section"><div class="answer-section-title">Questions 1-10</div>';
+            for (let i = 1; i <= 10; i++) {
+                html += `<div class="answer-row"><div class="answer-label">Question ${i}:</div><div class="answer-value">${answers[i] || '(Not answered)'}</div></div>`;
+            }
+            html += '</div>';
+            
+            html += '<div class="answer-section"><div class="answer-section-title">Questions 11-16</div>';
+            for (let i = 11; i <= 16; i++) {
+                html += `<div class="answer-row"><div class="answer-label">Question ${i}:</div><div class="answer-value">${answers[i] || '(Not answered)'}</div></div>`;
+            }
+            html += '</div>';
+            
+            html += '<div class="answer-section"><div class="answer-section-title">Questions 17-20</div>';
+            for (let i = 17; i <= 20; i++) {
+                html += `<div class="answer-row"><div class="answer-label">Question ${i}:</div><div class="answer-value">${answers[i] || '(Not answered)'}</div></div>`;
+            }
+            html += '</div>';
+            
+            answerSheet.innerHTML = html;
+            document.getElementById('resultsModal').style.display = 'flex';
+        }
+
+        document.getElementById('copyAnswersBtn').addEventListener('click', function() {
+            let text = `EDUNEST Reading Test - Day 49\nStudent: ${studentName}\nDate: ${new Date().toLocaleDateString()}\nTest Owner: JONY\n${'='.repeat(60)}\n\n`;
+            
+            text += `Questions 1-10:\n`;
+            for (let i = 1; i <= 10; i++) text += `Question ${i}: ${answers[i] || '(Not answered)'}\n`;
+            text += `\nQuestions 11-16:\n`;
+            for (let i = 11; i <= 16; i++) text += `Question ${i}: ${answers[i] || '(Not answered)'}\n`;
+            text += `\nQuestions 17-20:\n`;
+            for (let i = 17; i <= 20; i++) text += `Question ${i}: ${answers[i] || '(Not answered)'}\n`;
+            
+            const copyToClipboard = (text) => {
+                if (navigator.clipboard && navigator.clipboard.writeText) {
+                    navigator.clipboard.writeText(text).then(() => {
+                        showCopyNotification();
+                    }).catch(() => {
+                        fallbackCopy(text);
+                    });
+                } else {
+                    fallbackCopy(text);
+                }
+            };
+
+            const fallbackCopy = (text) => {
+                const textArea = document.createElement('textarea');
+                textArea.value = text;
+                textArea.style.position = 'fixed';
+                textArea.style.top = '-9999px';
+                textArea.setAttribute('readonly', '');
+                document.body.appendChild(textArea);
+                textArea.focus();
+                textArea.select();
+                
+                if (navigator.userAgent.match(/ipad|ipod|iphone/i)) {
+                    const range = document.createRange();
+                    range.selectNodeContents(textArea);
+                    const selection = window.getSelection();
+                    selection.removeAllRanges();
+                    selection.addRange(range);
+                    textArea.setSelectionRange(0, 999999);
+                }
+                
+                try {
+                    document.execCommand('copy');
+                    showCopyNotification();
+                } catch (err) {
+                    alert('Please manually copy the text');
+                }
+                
+                document.body.removeChild(textArea);
+            };
+
+            copyToClipboard(text);
+        });
+
+        function showCopyNotification() {
+            const notification = document.getElementById('copyNotification');
+            notification.style.display = 'block';
+            setTimeout(() => notification.style.display = 'none', 3000);
+        }
+
+        document.getElementById('downloadPdfBtn').addEventListener('click', function() {
+            downloadPDF(false);
+        });
+
+        function downloadPDF(autoSave) {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            
+            doc.setFontSize(22);
+            doc.setFont(undefined, 'bold');
+            doc.text('EDUNEST Reading Test - Day 49', 105, 20, { align: 'center' });
+            
+            doc.setFontSize(12);
+            doc.setFont(undefined, 'normal');
+            doc.text(`Student: ${studentName}`, 20, 35);
+            doc.text(`Date: ${new Date().toLocaleDateString()}`, 20, 42);
+            doc.text(`Test Owner: JONY`, 20, 49);
+            if (autoSave) {
+                doc.text('Status: Auto-saved (Time Expired)', 20, 56);
+            }
+            
+            doc.line(20, 62, 190, 62);
+            
+            let y = 73;
+            
+            doc.setFontSize(14);
+            doc.setFont(undefined, 'bold');
+            doc.text('Questions 1-10', 20, y);
+            y += 8;
+            
+            doc.setFontSize(11);
+            doc.setFont(undefined, 'normal');
+            for (let i = 1; i <= 10; i++) {
+                doc.text(`Question ${i}: ${answers[i] || '(Not answered)'}`, 20, y);
+                y += 7;
+            }
+            y += 3;
+            
+            doc.setFontSize(14);
+            doc.setFont(undefined, 'bold');
+            doc.text('Questions 11-16', 20, y);
+            y += 8;
+            
+            doc.setFontSize(11);
+            doc.setFont(undefined, 'normal');
+            for (let i = 11; i <= 16; i++) {
+                doc.text(`Question ${i}: ${answers[i] || '(Not answered)'}`, 20, y);
+                y += 7;
+            }
+            y += 3;
+            
+            doc.setFontSize(14);
+            doc.setFont(undefined, 'bold');
+            doc.text('Questions 17-20', 20, y);
+            y += 8;
+            
+            doc.setFontSize(11);
+            doc.setFont(undefined, 'normal');
+            for (let i = 17; i <= 20; i++) {
+                doc.text(`Question ${i}: ${answers[i] || '(Not answered)'}`, 20, y);
+                y += 7;
+            }
+            
+            const filename = autoSave ? 
+                `${studentName}_ReadingTest_Day49_AutoSaved.pdf` : 
+                `${studentName}_ReadingTest_Day49.pdf`;
+            
+            doc.save(filename);
+        }
+    </script>
+</body>
+</html>
