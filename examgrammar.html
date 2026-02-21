@@ -1,0 +1,846 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>EDUNEST Grammar Test</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;800&family=Nunito:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg-deep: #0b1628;
+  --bg-mid: #0f1f3d;
+  --bg-card: #142244;
+  --bg-card-hover: #18294f;
+  --teal: #2dd4bf;
+  --teal-glow: rgba(45,212,191,0.15);
+  --coral: #fb7185;
+  --coral-glow: rgba(251,113,133,0.15);
+  --sky: #38bdf8;
+  --amber: #fbbf24;
+  --violet: #a78bfa;
+  --mint: #34d399;
+  --gradient-main: linear-gradient(135deg, #2dd4bf, #38bdf8, #a78bfa);
+  --gradient-warm: linear-gradient(135deg, #fb7185, #fbbf24);
+  --gradient-cool: linear-gradient(135deg, #2dd4bf, #38bdf8);
+  --text-primary: #f0fdfa;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+  --border: rgba(255,255,255,0.07);
+  --border-glow: rgba(45,212,191,0.12);
+  --glass: rgba(255,255,255,0.03);
+  --success: #34d399;
+  --danger: #fb7185;
+}
+
+* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+
+body {
+  font-family:'Nunito',sans-serif;
+  background:var(--bg-deep);
+  color:var(--text-primary);
+  min-height:100vh;
+  overflow-x:hidden;
+  line-height:1.6;
+}
+
+::-webkit-scrollbar{width:5px;}
+::-webkit-scrollbar-track{background:transparent;}
+::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.1);border-radius:10px;}
+
+/* ═══════════════════════════════════
+   WELCOME SCREEN
+   ═══════════════════════════════════ */
+#welcome-screen {
+  min-height:100vh; display:flex;
+  align-items:center; justify-content:center;
+  position:relative; overflow:hidden;
+}
+
+.w-bg {
+  position:fixed; inset:0; z-index:0;
+  background:
+    radial-gradient(ellipse 80% 60% at 25% 15%, rgba(45,212,191,0.2) 0%, transparent 55%),
+    radial-gradient(ellipse 70% 55% at 75% 25%, rgba(56,189,248,0.15) 0%, transparent 50%),
+    radial-gradient(ellipse 60% 45% at 50% 85%, rgba(251,113,133,0.12) 0%, transparent 45%),
+    radial-gradient(ellipse 50% 35% at 85% 75%, rgba(167,139,250,0.1) 0%, transparent 40%),
+    var(--bg-deep);
+}
+
+.w-shapes { position:fixed; inset:0; z-index:1; pointer-events:none; overflow:hidden; }
+
+.w-ring {
+  position:absolute; border-radius:50%;
+  border:1px solid rgba(255,255,255,0.04);
+  animation:ringPulse 10s infinite ease-in-out;
+}
+.w-ring-1 { width:400px;height:400px;top:-100px;left:-100px;animation-delay:0s; }
+.w-ring-2 { width:300px;height:300px;bottom:-80px;right:-80px;animation-delay:-3s; }
+.w-ring-3 { width:500px;height:500px;top:30%;left:50%;transform:translateX(-50%);animation-delay:-6s; }
+
+@keyframes ringPulse {
+  0%,100%{transform:scale(1);opacity:0.3;}
+  50%{transform:scale(1.15);opacity:0.6;}
+}
+
+.w-dot {
+  position:absolute; width:3px; height:3px;
+  background:var(--teal); border-radius:50%;
+  opacity:0; animation:dotTwinkle 5s infinite ease-in-out;
+}
+
+@keyframes dotTwinkle {
+  0%,100%{opacity:0;transform:scale(0.5);}
+  50%{opacity:0.7;transform:scale(1.5);}
+}
+
+.w-container { position:relative; z-index:10; width:100%; max-width:500px; padding:20px; }
+
+.w-card {
+  background:linear-gradient(150deg, rgba(20,34,68,0.94), rgba(15,31,61,0.97));
+  border:1px solid var(--border-glow);
+  border-radius:28px; padding:42px 38px;
+  backdrop-filter:blur(40px);
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,0.05),
+    0 30px 60px -15px rgba(0,0,0,0.5),
+    0 0 100px rgba(45,212,191,0.05),
+    inset 0 1px 0 rgba(255,255,255,0.06);
+  animation:cardUp 0.85s cubic-bezier(0.16,1,0.3,1) forwards;
+  opacity:0; transform:translateY(35px);
+}
+
+@keyframes cardUp { to{opacity:1;transform:translateY(0);} }
+
+.w-logo { text-align:center; margin-bottom:6px; }
+.w-logo img { height:54px; width:auto; filter:drop-shadow(0 4px 14px rgba(45,212,191,0.35)); }
+
+.w-badge { text-align:center; margin-bottom:22px; }
+.w-badge span {
+  display:inline-block; font-family:'JetBrains Mono',monospace;
+  font-size:10px; font-weight:700; letter-spacing:3.5px;
+  text-transform:uppercase;
+  background:var(--gradient-main);
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+}
+
+.w-title {
+  font-family:'Playfair Display',serif;
+  font-size:29px; font-weight:800;
+  text-align:center; margin-bottom:4px;
+  background:linear-gradient(135deg,#fff,var(--teal));
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+  line-height:1.3;
+}
+
+.w-sub { text-align:center; color:var(--text-secondary); font-size:14px; margin-bottom:6px; }
+
+.w-owner {
+  text-align:center; font-size:11px; letter-spacing:2.5px;
+  text-transform:uppercase; margin-bottom:28px; font-weight:700;
+  background:var(--gradient-warm);
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+}
+
+.fg { margin-bottom:18px; }
+.fl { display:block; font-size:11px; font-weight:700; color:var(--text-secondary); margin-bottom:7px; letter-spacing:1px; text-transform:uppercase; }
+
+.fi {
+  width:100%; padding:13px 16px;
+  background:rgba(255,255,255,0.04);
+  border:1px solid var(--border-glow);
+  border-radius:12px; color:var(--text-primary);
+  font-family:'Nunito',sans-serif; font-size:15px;
+  transition:all 0.3s; outline:none;
+}
+.fi:focus { border-color:var(--teal); box-shadow:0 0 0 3px var(--teal-glow); }
+.fi::placeholder { color:var(--text-muted); }
+
+.pin-row { display:flex; gap:14px; justify-content:center; }
+
+.pin-box {
+  width:56px; height:66px; text-align:center;
+  font-family:'JetBrains Mono',monospace;
+  font-size:26px; font-weight:700;
+  background:rgba(255,255,255,0.04);
+  border:2px solid var(--border-glow);
+  border-radius:16px; color:var(--text-primary);
+  transition:all 0.3s; outline:none;
+  -webkit-text-security:disc;
+}
+.pin-box:focus { border-color:var(--coral); box-shadow:0 0 0 3px var(--coral-glow); transform:translateY(-3px); }
+.pin-box.err { border-color:var(--danger); box-shadow:0 0 0 3px rgba(251,113,133,0.25); animation:shake 0.5s; }
+.pin-box.ok { border-color:var(--success); box-shadow:0 0 0 3px rgba(52,211,153,0.25); }
+
+@keyframes shake { 0%,100%{transform:translateX(0);}20%{transform:translateX(-8px);}40%{transform:translateX(8px);}60%{transform:translateX(-5px);}80%{transform:translateX(5px);} }
+
+.err-txt { text-align:center; color:var(--danger); font-size:13px; margin-top:10px; min-height:20px; font-weight:600; }
+
+.go-btn {
+  width:100%; padding:16px; margin-top:22px;
+  background:var(--gradient-main);
+  border:none; border-radius:14px; color:#0b1628;
+  font-family:'Nunito',sans-serif; font-size:16px; font-weight:800;
+  cursor:pointer; transition:all 0.3s;
+  letter-spacing:1px; text-transform:uppercase;
+  position:relative; overflow:hidden;
+}
+.go-btn::after { content:''; position:absolute; inset:0; background:linear-gradient(135deg,transparent,rgba(255,255,255,0.2)); opacity:0; transition:opacity 0.3s; }
+.go-btn:hover::after{opacity:1;}
+.go-btn:hover{transform:translateY(-2px);box-shadow:0 10px 35px rgba(45,212,191,0.3);}
+.go-btn:disabled{opacity:0.3;cursor:not-allowed;transform:none;box-shadow:none;}
+
+/* ═══════════════════════════════════
+   PROCTOR
+   ═══════════════════════════════════ */
+#proctor {
+  display:none; position:fixed; inset:0; z-index:10000;
+  background:rgba(0,0,0,0.96); backdrop-filter:blur(24px);
+  align-items:center; justify-content:center;
+}
+
+.pr-card {
+  background:linear-gradient(150deg,#142244,#0f1f3d);
+  border:1px solid rgba(251,113,133,0.2);
+  border-radius:24px; padding:42px 34px;
+  max-width:430px; width:90%; text-align:center;
+  box-shadow:0 0 70px rgba(251,113,133,0.06);
+}
+
+.pr-icon { width:66px;height:66px;margin:0 auto 16px;background:rgba(251,113,133,0.1);border:2px solid rgba(251,113,133,0.2);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:28px; }
+.pr-title { font-family:'Playfair Display',serif; font-size:22px; font-weight:700; color:var(--danger); margin-bottom:8px; }
+.pr-text { color:var(--text-secondary); font-size:14px; margin-bottom:22px; line-height:1.7; }
+
+.pr-pins { display:flex; gap:10px; justify-content:center; margin-bottom:10px; }
+
+.pr-pin {
+  width:50px;height:58px;text-align:center;
+  font-family:'JetBrains Mono',monospace;font-size:22px;font-weight:700;
+  background:rgba(255,255,255,0.04);border:2px solid var(--border);border-radius:14px;
+  color:var(--text-primary);transition:all 0.3s;outline:none;
+  -webkit-text-security:disc;
+}
+.pr-pin:focus{border-color:var(--danger);box-shadow:0 0 0 3px rgba(251,113,133,0.2);}
+
+.pr-err{color:var(--danger);font-size:13px;min-height:20px;font-weight:600;}
+
+.pr-btn {
+  padding:14px 38px;margin-top:14px;
+  background:linear-gradient(135deg,var(--danger),#e11d48);
+  border:none;border-radius:12px;color:white;
+  font-family:'Nunito',sans-serif;font-size:15px;font-weight:700;
+  cursor:pointer;transition:all 0.3s;
+}
+.pr-btn:hover{transform:translateY(-2px);box-shadow:0 8px 25px rgba(251,113,133,0.3);}
+
+/* ═══════════════════════════════════
+   TEST SCREEN
+   ═══════════════════════════════════ */
+#test-screen { display:none; height:100vh; overflow:hidden; }
+
+.t-header {
+  position:fixed; top:0; left:0; right:0; z-index:500;
+  background:rgba(11,22,40,0.92); backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--border);
+  padding:8px 20px; display:flex;
+  align-items:center; justify-content:space-between;
+  height:50px;
+}
+
+.t-hl { display:flex; align-items:center; gap:12px; }
+.t-hl img { height:28px; width:auto; }
+
+.t-hinfo .t-htitle { font-family:'Playfair Display',serif; font-size:14px; font-weight:700; line-height:1.2; }
+.t-hinfo .t-hstudent { font-size:11px; color:var(--text-secondary); }
+.t-hinfo .t-hstudent strong { color:var(--teal); }
+
+.t-hr { display:flex; align-items:center; gap:8px; }
+
+/* Part nav tabs */
+.pnav { display:flex; gap:4px; }
+
+.pnav-btn {
+  padding:6px 12px; background:var(--glass);
+  border:1px solid var(--border); border-radius:8px;
+  color:var(--text-muted); font-family:'Nunito',sans-serif;
+  font-size:11px; font-weight:700; cursor:pointer;
+  transition:all 0.3s; letter-spacing:0.3px;
+}
+.pnav-btn:hover { background:rgba(45,212,191,0.08); color:var(--text-primary); }
+.pnav-btn.active {
+  background:var(--gradient-cool); border-color:transparent;
+  color:#0b1628; box-shadow:0 2px 12px rgba(45,212,191,0.2);
+}
+
+/* Timer circle (decorative) */
+.timer-circle {
+  width:34px; height:34px; border-radius:50%;
+  background:rgba(45,212,191,0.08);
+  border:2px solid rgba(45,212,191,0.2);
+  display:flex; align-items:center; justify-content:center;
+  font-family:'JetBrains Mono',monospace;
+  font-size:10px; font-weight:700; color:var(--teal);
+  flex-shrink:0; cursor:default;
+  position:relative;
+}
+.timer-circle .tc-tip {
+  display:none; position:absolute;
+  top:calc(100% + 8px); right:0;
+  background:var(--bg-card); border:1px solid var(--border-glow);
+  border-radius:8px; padding:5px 11px;
+  font-size:10px; white-space:nowrap;
+  color:var(--text-secondary); font-weight:600;
+  pointer-events:none; z-index:999;
+}
+.timer-circle:hover .tc-tip { display:block; }
+
+/* ═══ SPLIT LAYOUT ═══ */
+.split {
+  display:flex; height:calc(100vh - 50px); margin-top:50px;
+}
+
+.split-l {
+  width:50%; height:100%; overflow-y:auto;
+  padding:26px 26px 100px;
+  border-right:1px solid var(--border);
+  background:rgba(255,255,255,0.008);
+}
+
+.split-r {
+  width:50%; height:100%; overflow-y:auto;
+  padding:26px 26px 100px;
+}
+
+/* Questions in left panel (grammar = questions are the content) */
+.part-block { display:none; }
+.part-block.active { display:block; animation:fadeIn 0.35s ease; }
+
+@keyframes fadeIn { from{opacity:0;transform:translateY(10px);} to{opacity:1;transform:translateY(0);} }
+
+.part-title {
+  font-family:'Playfair Display',serif;
+  font-size:20px; font-weight:800; margin-bottom:4px;
+  background:var(--gradient-main);
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+}
+
+.part-sub {
+  font-size:12px; color:var(--text-muted); margin-bottom:20px;
+  font-weight:600; letter-spacing:0.5px;
+}
+
+.qcard {
+  background:var(--bg-card);
+  border:1px solid var(--border);
+  border-radius:14px; padding:18px 20px;
+  margin-bottom:12px; transition:all 0.25s;
+}
+.qcard:hover { border-color:var(--border-glow); background:var(--bg-card-hover); }
+
+.qnum {
+  display:inline-block; font-family:'JetBrains Mono',monospace;
+  font-size:10px; font-weight:700; color:var(--teal);
+  background:rgba(45,212,191,0.1);
+  padding:3px 10px; border-radius:6px; margin-bottom:8px;
+}
+
+.qstem {
+  font-size:14.5px; color:var(--text-primary);
+  margin-bottom:12px; line-height:1.55; font-weight:500;
+}
+
+.qstem .blank {
+  display:inline-block; min-width:80px;
+  border-bottom:2px dashed rgba(45,212,191,0.4);
+  margin:0 4px; padding:0 4px;
+  color:var(--teal); font-weight:700;
+}
+
+.opts { display:grid; grid-template-columns:1fr 1fr; gap:6px; }
+
+.opt {
+  display:flex; align-items:center; gap:9px;
+  padding:10px 14px;
+  background:rgba(255,255,255,0.02);
+  border:1px solid var(--border);
+  border-radius:10px; cursor:pointer;
+  transition:all 0.25s; font-size:13px; font-weight:500;
+}
+
+.opt:hover {
+  background:rgba(45,212,191,0.05);
+  border-color:rgba(45,212,191,0.15);
+}
+
+.opt input[type="radio"] {
+  appearance:none; width:18px; height:18px;
+  border:2px solid var(--text-muted); border-radius:50%;
+  transition:all 0.3s; flex-shrink:0; position:relative;
+}
+
+.opt input[type="radio"]:checked {
+  border-color:var(--teal); background:var(--teal);
+}
+
+.opt input[type="radio"]:checked::after {
+  content:''; position:absolute;
+  top:50%; left:50%; transform:translate(-50%,-50%);
+  width:7px; height:7px; background:white; border-radius:50%;
+}
+
+.opt:has(input:checked) {
+  background:rgba(45,212,191,0.07);
+  border-color:rgba(45,212,191,0.2);
+}
+
+/* Answer summary in right panel */
+.ans-panel-title {
+  font-family:'Playfair Display',serif;
+  font-size:18px; font-weight:700; margin-bottom:16px;
+  color:var(--text-primary);
+}
+
+.ans-grid {
+  display:grid; grid-template-columns:repeat(5,1fr); gap:8px;
+  margin-bottom:24px;
+}
+
+.ans-cell {
+  background:var(--bg-card);
+  border:1px solid var(--border);
+  border-radius:10px; padding:10px 6px;
+  text-align:center; transition:all 0.3s;
+  cursor:pointer;
+}
+
+.ans-cell:hover { border-color:var(--border-glow); }
+
+.ans-cell .ac-num {
+  font-family:'JetBrains Mono',monospace;
+  font-size:10px; font-weight:700;
+  color:var(--text-muted); margin-bottom:3px;
+}
+
+.ans-cell .ac-val {
+  font-family:'JetBrains Mono',monospace;
+  font-size:15px; font-weight:700;
+  color:var(--text-muted); min-height:20px;
+}
+
+.ans-cell.answered { border-color:rgba(45,212,191,0.2); }
+.ans-cell.answered .ac-val { color:var(--teal); }
+
+/* Submit area */
+.sub-area { text-align:center; padding:30px 0 16px; }
+
+.sub-btn {
+  padding:15px 44px;
+  background:linear-gradient(135deg,var(--success),#10b981);
+  border:none; border-radius:14px; color:#0b1628;
+  font-family:'Nunito',sans-serif;
+  font-size:16px; font-weight:800;
+  cursor:pointer; transition:all 0.3s;
+  text-transform:uppercase; letter-spacing:0.5px;
+}
+.sub-btn:hover { transform:translateY(-2px); box-shadow:0 10px 30px rgba(52,211,153,0.3); }
+
+.copy-btn {
+  padding:13px 32px; margin-left:10px;
+  background:var(--gradient-main);
+  border:none; border-radius:12px; color:#0b1628;
+  font-family:'Nunito',sans-serif;
+  font-size:14px; font-weight:700;
+  cursor:pointer; transition:all 0.3s;
+  text-transform:uppercase; display:none;
+}
+.copy-btn:hover { transform:translateY(-2px); box-shadow:0 8px 25px rgba(45,212,191,0.3); }
+
+.post-sub { display:none; margin-top:18px; animation:fadeIn 0.5s; }
+.sub-msg { color:var(--success); font-size:15px; font-weight:700; margin-bottom:12px; }
+#copy-fb { color:var(--sky); font-size:13px; margin-top:8px; min-height:20px; font-weight:600; }
+
+/* ═══ MOBILE ═══ */
+@media(max-width:900px){
+  .split{flex-direction:column;height:auto;margin-top:50px;}
+  .split-l{width:100%;height:auto;border-right:none;border-bottom:1px solid var(--border);padding:18px 14px;max-height:none;overflow-y:visible;}
+  .split-r{width:100%;height:auto;padding:18px 14px 120px;overflow-y:visible;}
+  .t-header{padding:8px 10px;}
+  .pnav-btn{padding:5px 9px;font-size:10px;}
+  .opts{grid-template-columns:1fr;}
+  .ans-grid{grid-template-columns:repeat(5,1fr);gap:6px;}
+  .sub-btn{padding:13px 30px;font-size:14px;}
+  .copy-btn{margin-left:0;margin-top:10px;}
+  .sub-area{display:flex;flex-direction:column;align-items:center;gap:0;}
+}
+
+@media(max-width:400px){
+  .w-card{padding:30px 18px;}
+  .w-title{font-size:24px;}
+  .pin-box{width:48px;height:58px;font-size:22px;}
+  .ans-grid{grid-template-columns:repeat(4,1fr);}
+}
+</style>
+</head>
+<body>
+
+<!-- ═══ WELCOME ═══ -->
+<div id="welcome-screen">
+  <div class="w-bg"></div>
+  <div class="w-shapes">
+    <div class="w-ring w-ring-1"></div>
+    <div class="w-ring w-ring-2"></div>
+    <div class="w-ring w-ring-3"></div>
+  </div>
+  <div class="w-shapes" id="dots-c"></div>
+
+  <div class="w-container">
+    <div class="w-card">
+      <div class="w-logo"><img src="https://image2url.com/r2/default/images/1769700366134-01db5cda-e300-4af6-8039-9c7cad80199a.png" alt="EDUNEST" onerror="this.style.display='none'"></div>
+      <div class="w-badge"><span>Grammar Examination</span></div>
+      <div class="w-title">EDUNEST Grammar Test</div>
+      <div class="w-sub">40 multiple-choice questions. Choose the best answer.</div>
+      <div class="w-owner">Test Owner: GULRUX</div>
+
+      <div class="fg">
+        <label class="fl">Student Name</label>
+        <input type="text" id="sname" class="fi" placeholder="Enter your full name" autocomplete="off">
+      </div>
+
+      <div class="fg">
+        <label class="fl">Access Code</label>
+        <div class="pin-row">
+          <input type="tel" class="pin-box" maxlength="1" data-pin="0" inputmode="numeric" autocomplete="off">
+          <input type="tel" class="pin-box" maxlength="1" data-pin="1" inputmode="numeric" autocomplete="off">
+          <input type="tel" class="pin-box" maxlength="1" data-pin="2" inputmode="numeric" autocomplete="off">
+          <input type="tel" class="pin-box" maxlength="1" data-pin="3" inputmode="numeric" autocomplete="off">
+        </div>
+        <div class="err-txt" id="pin-err"></div>
+      </div>
+
+      <button class="go-btn" id="go-btn" disabled>Begin Examination</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ PROCTOR ═══ -->
+<div id="proctor">
+  <div class="pr-card">
+    <div class="pr-icon">🔒</div>
+    <div class="pr-title">Session Locked</div>
+    <div class="pr-text">You navigated away from the test. Enter the proctor password to resume.</div>
+    <div class="pr-pins">
+      <input type="tel" class="pr-pin" maxlength="1" data-pp="0" inputmode="numeric" autocomplete="off">
+      <input type="tel" class="pr-pin" maxlength="1" data-pp="1" inputmode="numeric" autocomplete="off">
+      <input type="tel" class="pr-pin" maxlength="1" data-pp="2" inputmode="numeric" autocomplete="off">
+      <input type="tel" class="pr-pin" maxlength="1" data-pp="3" inputmode="numeric" autocomplete="off">
+    </div>
+    <div class="pr-err" id="pr-err"></div>
+    <button class="pr-btn" id="pr-btn">Unlock Session</button>
+  </div>
+</div>
+
+<!-- ═══ TEST ═══ -->
+<div id="test-screen">
+  <div class="t-header">
+    <div class="t-hl">
+      <img src="https://image2url.com/r2/default/images/1769700366134-01db5cda-e300-4af6-8039-9c7cad80199a.png" alt="EDUNEST" onerror="this.style.display='none'">
+      <div class="t-hinfo">
+        <div class="t-htitle">Grammar Test</div>
+        <div class="t-hstudent">Student: <strong id="dname"></strong></div>
+      </div>
+    </div>
+    <div class="t-hr">
+      <div class="pnav">
+        <button class="pnav-btn active" data-part="1">1–10</button>
+        <button class="pnav-btn" data-part="2">11–20</button>
+        <button class="pnav-btn" data-part="3">21–30</button>
+        <button class="pnav-btn" data-part="4">31–40</button>
+      </div>
+      <div class="timer-circle" id="tcircle">
+        <span>40</span>
+        <span class="tc-tip">40 Questions</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="split">
+    <!-- LEFT: QUESTIONS -->
+    <div class="split-l" id="q-panel">
+
+      <!-- Part 1: Q1–10 -->
+      <div class="part-block active" id="part-1">
+        <div class="part-title">Questions 1 – 10</div>
+        <div class="part-sub">Choose the best answer: A, B, C or D</div>
+        <!-- Q1 --><div class="qcard"><div class="qnum">Q1</div><div class="qstem">She left her keys <span class="blank">___</span> the reception desk before the meeting started.</div><div class="opts"><label class="opt"><input type="radio" name="q1" value="A" data-q="1"> A) on</label><label class="opt"><input type="radio" name="q1" value="B" data-q="1"> B) in</label><label class="opt"><input type="radio" name="q1" value="C" data-q="1"> C) at</label><label class="opt"><input type="radio" name="q1" value="D" data-q="1"> D) to</label></div></div>
+        <!-- Q2 --><div class="qcard"><div class="qnum">Q2</div><div class="qstem">The documents <span class="blank">___</span> by the manager before the deadline yesterday.</div><div class="opts"><label class="opt"><input type="radio" name="q2" value="A" data-q="2"> A) were signed</label><label class="opt"><input type="radio" name="q2" value="B" data-q="2"> B) had signed</label><label class="opt"><input type="radio" name="q2" value="C" data-q="2"> C) have signed</label><label class="opt"><input type="radio" name="q2" value="D" data-q="2"> D) are signed</label></div></div>
+        <!-- Q3 --><div class="qcard"><div class="qnum">Q3</div><div class="qstem">When I arrived at the café, they <span class="blank">___</span> for over an hour.</div><div class="opts"><label class="opt"><input type="radio" name="q3" value="A" data-q="3"> A) waited</label><label class="opt"><input type="radio" name="q3" value="B" data-q="3"> B) were waiting</label><label class="opt"><input type="radio" name="q3" value="C" data-q="3"> C) had been waiting</label><label class="opt"><input type="radio" name="q3" value="D" data-q="3"> D) wait</label></div></div>
+        <!-- Q4 --><div class="qcard"><div class="qnum">Q4</div><div class="qstem">The lights suddenly went out while we <span class="blank">___</span> the presentation.</div><div class="opts"><label class="opt"><input type="radio" name="q4" value="A" data-q="4"> A) watched</label><label class="opt"><input type="radio" name="q4" value="B" data-q="4"> B) had watched</label><label class="opt"><input type="radio" name="q4" value="C" data-q="4"> C) were watching</label><label class="opt"><input type="radio" name="q4" value="D" data-q="4"> D) watch</label></div></div>
+        <!-- Q5 --><div class="qcard"><div class="qnum">Q5</div><div class="qstem">There isn't much <span class="blank">___</span> left in the fridge.</div><div class="opts"><label class="opt"><input type="radio" name="q5" value="A" data-q="5"> A) apples</label><label class="opt"><input type="radio" name="q5" value="B" data-q="5"> B) juice</label><label class="opt"><input type="radio" name="q5" value="C" data-q="5"> C) eggs</label><label class="opt"><input type="radio" name="q5" value="D" data-q="5"> D) sandwiches</label></div></div>
+        <!-- Q6 --><div class="qcard"><div class="qnum">Q6</div><div class="qstem">If metal <span class="blank">___</span> wet for a long time, it rusts.</div><div class="opts"><label class="opt"><input type="radio" name="q6" value="A" data-q="6"> A) stays</label><label class="opt"><input type="radio" name="q6" value="B" data-q="6"> B) will stay</label><label class="opt"><input type="radio" name="q6" value="C" data-q="6"> C) stayed</label><label class="opt"><input type="radio" name="q6" value="D" data-q="6"> D) would stay</label></div></div>
+        <!-- Q7 --><div class="qcard"><div class="qnum">Q7</div><div class="qstem">If she finishes early, she <span class="blank">___</span> us at the conference hall.</div><div class="opts"><label class="opt"><input type="radio" name="q7" value="A" data-q="7"> A) joined</label><label class="opt"><input type="radio" name="q7" value="B" data-q="7"> B) will join</label><label class="opt"><input type="radio" name="q7" value="C" data-q="7"> C) joins</label><label class="opt"><input type="radio" name="q7" value="D" data-q="7"> D) would join</label></div></div>
+        <!-- Q8 --><div class="qcard"><div class="qnum">Q8</div><div class="qstem">If I were in charge of the project, I <span class="blank">___</span> the deadline.</div><div class="opts"><label class="opt"><input type="radio" name="q8" value="A" data-q="8"> A) extend</label><label class="opt"><input type="radio" name="q8" value="B" data-q="8"> B) will extend</label><label class="opt"><input type="radio" name="q8" value="C" data-q="8"> C) extended</label><label class="opt"><input type="radio" name="q8" value="D" data-q="8"> D) would extend</label></div></div>
+        <!-- Q9 --><div class="qcard"><div class="qnum">Q9</div><div class="qstem">He has a meeting <span class="blank">___</span> noon <span class="blank">___</span> Friday.</div><div class="opts"><label class="opt"><input type="radio" name="q9" value="A" data-q="9"> A) at / on</label><label class="opt"><input type="radio" name="q9" value="B" data-q="9"> B) in / at</label><label class="opt"><input type="radio" name="q9" value="C" data-q="9"> C) on / at</label><label class="opt"><input type="radio" name="q9" value="D" data-q="9"> D) at / in</label></div></div>
+        <!-- Q10 --><div class="qcard"><div class="qnum">Q10</div><div class="qstem">The new bridge <span class="blank">___</span> in 2018 after two years of construction.</div><div class="opts"><label class="opt"><input type="radio" name="q10" value="A" data-q="10"> A) was completed</label><label class="opt"><input type="radio" name="q10" value="B" data-q="10"> B) completed</label><label class="opt"><input type="radio" name="q10" value="C" data-q="10"> C) has completed</label><label class="opt"><input type="radio" name="q10" value="D" data-q="10"> D) had completed</label></div></div>
+      </div>
+
+      <!-- Part 2: Q11–20 -->
+      <div class="part-block" id="part-2">
+        <div class="part-title">Questions 11 – 20</div>
+        <div class="part-sub">Choose the best answer: A, B, C or D</div>
+        <div class="qcard"><div class="qnum">Q11</div><div class="qstem">She didn't recognize him because she <span class="blank">___</span> him before.</div><div class="opts"><label class="opt"><input type="radio" name="q11" value="A" data-q="11"> A) never saw</label><label class="opt"><input type="radio" name="q11" value="B" data-q="11"> B) wasn't seeing</label><label class="opt"><input type="radio" name="q11" value="C" data-q="11"> C) had never seen</label><label class="opt"><input type="radio" name="q11" value="D" data-q="11"> D) hasn't seen</label></div></div>
+        <div class="qcard"><div class="qnum">Q12</div><div class="qstem">I found a wallet <span class="blank">___</span> the floor <span class="blank">___</span> the corner of the room.</div><div class="opts"><label class="opt"><input type="radio" name="q12" value="A" data-q="12"> A) on / in</label><label class="opt"><input type="radio" name="q12" value="B" data-q="12"> B) at / in</label><label class="opt"><input type="radio" name="q12" value="C" data-q="12"> C) in / at</label><label class="opt"><input type="radio" name="q12" value="D" data-q="12"> D) on / at</label></div></div>
+        <div class="qcard"><div class="qnum">Q13</div><div class="qstem">There are only a few <span class="blank">___</span> in the jar.</div><div class="opts"><label class="opt"><input type="radio" name="q13" value="A" data-q="13"> A) sugar</label><label class="opt"><input type="radio" name="q13" value="B" data-q="13"> B) coins</label><label class="opt"><input type="radio" name="q13" value="C" data-q="13"> C) rice</label><label class="opt"><input type="radio" name="q13" value="D" data-q="13"> D) milk</label></div></div>
+        <div class="qcard"><div class="qnum">Q14</div><div class="qstem">The emails <span class="blank">___</span> while the system was being updated.</div><div class="opts"><label class="opt"><input type="radio" name="q14" value="A" data-q="14"> A) were sent</label><label class="opt"><input type="radio" name="q14" value="B" data-q="14"> B) are sent</label><label class="opt"><input type="radio" name="q14" value="C" data-q="14"> C) sent</label><label class="opt"><input type="radio" name="q14" value="D" data-q="14"> D) have sent</label></div></div>
+        <div class="qcard"><div class="qnum">Q15</div><div class="qstem">While the children <span class="blank">___</span> outside, it suddenly started to snow.</div><div class="opts"><label class="opt"><input type="radio" name="q15" value="A" data-q="15"> A) played</label><label class="opt"><input type="radio" name="q15" value="B" data-q="15"> B) had played</label><label class="opt"><input type="radio" name="q15" value="C" data-q="15"> C) were playing</label><label class="opt"><input type="radio" name="q15" value="D" data-q="15"> D) play</label></div></div>
+        <div class="qcard"><div class="qnum">Q16</div><div class="qstem">If water <span class="blank">___</span> below zero degrees, it turns into ice.</div><div class="opts"><label class="opt"><input type="radio" name="q16" value="A" data-q="16"> A) will reach</label><label class="opt"><input type="radio" name="q16" value="B" data-q="16"> B) reached</label><label class="opt"><input type="radio" name="q16" value="C" data-q="16"> C) reaches</label><label class="opt"><input type="radio" name="q16" value="D" data-q="16"> D) would reach</label></div></div>
+        <div class="qcard"><div class="qnum">Q17</div><div class="qstem">We will cancel the picnic if it <span class="blank">___</span>.</div><div class="opts"><label class="opt"><input type="radio" name="q17" value="A" data-q="17"> A) rains</label><label class="opt"><input type="radio" name="q17" value="B" data-q="17"> B) would rain</label><label class="opt"><input type="radio" name="q17" value="C" data-q="17"> C) rained</label><label class="opt"><input type="radio" name="q17" value="D" data-q="17"> D) rain</label></div></div>
+        <div class="qcard"><div class="qnum">Q18</div><div class="qstem">If they had more evidence, they <span class="blank">___</span> the case differently.</div><div class="opts"><label class="opt"><input type="radio" name="q18" value="A" data-q="18"> A) handled</label><label class="opt"><input type="radio" name="q18" value="B" data-q="18"> B) will handle</label><label class="opt"><input type="radio" name="q18" value="C" data-q="18"> C) handle</label><label class="opt"><input type="radio" name="q18" value="D" data-q="18"> D) would handle</label></div></div>
+        <div class="qcard"><div class="qnum">Q19</div><div class="qstem">She put the files <span class="blank">___</span> her bag <span class="blank">___</span> the taxi arrived.</div><div class="opts"><label class="opt"><input type="radio" name="q19" value="A" data-q="19"> A) in / before</label><label class="opt"><input type="radio" name="q19" value="B" data-q="19"> B) on / during</label><label class="opt"><input type="radio" name="q19" value="C" data-q="19"> C) at / while</label><label class="opt"><input type="radio" name="q19" value="D" data-q="19"> D) in / while</label></div></div>
+        <div class="qcard"><div class="qnum">Q20</div><div class="qstem">The painting <span class="blank">___</span> carefully before it was displayed.</div><div class="opts"><label class="opt"><input type="radio" name="q20" value="A" data-q="20"> A) had restored</label><label class="opt"><input type="radio" name="q20" value="B" data-q="20"> B) restored</label><label class="opt"><input type="radio" name="q20" value="C" data-q="20"> C) was restored</label><label class="opt"><input type="radio" name="q20" value="D" data-q="20"> D) restores</label></div></div>
+      </div>
+
+      <!-- Part 3: Q21–30 -->
+      <div class="part-block" id="part-3">
+        <div class="part-title">Questions 21 – 30</div>
+        <div class="part-sub">Choose the best answer: A, B, C or D</div>
+        <div class="qcard"><div class="qnum">Q21</div><div class="qstem">By the time the train arrived, we <span class="blank">___</span> for thirty minutes.</div><div class="opts"><label class="opt"><input type="radio" name="q21" value="A" data-q="21"> A) waited</label><label class="opt"><input type="radio" name="q21" value="B" data-q="21"> B) were waiting</label><label class="opt"><input type="radio" name="q21" value="C" data-q="21"> C) had waited</label><label class="opt"><input type="radio" name="q21" value="D" data-q="21"> D) wait</label></div></div>
+        <div class="qcard"><div class="qnum">Q22</div><div class="qstem">There isn't enough <span class="blank">___</span> to finish the report today.</div><div class="opts"><label class="opt"><input type="radio" name="q22" value="A" data-q="22"> A) informations</label><label class="opt"><input type="radio" name="q22" value="B" data-q="22"> B) details</label><label class="opt"><input type="radio" name="q22" value="C" data-q="22"> C) data</label><label class="opt"><input type="radio" name="q22" value="D" data-q="22"> D) facts</label></div></div>
+        <div class="qcard"><div class="qnum">Q23</div><div class="qstem">He was standing <span class="blank">___</span> the entrance when I saw him.</div><div class="opts"><label class="opt"><input type="radio" name="q23" value="A" data-q="23"> A) on</label><label class="opt"><input type="radio" name="q23" value="B" data-q="23"> B) at</label><label class="opt"><input type="radio" name="q23" value="C" data-q="23"> C) in</label><label class="opt"><input type="radio" name="q23" value="D" data-q="23"> D) to</label></div></div>
+        <div class="qcard"><div class="qnum">Q24</div><div class="qstem">The results <span class="blank">___</span> to the participants last week.</div><div class="opts"><label class="opt"><input type="radio" name="q24" value="A" data-q="24"> A) were emailed</label><label class="opt"><input type="radio" name="q24" value="B" data-q="24"> B) have emailed</label><label class="opt"><input type="radio" name="q24" value="C" data-q="24"> C) emailed</label><label class="opt"><input type="radio" name="q24" value="D" data-q="24"> D) are emailing</label></div></div>
+        <div class="qcard"><div class="qnum">Q25</div><div class="qstem">I noticed that someone <span class="blank">___</span> my notebook.</div><div class="opts"><label class="opt"><input type="radio" name="q25" value="A" data-q="25"> A) moved</label><label class="opt"><input type="radio" name="q25" value="B" data-q="25"> B) was moving</label><label class="opt"><input type="radio" name="q25" value="C" data-q="25"> C) had moved</label><label class="opt"><input type="radio" name="q25" value="D" data-q="25"> D) moves</label></div></div>
+        <div class="qcard"><div class="qnum">Q26</div><div class="qstem">She found a seat <span class="blank">___</span> the back row <span class="blank">___</span> the cinema.</div><div class="opts"><label class="opt"><input type="radio" name="q26" value="A" data-q="26"> A) in / at</label><label class="opt"><input type="radio" name="q26" value="B" data-q="26"> B) at / in</label><label class="opt"><input type="radio" name="q26" value="C" data-q="26"> C) on / in</label><label class="opt"><input type="radio" name="q26" value="D" data-q="26"> D) in / in</label></div></div>
+        <div class="qcard"><div class="qnum">Q27</div><div class="qstem">Too much <span class="blank">___</span> can be harmful to plants.</div><div class="opts"><label class="opt"><input type="radio" name="q27" value="A" data-q="27"> A) fertilizers</label><label class="opt"><input type="radio" name="q27" value="B" data-q="27"> B) water</label><label class="opt"><input type="radio" name="q27" value="C" data-q="27"> C) waters</label><label class="opt"><input type="radio" name="q27" value="D" data-q="27"> D) soils</label></div></div>
+        <div class="qcard"><div class="qnum">Q28</div><div class="qstem">If he <span class="blank">___</span> more careful, he wouldn't make so many mistakes.</div><div class="opts"><label class="opt"><input type="radio" name="q28" value="A" data-q="28"> A) is</label><label class="opt"><input type="radio" name="q28" value="B" data-q="28"> B) was</label><label class="opt"><input type="radio" name="q28" value="C" data-q="28"> C) were</label><label class="opt"><input type="radio" name="q28" value="D" data-q="28"> D) will be</label></div></div>
+        <div class="qcard"><div class="qnum">Q29</div><div class="qstem">The package <span class="blank">___</span> before we arrived at the office.</div><div class="opts"><label class="opt"><input type="radio" name="q29" value="A" data-q="29"> A) delivers</label><label class="opt"><input type="radio" name="q29" value="B" data-q="29"> B) was delivering</label><label class="opt"><input type="radio" name="q29" value="C" data-q="29"> C) had been delivered</label><label class="opt"><input type="radio" name="q29" value="D" data-q="29"> D) is delivered</label></div></div>
+        <div class="qcard"><div class="qnum">Q30</div><div class="qstem">She was reading a report while her assistant <span class="blank">___</span> notes.</div><div class="opts"><label class="opt"><input type="radio" name="q30" value="A" data-q="30"> A) took</label><label class="opt"><input type="radio" name="q30" value="B" data-q="30"> B) had taken</label><label class="opt"><input type="radio" name="q30" value="C" data-q="30"> C) was taking</label><label class="opt"><input type="radio" name="q30" value="D" data-q="30"> D) takes</label></div></div>
+      </div>
+
+      <!-- Part 4: Q31–40 -->
+      <div class="part-block" id="part-4">
+        <div class="part-title">Questions 31 – 40</div>
+        <div class="part-sub">Choose the best answer: A, B, C or D</div>
+        <div class="qcard"><div class="qnum">Q31</div><div class="qstem">There are several <span class="blank">___</span> missing from the archive.</div><div class="opts"><label class="opt"><input type="radio" name="q31" value="A" data-q="31"> A) equipment</label><label class="opt"><input type="radio" name="q31" value="B" data-q="31"> B) furniture</label><label class="opt"><input type="radio" name="q31" value="C" data-q="31"> C) documents</label><label class="opt"><input type="radio" name="q31" value="D" data-q="31"> D) advice</label></div></div>
+        <div class="qcard"><div class="qnum">Q32</div><div class="qstem">If the temperature drops tonight, the roads <span class="blank">___</span> icy.</div><div class="opts"><label class="opt"><input type="radio" name="q32" value="A" data-q="32"> A) become</label><label class="opt"><input type="radio" name="q32" value="B" data-q="32"> B) will become</label><label class="opt"><input type="radio" name="q32" value="C" data-q="32"> C) became</label><label class="opt"><input type="radio" name="q32" value="D" data-q="32"> D) would become</label></div></div>
+        <div class="qcard"><div class="qnum">Q33</div><div class="qstem">He left the umbrella <span class="blank">___</span> the staircase <span class="blank">___</span> accident.</div><div class="opts"><label class="opt"><input type="radio" name="q33" value="A" data-q="33"> A) on / by</label><label class="opt"><input type="radio" name="q33" value="B" data-q="33"> B) in / by</label><label class="opt"><input type="radio" name="q33" value="C" data-q="33"> C) at / in</label><label class="opt"><input type="radio" name="q33" value="D" data-q="33"> D) on / in</label></div></div>
+        <div class="qcard"><div class="qnum">Q34</div><div class="qstem">The announcement <span class="blank">___</span> during the ceremony.</div><div class="opts"><label class="opt"><input type="radio" name="q34" value="A" data-q="34"> A) was made</label><label class="opt"><input type="radio" name="q34" value="B" data-q="34"> B) has made</label><label class="opt"><input type="radio" name="q34" value="C" data-q="34"> C) made</label><label class="opt"><input type="radio" name="q34" value="D" data-q="34"> D) is making</label></div></div>
+        <div class="qcard"><div class="qnum">Q35</div><div class="qstem">They <span class="blank">___</span> dinner when the power went off.</div><div class="opts"><label class="opt"><input type="radio" name="q35" value="A" data-q="35"> A) had</label><label class="opt"><input type="radio" name="q35" value="B" data-q="35"> B) have</label><label class="opt"><input type="radio" name="q35" value="C" data-q="35"> C) were having</label><label class="opt"><input type="radio" name="q35" value="D" data-q="35"> D) had had</label></div></div>
+        <div class="qcard"><div class="qnum">Q36</div><div class="qstem">By midnight, the guests <span class="blank">___</span> the party.</div><div class="opts"><label class="opt"><input type="radio" name="q36" value="A" data-q="36"> A) left</label><label class="opt"><input type="radio" name="q36" value="B" data-q="36"> B) were leaving</label><label class="opt"><input type="radio" name="q36" value="C" data-q="36"> C) had left</label><label class="opt"><input type="radio" name="q36" value="D" data-q="36"> D) leave</label></div></div>
+        <div class="qcard"><div class="qnum">Q37</div><div class="qstem">There isn't much <span class="blank">___</span> in his argument.</div><div class="opts"><label class="opt"><input type="radio" name="q37" value="A" data-q="37"> A) logic</label><label class="opt"><input type="radio" name="q37" value="B" data-q="37"> B) ideas</label><label class="opt"><input type="radio" name="q37" value="C" data-q="37"> C) reasons</label><label class="opt"><input type="radio" name="q37" value="D" data-q="37"> D) points</label></div></div>
+        <div class="qcard"><div class="qnum">Q38</div><div class="qstem">If she studies consistently, she <span class="blank">___</span> significant progress.</div><div class="opts"><label class="opt"><input type="radio" name="q38" value="A" data-q="38"> A) makes</label><label class="opt"><input type="radio" name="q38" value="B" data-q="38"> B) will make</label><label class="opt"><input type="radio" name="q38" value="C" data-q="38"> C) made</label><label class="opt"><input type="radio" name="q38" value="D" data-q="38"> D) would make</label></div></div>
+        <div class="qcard"><div class="qnum">Q39</div><div class="qstem">The equipment <span class="blank">___</span> regularly to ensure safety.</div><div class="opts"><label class="opt"><input type="radio" name="q39" value="A" data-q="39"> A) is checked</label><label class="opt"><input type="radio" name="q39" value="B" data-q="39"> B) has checked</label><label class="opt"><input type="radio" name="q39" value="C" data-q="39"> C) checked</label><label class="opt"><input type="radio" name="q39" value="D" data-q="39"> D) checks</label></div></div>
+        <div class="qcard"><div class="qnum">Q40</div><div class="qstem">While I <span class="blank">___</span> through the old files, I found an interesting letter.</div><div class="opts"><label class="opt"><input type="radio" name="q40" value="A" data-q="40"> A) looked</label><label class="opt"><input type="radio" name="q40" value="B" data-q="40"> B) had looked</label><label class="opt"><input type="radio" name="q40" value="C" data-q="40"> C) was looking</label><label class="opt"><input type="radio" name="q40" value="D" data-q="40"> D) look</label></div></div>
+      </div>
+    </div>
+
+    <!-- RIGHT: ANSWER OVERVIEW + SUBMIT -->
+    <div class="split-r" id="ans-panel">
+      <div class="ans-panel-title">Answer Overview</div>
+      <div class="ans-grid" id="ans-grid"></div>
+
+      <div class="sub-area" id="sub-area">
+        <button class="sub-btn" id="sub-btn" onclick="submitAnswers()">Submit Answers</button>
+        <button class="copy-btn" id="copy-btn" onclick="copyAnswers()">Copy Answers</button>
+        <div class="post-sub" id="post-sub">
+          <div class="sub-msg">✓ Answers submitted! Your PDF is downloading.</div>
+          <div id="copy-fb"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const ACCESS=[0,1,1,3], PROCTOR=[1,0,3,1];
+let testOn=false, sName='', done=false;
+
+// Dots
+(function(){const c=document.getElementById('dots-c');for(let i=0;i<55;i++){const d=document.createElement('div');d.className='w-dot';d.style.left=Math.random()*100+'%';d.style.top=Math.random()*100+'%';d.style.animationDelay=Math.random()*5+'s';d.style.animationDuration=(3+Math.random()*5)+'s';c.appendChild(d);}})();
+
+// Answer grid
+(function(){const g=document.getElementById('ans-grid');for(let i=1;i<=40;i++){const c=document.createElement('div');c.className='ans-cell';c.id='ac-'+i;c.innerHTML=`<div class="ac-num">Q${i}</div><div class="ac-val" id="av-${i}">—</div>`;c.onclick=()=>{const p=Math.ceil(i/10);document.querySelectorAll('.pnav-btn').forEach(b=>b.classList.remove('active'));document.querySelector(`.pnav-btn[data-part="${p}"]`).classList.add('active');document.querySelectorAll('.part-block').forEach(b=>b.classList.remove('active'));document.getElementById('part-'+p).classList.add('active');setTimeout(()=>{const qc=document.querySelector(`input[name="q${i}"]`);if(qc)qc.closest('.qcard').scrollIntoView({behavior:'smooth',block:'center'});},100);};g.appendChild(c);}})();
+
+// Listen for answer changes
+document.querySelectorAll('input[type="radio"]').forEach(r=>{
+  r.addEventListener('change',function(){
+    const q=this.dataset.q;
+    document.getElementById('av-'+q).textContent=this.value;
+    document.getElementById('ac-'+q).classList.add('answered');
+  });
+});
+
+// PIN helper
+function setupP(sel,cb){
+  const ps=document.querySelectorAll(sel);
+  ps.forEach((inp,i)=>{
+    inp.addEventListener('input',function(){this.value=this.value.replace(/\D/g,'');if(this.value&&i<ps.length-1)ps[i+1].focus();if(Array.from(ps).every(p=>p.value!==''))cb(Array.from(ps).map(p=>p.value));});
+    inp.addEventListener('keydown',function(e){if(e.key==='Backspace'&&!this.value&&i>0){ps[i-1].focus();ps[i-1].value='';}});
+    inp.addEventListener('paste',function(e){e.preventDefault();const d=(e.clipboardData||window.clipboardData).getData('text').replace(/\D/g,'');for(let j=0;j<Math.min(d.length,ps.length);j++)ps[j].value=d[j];if(d.length>=ps.length){ps[ps.length-1].focus();cb(Array.from(ps).map(p=>p.value));}});
+  });
+}
+
+setupP('.pin-box',()=>chkReady());
+
+function chkReady(){
+  const n=document.getElementById('sname').value.trim();
+  const ok=Array.from(document.querySelectorAll('.pin-box')).every(p=>p.value!=='');
+  document.getElementById('go-btn').disabled=!(n&&ok);
+}
+document.getElementById('sname').addEventListener('input',chkReady);
+
+document.getElementById('go-btn').addEventListener('click',function(){
+  const ps=document.querySelectorAll('.pin-box');
+  const e=Array.from(ps).map(p=>parseInt(p.value));
+  if(JSON.stringify(e)===JSON.stringify(ACCESS)){
+    ps.forEach(p=>p.classList.add('ok'));
+    sName=document.getElementById('sname').value.trim();
+    document.getElementById('dname').textContent=sName;
+    setTimeout(()=>{document.getElementById('welcome-screen').style.display='none';document.getElementById('test-screen').style.display='block';testOn=true;goFS();},500);
+  } else {
+    ps.forEach(p=>p.classList.add('err'));
+    document.getElementById('pin-err').textContent='Incorrect code. Try again.';
+    setTimeout(()=>{ps.forEach(p=>{p.classList.remove('err');p.value='';});ps[0].focus();document.getElementById('pin-err').textContent='';},1500);
+  }
+});
+
+function goFS(){const el=document.documentElement;try{if(el.requestFullscreen)el.requestFullscreen();else if(el.webkitRequestFullscreen)el.webkitRequestFullscreen();else if(el.msRequestFullscreen)el.msRequestFullscreen();}catch(e){}}
+
+// Proctor
+function lock(){if(!testOn||done)return;const o=document.getElementById('proctor');o.style.display='flex';document.querySelectorAll('.pr-pin').forEach(p=>p.value='');document.getElementById('pr-err').textContent='';setTimeout(()=>document.querySelector('.pr-pin').focus(),100);}
+setupP('.pr-pin',()=>{});
+document.getElementById('pr-btn').addEventListener('click',function(){
+  const ps=document.querySelectorAll('.pr-pin');
+  const e=Array.from(ps).map(p=>parseInt(p.value));
+  if(JSON.stringify(e)===JSON.stringify(PROCTOR)){document.getElementById('proctor').style.display='none';goFS();}
+  else{document.getElementById('pr-err').textContent='Incorrect. Contact your proctor.';ps.forEach(p=>p.value='');setTimeout(()=>document.querySelector('.pr-pin').focus(),100);}
+});
+document.addEventListener('visibilitychange',()=>{if(document.hidden&&testOn&&!done)lock();});
+window.addEventListener('blur',()=>{if(testOn&&!done)lock();});
+document.addEventListener('fullscreenchange',()=>{if(!document.fullscreenElement&&testOn&&!done)lock();});
+document.addEventListener('webkitfullscreenchange',()=>{if(!document.webkitFullscreenElement&&testOn&&!done)lock();});
+
+// Part nav
+document.querySelectorAll('.pnav-btn').forEach(b=>{
+  b.addEventListener('click',function(){
+    document.querySelectorAll('.pnav-btn').forEach(x=>x.classList.remove('active'));
+    this.classList.add('active');
+    document.querySelectorAll('.part-block').forEach(x=>x.classList.remove('active'));
+    document.getElementById('part-'+this.dataset.part).classList.add('active');
+    document.getElementById('q-panel').scrollTop=0;
+  });
+});
+
+// Collect
+function collect(){const a={};for(let i=1;i<=40;i++){const c=document.querySelector(`input[name="q${i}"]:checked`);a['Q'+i]=c?c.value:'';}return a;}
+
+// Question stems for PDF
+const STEMS={
+1:"She left her keys ___ the reception desk before the meeting started.",
+2:"The documents ___ by the manager before the deadline yesterday.",
+3:"When I arrived at the café, they ___ for over an hour.",
+4:"The lights suddenly went out while we ___ the presentation.",
+5:"There isn't much ___ left in the fridge.",
+6:"If metal ___ wet for a long time, it rusts.",
+7:"If she finishes early, she ___ us at the conference hall.",
+8:"If I were in charge of the project, I ___ the deadline.",
+9:"He has a meeting ___ noon ___ Friday.",
+10:"The new bridge ___ in 2018 after two years of construction.",
+11:"She didn't recognize him because she ___ him before.",
+12:"I found a wallet ___ the floor ___ the corner of the room.",
+13:"There are only a few ___ in the jar.",
+14:"The emails ___ while the system was being updated.",
+15:"While the children ___ outside, it suddenly started to snow.",
+16:"If water ___ below zero degrees, it turns into ice.",
+17:"We will cancel the picnic if it ___.",
+18:"If they had more evidence, they ___ the case differently.",
+19:"She put the files ___ her bag ___ the taxi arrived.",
+20:"The painting ___ carefully before it was displayed.",
+21:"By the time the train arrived, we ___ for thirty minutes.",
+22:"There isn't enough ___ to finish the report today.",
+23:"He was standing ___ the entrance when I saw him.",
+24:"The results ___ to the participants last week.",
+25:"I noticed that someone ___ my notebook.",
+26:"She found a seat ___ the back row ___ the cinema.",
+27:"Too much ___ can be harmful to plants.",
+28:"If he ___ more careful, he wouldn't make so many mistakes.",
+29:"The package ___ before we arrived at the office.",
+30:"She was reading a report while her assistant ___ notes.",
+31:"There are several ___ missing from the archive.",
+32:"If the temperature drops tonight, the roads ___ icy.",
+33:"He left the umbrella ___ the staircase ___ accident.",
+34:"The announcement ___ during the ceremony.",
+35:"They ___ dinner when the power went off.",
+36:"By midnight, the guests ___ the party.",
+37:"There isn't much ___ in his argument.",
+38:"If she studies consistently, she ___ significant progress.",
+39:"The equipment ___ regularly to ensure safety.",
+40:"While I ___ through the old files, I found an interesting letter."
+};
+
+function genText(a){
+  const l=[];
+  l.push('EDUNEST GRAMMAR TEST — ANSWER SHEET');
+  l.push('==========================================');
+  l.push('Student: '+sName);
+  l.push('Date: '+new Date().toLocaleDateString('en-GB',{day:'2-digit',month:'long',year:'numeric'}));
+  l.push('Test Owner: GULRUX');
+  l.push('');
+  for(let i=1;i<=40;i++) l.push('Q'+i+': '+(a['Q'+i]||'(no answer)')+'  — '+STEMS[i]);
+  l.push('');
+  l.push('==========================================');
+  l.push('END OF ANSWER SHEET');
+  return l.join('\n');
+}
+
+function submitAnswers(){
+  if(done)return;
+  if(!confirm('Submit your answers? You cannot change them after.'))return;
+  done=true;
+  const a=collect();
+  makePDF(a);
+  document.getElementById('sub-btn').style.display='none';
+  document.getElementById('copy-btn').style.display='inline-block';
+  document.getElementById('post-sub').style.display='block';
+}
+
+function makePDF(a){
+  const date=new Date().toLocaleDateString('en-GB',{day:'2-digit',month:'long',year:'numeric'});
+  function row(i){return `<tr><td style="padding:6px 10px;font-weight:700;color:#0d9488;width:44px;font-family:'Courier New',monospace;">Q${i}</td><td style="padding:6px 10px;color:#444;font-size:11.5px;">${STEMS[i]}</td><td style="padding:6px 10px;text-align:right;font-weight:700;color:#0b1628;min-width:50px;font-size:14px;">${a['Q'+i]||'—'}</td></tr>`;}
+  let h=`<!DOCTYPE html><html><head><meta charset="UTF-8"><style>@page{size:A4;margin:18mm;}body{font-family:'Segoe UI',Arial,sans-serif;color:#1a1a2e;line-height:1.5;font-size:12px;}.hdr{text-align:center;border-bottom:3px solid #0d9488;padding-bottom:12px;margin-bottom:16px;}.hdr h1{font-size:22px;color:#0d9488;margin:0 0 2px;}.hdr p{margin:1px 0;color:#555;font-size:12px;}.sec{background:#0d9488;color:#fff;padding:7px 14px;border-radius:6px;font-size:13px;font-weight:700;margin:14px 0 6px;}table{width:100%;border-collapse:collapse;}tr{border-bottom:1px solid #eee;}.ft{text-align:center;margin-top:22px;padding-top:10px;border-top:2px solid #eee;color:#999;font-size:10px;}</style></head><body>`;
+  h+=`<div class="hdr"><h1>EDUNEST GRAMMAR TEST</h1><p><b>Student:</b> ${sName} &nbsp;|&nbsp; <b>Date:</b> ${date} &nbsp;|&nbsp; <b>Test Owner:</b> GULRUX</p></div>`;
+  h+=`<div class="sec">Questions 1–10</div><table>${Array.from({length:10},(_,i)=>row(i+1)).join('')}</table>`;
+  h+=`<div class="sec">Questions 11–20</div><table>${Array.from({length:10},(_,i)=>row(i+11)).join('')}</table>`;
+  h+=`<div class="sec">Questions 21–30</div><table>${Array.from({length:10},(_,i)=>row(i+21)).join('')}</table>`;
+  h+=`<div class="sec">Questions 31–40</div><table>${Array.from({length:10},(_,i)=>row(i+31)).join('')}</table>`;
+  h+=`<div class="ft">EDUNEST Grammar Test &bull; Answer Sheet &bull; Test Owner: GULRUX</div></body></html>`;
+
+  const w=window.open('','_blank');
+  if(w){w.document.write(h);w.document.close();setTimeout(()=>w.print(),500);}
+  else{const b=new Blob([h],{type:'text/html'});const u=URL.createObjectURL(b);const l=document.createElement('a');l.href=u;l.download=sName.replace(/\s+/g,'_')+'_Grammar_Answers.html';document.body.appendChild(l);l.click();document.body.removeChild(l);URL.revokeObjectURL(u);}
+}
+
+function copyAnswers(){
+  const a=collect();const text=genText(a);
+  if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(text).then(()=>showFB('✓ Copied to clipboard!')).catch(()=>fbCopy(text));}
+  else fbCopy(text);
+}
+
+function fbCopy(text){
+  const ta=document.createElement('textarea');ta.value=text;ta.style.cssText='position:fixed;left:-9999px;top:0;opacity:0;';document.body.appendChild(ta);
+  ta.contentEditable=true;ta.readOnly=false;
+  const r=document.createRange();r.selectNodeContents(ta);const s=window.getSelection();s.removeAllRanges();s.addRange(r);ta.setSelectionRange(0,text.length);
+  try{document.execCommand('copy');showFB('✓ Copied to clipboard!');}
+  catch(e){
+    showFB('Select text below & copy manually:');
+    const m=document.createElement('div');m.style.cssText='position:fixed;inset:0;z-index:99999;background:rgba(0,0,0,0.92);display:flex;align-items:center;justify-content:center;padding:20px;';
+    const bx=document.createElement('div');bx.style.cssText='background:#142244;border-radius:16px;padding:24px;max-width:600px;width:100%;max-height:80vh;overflow:auto;';
+    const t=document.createElement('textarea');t.value=text;t.readOnly=true;t.style.cssText='width:100%;height:400px;background:#0b1628;color:#f0fdfa;border:1px solid #333;border-radius:8px;padding:12px;font-family:monospace;font-size:11px;resize:none;';
+    const btn=document.createElement('button');btn.textContent='Close';btn.style.cssText='margin-top:12px;padding:10px 24px;background:#2dd4bf;color:#0b1628;border:none;border-radius:8px;cursor:pointer;font-size:14px;font-weight:700;';
+    btn.onclick=()=>document.body.removeChild(m);
+    bx.appendChild(t);bx.appendChild(btn);m.appendChild(bx);document.body.appendChild(m);t.select();
+  }
+  document.body.removeChild(ta);
+}
+
+function showFB(m){const el=document.getElementById('copy-fb');el.textContent=m;setTimeout(()=>{el.textContent='';},3500);}
+</script>
+</body>
+</html>
