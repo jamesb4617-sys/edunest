@@ -1,0 +1,1556 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>EDUNEST Reading Test</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;800&family=Nunito:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ═══════════════════════════════════════
+   CSS VARIABLES & RESET
+   ═══════════════════════════════════════ */
+:root {
+  --bg-deep: #0f0c29;
+  --bg-mid: #1a1545;
+  --bg-card: #1e1952;
+  --bg-card-hover: #252060;
+  --accent-pink: #ff6b9d;
+  --accent-coral: #ff8a65;
+  --accent-violet: #b388ff;
+  --accent-blue: #64b5f6;
+  --accent-mint: #69f0ae;
+  --accent-gold: #ffd54f;
+  --accent-gradient: linear-gradient(135deg, #ff6b9d, #c084fc, #64b5f6);
+  --accent-warm: linear-gradient(135deg, #ff6b9d, #ff8a65);
+  --text-primary: #f5f3ff;
+  --text-secondary: #c4b5fd;
+  --text-muted: #8b7ec8;
+  --border: rgba(255,255,255,0.08);
+  --border-glow: rgba(196,181,253,0.15);
+  --glass: rgba(255,255,255,0.04);
+  --glass-strong: rgba(255,255,255,0.08);
+  --highlight-yellow: #fde047;
+  --success: #69f0ae;
+  --danger: #ff5252;
+  --radius: 14px;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+body {
+  font-family: 'Nunito', sans-serif;
+  background: var(--bg-deep);
+  color: var(--text-primary);
+  min-height: 100vh;
+  overflow-x: hidden;
+  line-height: 1.6;
+}
+
+::selection {
+  background: rgba(253,224,71,0.35);
+  color: inherit;
+}
+
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.12); border-radius: 10px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.2); }
+
+/* ═══════════════════════════════════════
+   WELCOME SCREEN
+   ═══════════════════════════════════════ */
+#welcome-screen {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.welcome-bg {
+  position: fixed; inset: 0; z-index: 0;
+  background:
+    radial-gradient(ellipse 90% 70% at 20% 10%, rgba(255,107,157,0.18) 0%, transparent 55%),
+    radial-gradient(ellipse 80% 60% at 80% 20%, rgba(192,132,252,0.15) 0%, transparent 50%),
+    radial-gradient(ellipse 70% 50% at 50% 90%, rgba(100,181,246,0.12) 0%, transparent 45%),
+    radial-gradient(ellipse 60% 40% at 10% 70%, rgba(105,240,174,0.08) 0%, transparent 40%),
+    var(--bg-deep);
+}
+
+.welcome-orbs {
+  position: fixed; inset: 0; z-index: 1; pointer-events: none;
+}
+
+.orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(60px);
+  opacity: 0.4;
+  animation: orbFloat 12s infinite ease-in-out;
+}
+.orb-1 { width: 300px; height: 300px; background: rgba(255,107,157,0.3); top: 10%; left: 5%; animation-delay: 0s; }
+.orb-2 { width: 250px; height: 250px; background: rgba(192,132,252,0.25); top: 60%; right: 5%; animation-delay: -4s; }
+.orb-3 { width: 200px; height: 200px; background: rgba(100,181,246,0.2); bottom: 10%; left: 40%; animation-delay: -8s; }
+
+@keyframes orbFloat {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(30px, -20px) scale(1.05); }
+  66% { transform: translate(-20px, 15px) scale(0.95); }
+}
+
+.sparkle {
+  position: absolute;
+  width: 3px; height: 3px;
+  background: white;
+  border-radius: 50%;
+  opacity: 0;
+  animation: sparkle 4s infinite ease-in-out;
+}
+
+@keyframes sparkle {
+  0%, 100% { opacity: 0; transform: scale(0); }
+  50% { opacity: 0.8; transform: scale(1.5); }
+}
+
+.welcome-container {
+  position: relative; z-index: 10;
+  width: 100%; max-width: 520px; padding: 20px;
+}
+
+.welcome-card {
+  background: linear-gradient(145deg, rgba(30,25,82,0.92), rgba(26,21,69,0.96));
+  border: 1px solid var(--border-glow);
+  border-radius: 28px;
+  padding: 44px 40px;
+  backdrop-filter: blur(40px);
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,0.06),
+    0 30px 60px -15px rgba(0,0,0,0.5),
+    0 0 120px rgba(192,132,252,0.06),
+    inset 0 1px 0 rgba(255,255,255,0.08);
+  animation: cardSlideUp 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  opacity: 0; transform: translateY(40px);
+}
+
+@keyframes cardSlideUp {
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.welcome-logo {
+  text-align: center; margin-bottom: 6px;
+}
+
+.welcome-logo img {
+  height: 56px; width: auto; object-fit: contain;
+  filter: drop-shadow(0 4px 16px rgba(192,132,252,0.4));
+}
+
+.welcome-ribbon {
+  text-align: center; margin-bottom: 24px;
+}
+
+.welcome-ribbon span {
+  display: inline-block;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px; font-weight: 600;
+  letter-spacing: 3.5px; text-transform: uppercase;
+  background: var(--accent-gradient);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  padding: 6px 0;
+}
+
+.welcome-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 30px; font-weight: 800;
+  text-align: center; margin-bottom: 4px;
+  background: linear-gradient(135deg, #fff, var(--accent-violet));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  line-height: 1.3;
+}
+
+.welcome-subtitle {
+  text-align: center; color: var(--text-secondary);
+  font-size: 14px; margin-bottom: 6px; font-weight: 400;
+}
+
+.welcome-owner {
+  text-align: center; font-size: 11px;
+  letter-spacing: 2.5px; text-transform: uppercase;
+  margin-bottom: 30px; font-weight: 700;
+  background: var(--accent-warm);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+}
+
+.form-group { margin-bottom: 20px; }
+
+.form-label {
+  display: block; font-size: 11px; font-weight: 700;
+  color: var(--text-secondary); margin-bottom: 8px;
+  letter-spacing: 1px; text-transform: uppercase;
+}
+
+.form-input {
+  width: 100%; padding: 14px 18px;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid var(--border-glow);
+  border-radius: 12px; color: var(--text-primary);
+  font-family: 'Nunito', sans-serif; font-size: 15px;
+  transition: all 0.3s ease; outline: none;
+}
+
+.form-input:focus {
+  border-color: var(--accent-violet);
+  box-shadow: 0 0 0 3px rgba(179,136,255,0.2);
+  background: rgba(255,255,255,0.07);
+}
+
+.form-input::placeholder { color: var(--text-muted); }
+
+.pin-container { display: flex; gap: 14px; justify-content: center; }
+
+.pin-input {
+  width: 58px; height: 68px;
+  text-align: center;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 26px; font-weight: 700;
+  background: rgba(255,255,255,0.05);
+  border: 2px solid var(--border-glow);
+  border-radius: 16px; color: var(--text-primary);
+  transition: all 0.3s ease; outline: none;
+  -webkit-text-security: disc;
+}
+
+.pin-input:focus {
+  border-color: var(--accent-pink);
+  box-shadow: 0 0 0 3px rgba(255,107,157,0.2);
+  background: rgba(255,107,157,0.05);
+  transform: translateY(-3px);
+}
+
+.pin-input.error {
+  border-color: var(--danger);
+  box-shadow: 0 0 0 3px rgba(255,82,82,0.2);
+  animation: pinShake 0.5s ease;
+}
+
+.pin-input.success {
+  border-color: var(--success);
+  box-shadow: 0 0 0 3px rgba(105,240,174,0.2);
+}
+
+@keyframes pinShake {
+  0%,100% { transform: translateX(0); }
+  20% { transform: translateX(-8px); }
+  40% { transform: translateX(8px); }
+  60% { transform: translateX(-5px); }
+  80% { transform: translateX(5px); }
+}
+
+.error-msg {
+  text-align: center; color: var(--danger);
+  font-size: 13px; margin-top: 10px;
+  min-height: 20px; font-weight: 600;
+}
+
+.start-btn {
+  width: 100%; padding: 16px; margin-top: 24px;
+  background: var(--accent-gradient);
+  border: none; border-radius: 14px; color: white;
+  font-family: 'Nunito', sans-serif;
+  font-size: 16px; font-weight: 800;
+  cursor: pointer; transition: all 0.3s ease;
+  letter-spacing: 1px; position: relative; overflow: hidden;
+  text-transform: uppercase;
+}
+
+.start-btn::before {
+  content: ''; position: absolute; inset: 0;
+  background: linear-gradient(135deg, transparent, rgba(255,255,255,0.2));
+  opacity: 0; transition: opacity 0.3s;
+}
+
+.start-btn:hover::before { opacity: 1; }
+.start-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 35px rgba(255,107,157,0.35); }
+.start-btn:disabled { opacity: 0.35; cursor: not-allowed; transform: none; box-shadow: none; }
+
+/* ═══════════════════════════════════════
+   PROCTOR OVERLAY
+   ═══════════════════════════════════════ */
+#proctor-overlay {
+  display: none; position: fixed; inset: 0; z-index: 10000;
+  background: rgba(0,0,0,0.96); backdrop-filter: blur(24px);
+  align-items: center; justify-content: center;
+  animation: overlayIn 0.3s ease;
+}
+
+@keyframes overlayIn { from { opacity: 0; } to { opacity: 1; } }
+
+.proctor-card {
+  background: linear-gradient(145deg, #1e1952, #150f3a);
+  border: 1px solid rgba(255,82,82,0.25);
+  border-radius: 24px; padding: 44px 36px;
+  max-width: 440px; width: 90%; text-align: center;
+  box-shadow: 0 0 80px rgba(255,82,82,0.08);
+}
+
+.proctor-icon {
+  width: 68px; height: 68px; margin: 0 auto 18px;
+  background: rgba(255,82,82,0.1);
+  border: 2px solid rgba(255,82,82,0.2);
+  border-radius: 50%; display: flex;
+  align-items: center; justify-content: center; font-size: 30px;
+}
+
+.proctor-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 24px; font-weight: 700;
+  color: var(--danger); margin-bottom: 10px;
+}
+
+.proctor-text {
+  color: var(--text-secondary); font-size: 14px;
+  margin-bottom: 24px; line-height: 1.7;
+}
+
+.proctor-pin-container { display: flex; gap: 10px; justify-content: center; margin-bottom: 12px; }
+
+.proctor-pin {
+  width: 52px; height: 60px; text-align: center;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 22px; font-weight: 700;
+  background: rgba(255,255,255,0.04);
+  border: 2px solid var(--border); border-radius: 14px;
+  color: var(--text-primary); transition: all 0.3s ease; outline: none;
+  -webkit-text-security: disc;
+}
+
+.proctor-pin:focus {
+  border-color: var(--danger);
+  box-shadow: 0 0 0 3px rgba(255,82,82,0.2);
+}
+
+.proctor-error { color: var(--danger); font-size: 13px; min-height: 20px; font-weight: 600; }
+
+.proctor-btn {
+  padding: 14px 40px; margin-top: 16px;
+  background: linear-gradient(135deg, var(--danger), #d32f2f);
+  border: none; border-radius: 12px; color: white;
+  font-family: 'Nunito', sans-serif;
+  font-size: 15px; font-weight: 700;
+  cursor: pointer; transition: all 0.3s ease;
+}
+
+.proctor-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(255,82,82,0.3); }
+
+/* ═══════════════════════════════════════
+   TEST SCREEN — SPLIT LAYOUT
+   ═══════════════════════════════════════ */
+#test-screen { display: none; height: 100vh; overflow: hidden; }
+
+.test-header {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 500;
+  background: rgba(15,12,41,0.92); backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+  padding: 8px 20px;
+  display: flex; align-items: center; justify-content: space-between;
+  height: 52px;
+}
+
+.header-left { display: flex; align-items: center; gap: 12px; }
+
+.header-logo img { height: 28px; width: auto; }
+
+.header-info .header-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 14px; font-weight: 700; line-height: 1.2;
+}
+
+.header-info .header-student {
+  font-size: 11px; color: var(--text-secondary);
+}
+
+.header-info .header-student strong { color: var(--accent-pink); }
+
+.header-right { display: flex; align-items: center; gap: 10px; }
+
+/* Passage Selector Tabs */
+.passage-tabs {
+  display: flex; gap: 4px;
+}
+
+.passage-tab {
+  padding: 6px 14px;
+  background: var(--glass);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--text-muted);
+  font-family: 'Nunito', sans-serif;
+  font-size: 11px; font-weight: 700;
+  cursor: pointer; transition: all 0.3s ease;
+  text-transform: uppercase; letter-spacing: 0.5px;
+}
+
+.passage-tab:hover { background: rgba(255,107,157,0.1); color: var(--text-primary); }
+
+.passage-tab.active {
+  background: var(--accent-warm);
+  border-color: transparent; color: white;
+  box-shadow: 0 2px 12px rgba(255,107,157,0.25);
+}
+
+/* Highlight toggle */
+.highlight-toggle {
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  background: rgba(253,224,71,0.15);
+  border: 2px solid rgba(253,224,71,0.3);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; transition: all 0.3s ease;
+  font-size: 16px; flex-shrink: 0;
+  position: relative;
+}
+
+.highlight-toggle:hover {
+  background: rgba(253,224,71,0.25);
+  transform: scale(1.05);
+}
+
+.highlight-toggle.active {
+  background: rgba(253,224,71,0.35);
+  border-color: var(--highlight-yellow);
+  box-shadow: 0 0 12px rgba(253,224,71,0.3);
+}
+
+.highlight-toggle .ht-tooltip {
+  display: none; position: absolute;
+  top: calc(100% + 8px); right: 0;
+  background: #1e1952; border: 1px solid var(--border-glow);
+  border-radius: 8px; padding: 6px 12px;
+  font-size: 11px; white-space: nowrap;
+  color: var(--text-secondary); font-weight: 600;
+  pointer-events: none; z-index: 999;
+}
+
+.highlight-toggle:hover .ht-tooltip { display: block; }
+
+/* ═══ SPLIT LAYOUT ═══ */
+.split-container {
+  display: flex; height: calc(100vh - 52px);
+  margin-top: 52px;
+}
+
+.split-left {
+  width: 50%; height: 100%;
+  overflow-y: auto; padding: 28px 28px 100px;
+  border-right: 1px solid var(--border);
+  background: rgba(255,255,255,0.01);
+}
+
+.split-right {
+  width: 50%; height: 100%;
+  overflow-y: auto; padding: 28px 28px 100px;
+}
+
+/* Passage content */
+.passage-content { display: none; }
+.passage-content.active { display: block; }
+
+.passage-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 22px; font-weight: 800;
+  margin-bottom: 20px; line-height: 1.3;
+  background: var(--accent-gradient);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+}
+
+.passage-text {
+  font-size: 15px; line-height: 1.85;
+  color: var(--text-primary);
+  letter-spacing: 0.01em;
+}
+
+.passage-text p {
+  margin-bottom: 18px;
+  text-align: justify;
+}
+
+.passage-text .para-label {
+  font-weight: 800;
+  color: var(--accent-pink);
+  margin-right: 4px;
+}
+
+.passage-text mark {
+  background: rgba(253,224,71,0.35);
+  color: inherit;
+  border-radius: 2px;
+  padding: 0 1px;
+}
+
+/* Questions panel */
+.questions-content { display: none; }
+.questions-content.active { display: block; }
+
+.q-section-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 16px; font-weight: 700;
+  margin-bottom: 6px; color: var(--accent-violet);
+}
+
+.q-section-desc {
+  font-size: 12px; color: var(--text-muted);
+  margin-bottom: 18px; font-weight: 600;
+  text-transform: uppercase; letter-spacing: 0.5px;
+}
+
+.q-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 20px; margin-bottom: 12px;
+  transition: all 0.25s ease;
+}
+
+.q-card:hover {
+  border-color: var(--border-glow);
+  background: var(--bg-card-hover);
+}
+
+.q-num {
+  display: inline-block;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px; font-weight: 700;
+  color: var(--accent-pink);
+  background: rgba(255,107,157,0.1);
+  padding: 3px 10px; border-radius: 6px;
+  margin-bottom: 8px;
+}
+
+.q-text {
+  font-size: 14px; color: var(--text-primary);
+  margin-bottom: 10px; line-height: 1.5;
+  font-weight: 500;
+}
+
+/* Text input answers */
+.q-input {
+  width: 100%; max-width: 300px;
+  padding: 10px 14px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border);
+  border-radius: 10px; color: var(--text-primary);
+  font-family: 'Nunito', sans-serif; font-size: 14px;
+  outline: none; transition: all 0.3s ease;
+}
+
+.q-input:focus {
+  border-color: var(--accent-violet);
+  box-shadow: 0 0 0 3px rgba(179,136,255,0.15);
+}
+
+/* Radio options */
+.opts { display: flex; flex-direction: column; gap: 6px; }
+
+.opt-label {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 14px;
+  background: rgba(255,255,255,0.02);
+  border: 1px solid var(--border);
+  border-radius: 10px; cursor: pointer;
+  transition: all 0.25s ease; font-size: 13px; font-weight: 500;
+}
+
+.opt-label:hover {
+  background: rgba(192,132,252,0.06);
+  border-color: rgba(192,132,252,0.2);
+}
+
+.opt-label input[type="radio"] {
+  appearance: none; width: 18px; height: 18px;
+  border: 2px solid var(--text-muted); border-radius: 50%;
+  transition: all 0.3s ease; flex-shrink: 0; position: relative;
+}
+
+.opt-label input[type="radio"]:checked {
+  border-color: var(--accent-violet);
+  background: var(--accent-violet);
+}
+
+.opt-label input[type="radio"]:checked::after {
+  content: ''; position: absolute;
+  top: 50%; left: 50%; transform: translate(-50%, -50%);
+  width: 7px; height: 7px; background: white; border-radius: 50%;
+}
+
+.opt-label:has(input:checked) {
+  background: rgba(179,136,255,0.08);
+  border-color: rgba(179,136,255,0.25);
+}
+
+/* True/False/NG select */
+.tfng-select {
+  padding: 10px 14px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  color: var(--text-primary);
+  font-family: 'Nunito', sans-serif;
+  font-size: 13px; font-weight: 600;
+  outline: none; cursor: pointer;
+  transition: all 0.3s ease;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23c4b5fd' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  padding-right: 34px;
+  min-width: 160px;
+}
+
+.tfng-select:focus {
+  border-color: var(--accent-violet);
+  box-shadow: 0 0 0 3px rgba(179,136,255,0.15);
+}
+
+.tfng-select option { background: #1e1952; color: var(--text-primary); }
+
+/* Paragraph match input */
+.para-input {
+  width: 60px; padding: 10px;
+  text-align: center; text-transform: uppercase;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 16px; font-weight: 700;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border);
+  border-radius: 10px; color: var(--accent-gold);
+  outline: none; transition: all 0.3s ease;
+}
+
+.para-input:focus {
+  border-color: var(--accent-gold);
+  box-shadow: 0 0 0 3px rgba(255,213,79,0.15);
+}
+
+/* Section divider */
+.q-divider {
+  height: 1px;
+  background: var(--border-glow);
+  margin: 24px 0;
+}
+
+/* ═══ SUBMIT AREA ═══ */
+.submit-area {
+  text-align: center; padding: 36px 0 20px;
+}
+
+.submit-btn {
+  padding: 16px 48px;
+  background: linear-gradient(135deg, var(--success), #00c853);
+  border: none; border-radius: 14px; color: #0a0e1a;
+  font-family: 'Nunito', sans-serif;
+  font-size: 16px; font-weight: 800;
+  cursor: pointer; transition: all 0.3s ease;
+  letter-spacing: 0.5px; text-transform: uppercase;
+}
+
+.submit-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 30px rgba(105,240,174,0.3);
+}
+
+.copy-btn {
+  padding: 14px 36px; margin-left: 12px;
+  background: var(--accent-gradient);
+  border: none; border-radius: 12px; color: white;
+  font-family: 'Nunito', sans-serif;
+  font-size: 15px; font-weight: 700;
+  cursor: pointer; transition: all 0.3s ease;
+  text-transform: uppercase;
+}
+
+.copy-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(192,132,252,0.3); }
+
+.post-submit {
+  display: none; margin-top: 20px;
+  animation: fadeUp 0.5s ease;
+}
+
+@keyframes fadeUp { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:translateY(0); } }
+
+.submit-msg {
+  color: var(--success); font-size: 15px;
+  font-weight: 700; margin-bottom: 14px;
+}
+
+#copy-feedback {
+  color: var(--accent-violet);
+  font-size: 13px; margin-top: 8px;
+  min-height: 20px; font-weight: 600;
+}
+
+/* ═══ MOBILE: Stack vertically ═══ */
+@media (max-width: 900px) {
+  .split-container { flex-direction: column; height: auto; margin-top: 52px; }
+  .split-left { width: 100%; height: auto; max-height: 45vh; border-right: none; border-bottom: 1px solid var(--border); padding: 20px 16px; overflow-y: auto; }
+  .split-right { width: 100%; height: auto; min-height: 55vh; padding: 20px 16px 120px; overflow-y: auto; }
+  .test-header { padding: 8px 12px; }
+  .passage-title { font-size: 18px; }
+  .passage-text { font-size: 14px; }
+  .header-info .header-title { font-size: 12px; }
+  .passage-tab { padding: 5px 10px; font-size: 10px; }
+  .highlight-toggle { width: 32px; height: 32px; font-size: 14px; }
+  .q-card { padding: 14px 16px; }
+  .submit-btn { padding: 14px 32px; font-size: 14px; }
+  .copy-btn { padding: 12px 24px; font-size: 13px; margin-left: 0; margin-top: 10px; }
+  .submit-area { display: flex; flex-direction: column; align-items: center; gap: 0; }
+}
+
+@media (max-width: 400px) {
+  .welcome-card { padding: 32px 20px; }
+  .welcome-title { font-size: 24px; }
+  .pin-input { width: 50px; height: 58px; font-size: 22px; }
+  .split-left { max-height: 40vh; padding: 16px 12px; }
+  .passage-text { font-size: 13px; line-height: 1.75; }
+}
+</style>
+</head>
+<body>
+
+<!-- ═══════ WELCOME SCREEN ═══════ -->
+<div id="welcome-screen">
+  <div class="welcome-bg"></div>
+  <div class="welcome-orbs">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+  </div>
+  <div id="sparkles-container" class="welcome-orbs"></div>
+
+  <div class="welcome-container">
+    <div class="welcome-card">
+      <div class="welcome-logo">
+        <img src="https://image2url.com/r2/default/images/1769700366134-01db5cda-e300-4af6-8039-9c7cad80199a.png" alt="EDUNEST" onerror="this.style.display='none'">
+      </div>
+      <div class="welcome-ribbon"><span>Reading Examination</span></div>
+      <div class="welcome-title">EDUNEST Reading Test</div>
+      <div class="welcome-subtitle">Read each passage carefully and answer all questions.</div>
+      <div class="welcome-owner">Test Owner: GULRUX</div>
+
+      <div class="form-group">
+        <label class="form-label">Student Name</label>
+        <input type="text" id="student-name" class="form-input" placeholder="Enter your full name" autocomplete="off">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Access Code</label>
+        <div class="pin-container">
+          <input type="tel" class="pin-input" maxlength="1" data-pin="0" inputmode="numeric" autocomplete="off">
+          <input type="tel" class="pin-input" maxlength="1" data-pin="1" inputmode="numeric" autocomplete="off">
+          <input type="tel" class="pin-input" maxlength="1" data-pin="2" inputmode="numeric" autocomplete="off">
+          <input type="tel" class="pin-input" maxlength="1" data-pin="3" inputmode="numeric" autocomplete="off">
+        </div>
+        <div class="error-msg" id="pin-error"></div>
+      </div>
+
+      <button class="start-btn" id="start-btn" disabled>Begin Examination</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════ PROCTOR OVERLAY ═══════ -->
+<div id="proctor-overlay">
+  <div class="proctor-card">
+    <div class="proctor-icon">🔒</div>
+    <div class="proctor-title">Session Locked</div>
+    <div class="proctor-text">You navigated away from the test. Enter the proctor password to resume your examination.</div>
+    <div class="proctor-pin-container">
+      <input type="tel" class="proctor-pin" maxlength="1" data-ppin="0" inputmode="numeric" autocomplete="off">
+      <input type="tel" class="proctor-pin" maxlength="1" data-ppin="1" inputmode="numeric" autocomplete="off">
+      <input type="tel" class="proctor-pin" maxlength="1" data-ppin="2" inputmode="numeric" autocomplete="off">
+      <input type="tel" class="proctor-pin" maxlength="1" data-ppin="3" inputmode="numeric" autocomplete="off">
+    </div>
+    <div class="proctor-error" id="proctor-error"></div>
+    <button class="proctor-btn" id="proctor-unlock-btn">Unlock Session</button>
+  </div>
+</div>
+
+<!-- ═══════ TEST SCREEN ═══════ -->
+<div id="test-screen">
+  <div class="test-header">
+    <div class="header-left">
+      <div class="header-logo">
+        <img src="https://image2url.com/r2/default/images/1769700366134-01db5cda-e300-4af6-8039-9c7cad80199a.png" alt="EDUNEST" onerror="this.style.display='none'">
+      </div>
+      <div class="header-info">
+        <div class="header-title">Reading Test</div>
+        <div class="header-student">Student: <strong id="display-name"></strong></div>
+      </div>
+    </div>
+    <div class="header-right">
+      <div class="passage-tabs">
+        <button class="passage-tab active" data-passage="1">Passage 1</button>
+        <button class="passage-tab" data-passage="2">Passage 2</button>
+      </div>
+      <div class="highlight-toggle" id="highlight-toggle" title="Toggle highlighter">
+        🖍
+        <span class="ht-tooltip">Yellow Highlighter</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="split-container">
+    <!-- ═══ LEFT: PASSAGE TEXT ═══ -->
+    <div class="split-left" id="text-panel">
+
+      <!-- Passage 1 Text -->
+      <div class="passage-content active" id="passage-text-1">
+        <div class="passage-title">The Most Interesting Facts About the Statue of Liberty</div>
+        <div class="passage-text" id="p1-text">
+          <p>The Statue of Liberty is one of the most famous monuments in the world. It stands on Liberty Island in New York Harbor and has welcomed millions of visitors since it was officially opened in 1886. The statue was a gift from the people of France to the people of United States as a symbol of friendship and freedom.</p>
+          <p>The statue was designed by the French sculptor Frédéric Auguste Bartholdi. However, the internal metal framework was created by Gustave Eiffel, who later became famous for designing the Eiffel Tower. The statue is made mainly of copper sheets placed over a strong iron structure. Over time, the copper reacted with the air and turned green. This natural process formed a protective layer on the surface.</p>
+          <p>The statue represents Libertas, the Roman goddess of freedom. In her right hand, she holds a torch, and in her left hand, she carries a tablet. On the tablet, the date July 4, 1776 is written in Roman numerals. This is the date of American independence. Broken chains lie at her feet, symbolizing freedom from oppression.</p>
+          <p>When it was first built, the statue was one of the tallest iron structures in the world. It measures about 93 meters from the ground to the tip of the torch. For many immigrants arriving by ship in the late 19th and early 20th centuries, the statue was the first sight of their new home. It became a powerful symbol of hope and opportunity.</p>
+          <p>Today, the Statue of Liberty is protected as a national monument and remains one of the most visited tourist attractions in the United States. Although it has been repaired several times, its meaning as a symbol of liberty has remained unchanged.</p>
+        </div>
+      </div>
+
+      <!-- Passage 2 Text -->
+      <div class="passage-content" id="passage-text-2">
+        <div class="passage-title">The Exploration of Marine Life</div>
+        <div class="passage-text" id="p2-text">
+          <p><span class="para-label">Paragraph A:</span>The exploration of marine life has fascinated humans for centuries. Although people have depended on the sea for food and transport, much of the ocean remained a mystery until recent times. Early sailors could only observe what was visible from the surface. However, scientists now know that more than 70 percent of the Earth's surface is covered by oceans, and a large part of it is still unexplored.</p>
+          <p><span class="para-label">Paragraph B:</span>In the 19th century, special research ships began to study the deep sea. One of the most important early expeditions was carried out by the HMS Challenger between 1872 and 1876. The scientists on board collected thousands of marine samples and discovered new species. Their work marked the beginning of modern oceanography.</p>
+          <p><span class="para-label">Paragraph C:</span>The development of new technology has greatly improved marine exploration. Submarines and remotely operated vehicles (ROVs) allow scientists to travel to extreme depths. For example, the Alvin submersible has helped researchers study underwater volcanoes and deep-sea ecosystems. These tools can survive enormous pressure that would crush ordinary equipment.</p>
+          <p><span class="para-label">Paragraph D:</span>Marine scientists have discovered that life exists even in the darkest and deepest parts of the ocean. Around hydrothermal vents, where hot water comes out from beneath the sea floor, unique organisms survive without sunlight. Instead of depending on photosynthesis, they rely on chemical energy. This discovery changed scientists' understanding of how life can exist on Earth and possibly on other planets.</p>
+          <p><span class="para-label">Paragraph E:</span>Despite these advances, exploring marine life remains challenging. The deep ocean is cold, dark, and difficult to reach. In addition, research is expensive and requires international cooperation. Many scientists believe that protecting marine ecosystems is just as important as studying them. Overfishing, pollution, and climate change are serious threats to ocean life.</p>
+          <p><span class="para-label">Paragraph F:</span>Today, organizations such as National Geographic Society support ocean research and raise public awareness. Modern satellites and underwater cameras continue to send valuable data to researchers. Although we have learned a great deal about marine life, experts estimate that many species are still waiting to be discovered.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ RIGHT: QUESTIONS ═══ -->
+    <div class="split-right" id="questions-panel">
+
+      <!-- Passage 1 Questions -->
+      <div class="questions-content active" id="passage-q-1">
+
+        <div class="q-section-title">Questions 1–8</div>
+        <div class="q-section-desc">True / False / Not Given</div>
+
+        <div class="q-card">
+          <div class="q-num">Q1</div>
+          <div class="q-text">The Statue of Liberty was opened in the 19th century.</div>
+          <select class="tfng-select" data-q="1"><option value="">Select…</option><option value="True">True</option><option value="False">False</option><option value="Not Given">Not Given</option></select>
+        </div>
+        <div class="q-card">
+          <div class="q-num">Q2</div>
+          <div class="q-text">The statue was a gift from the United States to France.</div>
+          <select class="tfng-select" data-q="2"><option value="">Select…</option><option value="True">True</option><option value="False">False</option><option value="Not Given">Not Given</option></select>
+        </div>
+        <div class="q-card">
+          <div class="q-num">Q3</div>
+          <div class="q-text">Gustave Eiffel designed the outside appearance of the statue.</div>
+          <select class="tfng-select" data-q="3"><option value="">Select…</option><option value="True">True</option><option value="False">False</option><option value="Not Given">Not Given</option></select>
+        </div>
+        <div class="q-card">
+          <div class="q-num">Q4</div>
+          <div class="q-text">The statue was originally brown in color.</div>
+          <select class="tfng-select" data-q="4"><option value="">Select…</option><option value="True">True</option><option value="False">False</option><option value="Not Given">Not Given</option></select>
+        </div>
+        <div class="q-card">
+          <div class="q-num">Q5</div>
+          <div class="q-text">The green color protects the statue from damage.</div>
+          <select class="tfng-select" data-q="5"><option value="">Select…</option><option value="True">True</option><option value="False">False</option><option value="Not Given">Not Given</option></select>
+        </div>
+        <div class="q-card">
+          <div class="q-num">Q6</div>
+          <div class="q-text">The tablet shows the date of France's independence.</div>
+          <select class="tfng-select" data-q="6"><option value="">Select…</option><option value="True">True</option><option value="False">False</option><option value="Not Given">Not Given</option></select>
+        </div>
+        <div class="q-card">
+          <div class="q-num">Q7</div>
+          <div class="q-text">The statue was the tallest structure in the world at the time it was built.</div>
+          <select class="tfng-select" data-q="7"><option value="">Select…</option><option value="True">True</option><option value="False">False</option><option value="Not Given">Not Given</option></select>
+        </div>
+        <div class="q-card">
+          <div class="q-num">Q8</div>
+          <div class="q-text">The Statue of Liberty has never been repaired.</div>
+          <select class="tfng-select" data-q="8"><option value="">Select…</option><option value="True">True</option><option value="False">False</option><option value="Not Given">Not Given</option></select>
+        </div>
+
+        <div class="q-divider"></div>
+
+        <div class="q-section-title">Questions 9–14</div>
+        <div class="q-section-desc">Multiple Choice — A, B, C or D</div>
+
+        <div class="q-card">
+          <div class="q-num">Q9</div>
+          <div class="q-text">The Statue of Liberty was mainly created to symbolize</div>
+          <div class="opts">
+            <label class="opt-label"><input type="radio" name="q9" value="A" data-q="9"> A. friendship and freedom</label>
+            <label class="opt-label"><input type="radio" name="q9" value="B" data-q="9"> B. wealth and power</label>
+            <label class="opt-label"><input type="radio" name="q9" value="C" data-q="9"> C. war and victory</label>
+            <label class="opt-label"><input type="radio" name="q9" value="D" data-q="9"> D. science and progress</label>
+          </div>
+        </div>
+
+        <div class="q-card">
+          <div class="q-num">Q10</div>
+          <div class="q-text">Frédéric Auguste Bartholdi was responsible for</div>
+          <div class="opts">
+            <label class="opt-label"><input type="radio" name="q10" value="A" data-q="10"> A. building the internal framework</label>
+            <label class="opt-label"><input type="radio" name="q10" value="B" data-q="10"> B. designing the statue's appearance</label>
+            <label class="opt-label"><input type="radio" name="q10" value="C" data-q="10"> C. writing the date on the tablet</label>
+            <label class="opt-label"><input type="radio" name="q10" value="D" data-q="10"> D. constructing Liberty Island</label>
+          </div>
+        </div>
+
+        <div class="q-card">
+          <div class="q-num">Q11</div>
+          <div class="q-text">The metal framework of the statue was designed by the same engineer who later built the</div>
+          <div class="opts">
+            <label class="opt-label"><input type="radio" name="q11" value="A" data-q="11"> A. Brooklyn Bridge</label>
+            <label class="opt-label"><input type="radio" name="q11" value="B" data-q="11"> B. White House</label>
+            <label class="opt-label"><input type="radio" name="q11" value="C" data-q="11"> C. Eiffel Tower</label>
+            <label class="opt-label"><input type="radio" name="q11" value="D" data-q="11"> D. Empire State Building</label>
+          </div>
+        </div>
+
+        <div class="q-card">
+          <div class="q-num">Q12</div>
+          <div class="q-text">The green color of the statue is the result of</div>
+          <div class="opts">
+            <label class="opt-label"><input type="radio" name="q12" value="A" data-q="12"> A. paint added later</label>
+            <label class="opt-label"><input type="radio" name="q12" value="B" data-q="12"> B. sea water damage</label>
+            <label class="opt-label"><input type="radio" name="q12" value="C" data-q="12"> C. a natural chemical reaction</label>
+            <label class="opt-label"><input type="radio" name="q12" value="D" data-q="12"> D. air pollution</label>
+          </div>
+        </div>
+
+        <div class="q-card">
+          <div class="q-num">Q13</div>
+          <div class="q-text">The broken chains at the statue's feet represent</div>
+          <div class="opts">
+            <label class="opt-label"><input type="radio" name="q13" value="A" data-q="13"> A. international friendship</label>
+            <label class="opt-label"><input type="radio" name="q13" value="B" data-q="13"> B. freedom from oppression</label>
+            <label class="opt-label"><input type="radio" name="q13" value="C" data-q="13"> C. economic growth</label>
+            <label class="opt-label"><input type="radio" name="q13" value="D" data-q="13"> D. ancient Roman culture</label>
+          </div>
+        </div>
+
+        <div class="q-card">
+          <div class="q-num">Q14</div>
+          <div class="q-text">For many immigrants, the statue was</div>
+          <div class="opts">
+            <label class="opt-label"><input type="radio" name="q14" value="A" data-q="14"> A. a warning sign</label>
+            <label class="opt-label"><input type="radio" name="q14" value="B" data-q="14"> B. a military signal</label>
+            <label class="opt-label"><input type="radio" name="q14" value="C" data-q="14"> C. a symbol of hope</label>
+            <label class="opt-label"><input type="radio" name="q14" value="D" data-q="14"> D. a government office</label>
+          </div>
+        </div>
+
+        <div class="q-divider"></div>
+
+        <div class="q-section-title">Questions 15–20</div>
+        <div class="q-section-desc">Gap Filling — ONE word only</div>
+
+        <div class="q-card">
+          <div class="q-num">Q15</div>
+          <div class="q-text">The Statue of Liberty stands on Liberty ____.</div>
+          <input type="text" class="q-input" data-q="15" placeholder="One word…">
+        </div>
+        <div class="q-card">
+          <div class="q-num">Q16</div>
+          <div class="q-text">It was officially opened in ____.</div>
+          <input type="text" class="q-input" data-q="16" placeholder="One word…">
+        </div>
+        <div class="q-card">
+          <div class="q-num">Q17</div>
+          <div class="q-text">The statue is made mainly of ____ sheets.</div>
+          <input type="text" class="q-input" data-q="17" placeholder="One word…">
+        </div>
+        <div class="q-card">
+          <div class="q-num">Q18</div>
+          <div class="q-text">The Roman goddess represented by the statue is called ____.</div>
+          <input type="text" class="q-input" data-q="18" placeholder="One word…">
+        </div>
+        <div class="q-card">
+          <div class="q-num">Q19</div>
+          <div class="q-text">The date on the tablet is written in Roman ____.</div>
+          <input type="text" class="q-input" data-q="19" placeholder="One word…">
+        </div>
+        <div class="q-card">
+          <div class="q-num">Q20</div>
+          <div class="q-text">The statue is protected as a national ____.</div>
+          <input type="text" class="q-input" data-q="20" placeholder="One word…">
+        </div>
+      </div>
+
+      <!-- Passage 2 Questions -->
+      <div class="questions-content" id="passage-q-2">
+
+        <div class="q-section-title">Questions 21–28</div>
+        <div class="q-section-desc">Which Paragraph? — Write the correct letter (A–F)</div>
+
+        <div class="q-card">
+          <div class="q-num">Q21</div>
+          <div class="q-text">An early scientific journey that collected many ocean samples</div>
+          <input type="text" class="para-input" data-q="21" placeholder="A–F" maxlength="1">
+        </div>
+        <div class="q-card">
+          <div class="q-num">Q22</div>
+          <div class="q-text">A description of how new devices can resist extreme conditions</div>
+          <input type="text" class="para-input" data-q="22" placeholder="A–F" maxlength="1">
+        </div>
+        <div class="q-card">
+          <div class="q-num">Q23</div>
+          <div class="q-text">A mention of dangers facing ocean ecosystems</div>
+          <input type="text" class="para-input" data-q="23" placeholder="A–F" maxlength="1">
+        </div>
+        <div class="q-card">
+          <div class="q-num">Q24</div>
+          <div class="q-text">A discovery that changed ideas about how life survives</div>
+          <input type="text" class="para-input" data-q="24" placeholder="A–F" maxlength="1">
+        </div>
+        <div class="q-card">
+          <div class="q-num">Q25</div>
+          <div class="q-text">Information about public education and support for research</div>
+          <input type="text" class="para-input" data-q="25" placeholder="A–F" maxlength="1">
+        </div>
+        <div class="q-card">
+          <div class="q-num">Q26</div>
+          <div class="q-text">A statement that most of the ocean has not yet been studied</div>
+          <input type="text" class="para-input" data-q="26" placeholder="A–F" maxlength="1">
+        </div>
+        <div class="q-card">
+          <div class="q-num">Q27</div>
+          <div class="q-text">Reference to cooperation between different countries</div>
+          <input type="text" class="para-input" data-q="27" placeholder="A–F" maxlength="1">
+        </div>
+        <div class="q-card">
+          <div class="q-num">Q28</div>
+          <div class="q-text">An explanation of why early humans knew little about the deep ocean</div>
+          <input type="text" class="para-input" data-q="28" placeholder="A–F" maxlength="1">
+        </div>
+
+        <div class="q-divider"></div>
+
+        <div class="q-section-title">Questions 29–34</div>
+        <div class="q-section-desc">Multiple Choice — A, B, C or D</div>
+
+        <div class="q-card">
+          <div class="q-num">Q29</div>
+          <div class="q-text">The main idea of the passage is that</div>
+          <div class="opts">
+            <label class="opt-label"><input type="radio" name="q29" value="A" data-q="29"> A. oceans are mainly used for transport</label>
+            <label class="opt-label"><input type="radio" name="q29" value="B" data-q="29"> B. marine exploration has developed over time</label>
+            <label class="opt-label"><input type="radio" name="q29" value="C" data-q="29"> C. all marine species have been discovered</label>
+            <label class="opt-label"><input type="radio" name="q29" value="D" data-q="29"> D. underwater travel is easy and cheap</label>
+          </div>
+        </div>
+
+        <div class="q-card">
+          <div class="q-num">Q30</div>
+          <div class="q-text">The HMS Challenger expedition was important because it</div>
+          <div class="opts">
+            <label class="opt-label"><input type="radio" name="q30" value="A" data-q="30"> A. discovered underwater volcanoes</label>
+            <label class="opt-label"><input type="radio" name="q30" value="B" data-q="30"> B. was the first submarine journey</label>
+            <label class="opt-label"><input type="radio" name="q30" value="C" data-q="30"> C. began systematic ocean research</label>
+            <label class="opt-label"><input type="radio" name="q30" value="D" data-q="30"> D. mapped all the world's oceans</label>
+          </div>
+        </div>
+
+        <div class="q-card">
+          <div class="q-num">Q31</div>
+          <div class="q-text">Remotely operated vehicles are useful because they</div>
+          <div class="opts">
+            <label class="opt-label"><input type="radio" name="q31" value="A" data-q="31"> A. replace all human divers</label>
+            <label class="opt-label"><input type="radio" name="q31" value="B" data-q="31"> B. can survive deep-sea pressure</label>
+            <label class="opt-label"><input type="radio" name="q31" value="C" data-q="31"> C. use sunlight for power</label>
+            <label class="opt-label"><input type="radio" name="q31" value="D" data-q="31"> D. prevent ocean pollution</label>
+          </div>
+        </div>
+
+        <div class="q-card">
+          <div class="q-num">Q32</div>
+          <div class="q-text">Organisms near hydrothermal vents survive by using</div>
+          <div class="opts">
+            <label class="opt-label"><input type="radio" name="q32" value="A" data-q="32"> A. oxygen from the air</label>
+            <label class="opt-label"><input type="radio" name="q32" value="B" data-q="32"> B. energy from sunlight</label>
+            <label class="opt-label"><input type="radio" name="q32" value="C" data-q="32"> C. chemical energy</label>
+            <label class="opt-label"><input type="radio" name="q32" value="D" data-q="32"> D. heat from the Sun</label>
+          </div>
+        </div>
+
+        <div class="q-card">
+          <div class="q-num">Q33</div>
+          <div class="q-text">Marine exploration is difficult mainly because the deep ocean is</div>
+          <div class="opts">
+            <label class="opt-label"><input type="radio" name="q33" value="A" data-q="33"> A. crowded with ships</label>
+            <label class="opt-label"><input type="radio" name="q33" value="B" data-q="33"> B. too warm for equipment</label>
+            <label class="opt-label"><input type="radio" name="q33" value="C" data-q="33"> C. bright and noisy</label>
+            <label class="opt-label"><input type="radio" name="q33" value="D" data-q="33"> D. hard to access and costly to study</label>
+          </div>
+        </div>
+
+        <div class="q-card">
+          <div class="q-num">Q34</div>
+          <div class="q-text">The writer suggests that in the future</div>
+          <div class="opts">
+            <label class="opt-label"><input type="radio" name="q34" value="A" data-q="34"> A. no new species will be found</label>
+            <label class="opt-label"><input type="radio" name="q34" value="B" data-q="34"> B. marine research will stop</label>
+            <label class="opt-label"><input type="radio" name="q34" value="C" data-q="34"> C. more discoveries are likely</label>
+            <label class="opt-label"><input type="radio" name="q34" value="D" data-q="34"> D. oceans will become smaller</label>
+          </div>
+        </div>
+
+        <div class="q-divider"></div>
+
+        <div class="q-section-title">Questions 35–40</div>
+        <div class="q-section-desc">Gap Filling — ONE word only</div>
+
+        <div class="q-card">
+          <div class="q-num">Q35</div>
+          <div class="q-text">More than 70 percent of the Earth's surface is covered by ____.</div>
+          <input type="text" class="q-input" data-q="35" placeholder="One word…">
+        </div>
+        <div class="q-card">
+          <div class="q-num">Q36</div>
+          <div class="q-text">The HMS Challenger expedition took place in the 19th ____.</div>
+          <input type="text" class="q-input" data-q="36" placeholder="One word…">
+        </div>
+        <div class="q-card">
+          <div class="q-num">Q37</div>
+          <div class="q-text">The submersible Alvin can explore deep-sea ____.</div>
+          <input type="text" class="q-input" data-q="37" placeholder="One word…">
+        </div>
+        <div class="q-card">
+          <div class="q-num">Q38</div>
+          <div class="q-text">Hydrothermal vents release hot water from beneath the sea ____.</div>
+          <input type="text" class="q-input" data-q="38" placeholder="One word…">
+        </div>
+        <div class="q-card">
+          <div class="q-num">Q39</div>
+          <div class="q-text">Overfishing and pollution are serious ____ to marine life.</div>
+          <input type="text" class="q-input" data-q="39" placeholder="One word…">
+        </div>
+        <div class="q-card">
+          <div class="q-num">Q40</div>
+          <div class="q-text">Many marine species are still waiting to be ____.</div>
+          <input type="text" class="q-input" data-q="40" placeholder="One word…">
+        </div>
+
+        <!-- Submit -->
+        <div class="submit-area" id="submit-area">
+          <button class="submit-btn" id="submit-btn" onclick="submitAnswers()">Submit Answers</button>
+          <button class="copy-btn" id="copy-btn-inline" onclick="copyAnswers()" style="display:none;">Copy Answers</button>
+          <div class="post-submit" id="post-submit">
+            <div class="submit-msg">✓ Answers submitted successfully! Your PDF is downloading.</div>
+            <div id="copy-feedback"></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+// ═══════════════════════════════════════
+// CONFIGURATION
+// ═══════════════════════════════════════
+const ACCESS_CODE = [0,1,1,2];
+const PROCTOR_CODE = [1,0,2,1];
+let testActive = false;
+let studentName = '';
+let submitted = false;
+let highlightMode = false;
+
+// ═══════════════════════════════════════
+// SPARKLES
+// ═══════════════════════════════════════
+(function(){
+  const c = document.getElementById('sparkles-container');
+  for(let i=0;i<50;i++){
+    const s=document.createElement('div');
+    s.className='sparkle';
+    s.style.left=Math.random()*100+'%';
+    s.style.top=Math.random()*100+'%';
+    s.style.animationDelay=Math.random()*4+'s';
+    s.style.animationDuration=(3+Math.random()*4)+'s';
+    c.appendChild(s);
+  }
+})();
+
+// ═══════════════════════════════════════
+// PIN INPUT HELPER
+// ═══════════════════════════════════════
+function setupPins(selector, onComplete){
+  const pins=document.querySelectorAll(selector);
+  pins.forEach((inp,idx)=>{
+    inp.addEventListener('input',function(){
+      this.value=this.value.replace(/[^0-9]/g,'');
+      if(this.value&&idx<pins.length-1) pins[idx+1].focus();
+      if(Array.from(pins).every(p=>p.value!=='')) onComplete(Array.from(pins).map(p=>p.value));
+    });
+    inp.addEventListener('keydown',function(e){
+      if(e.key==='Backspace'&&!this.value&&idx>0){pins[idx-1].focus();pins[idx-1].value='';}
+    });
+    inp.addEventListener('paste',function(e){
+      e.preventDefault();
+      const d=(e.clipboardData||window.clipboardData).getData('text').replace(/\D/g,'');
+      for(let i=0;i<Math.min(d.length,pins.length);i++) pins[i].value=d[i];
+      if(d.length>=pins.length){pins[pins.length-1].focus();onComplete(Array.from(pins).map(p=>p.value));}
+    });
+  });
+}
+
+// Welcome PIN
+setupPins('.pin-input', function(){ checkReady(); });
+
+function checkReady(){
+  const name=document.getElementById('student-name').value.trim();
+  const allFilled=Array.from(document.querySelectorAll('.pin-input')).every(p=>p.value!=='');
+  document.getElementById('start-btn').disabled=!(name&&allFilled);
+}
+document.getElementById('student-name').addEventListener('input', checkReady);
+
+document.getElementById('start-btn').addEventListener('click',function(){
+  const pins=document.querySelectorAll('.pin-input');
+  const entered=Array.from(pins).map(p=>parseInt(p.value));
+  if(JSON.stringify(entered)===JSON.stringify(ACCESS_CODE)){
+    pins.forEach(p=>p.classList.add('success'));
+    studentName=document.getElementById('student-name').value.trim();
+    document.getElementById('display-name').textContent=studentName;
+    setTimeout(()=>{
+      document.getElementById('welcome-screen').style.display='none';
+      document.getElementById('test-screen').style.display='block';
+      testActive=true;
+      enterFS();
+    },500);
+  } else {
+    pins.forEach(p=>p.classList.add('error'));
+    document.getElementById('pin-error').textContent='Incorrect access code. Try again.';
+    setTimeout(()=>{pins.forEach(p=>{p.classList.remove('error');p.value='';});pins[0].focus();document.getElementById('pin-error').textContent='';},1500);
+  }
+});
+
+// ═══════════════════════════════════════
+// FULLSCREEN
+// ═══════════════════════════════════════
+function enterFS(){
+  const el=document.documentElement;
+  try{if(el.requestFullscreen)el.requestFullscreen();else if(el.webkitRequestFullscreen)el.webkitRequestFullscreen();else if(el.msRequestFullscreen)el.msRequestFullscreen();}catch(e){}
+}
+
+// ═══════════════════════════════════════
+// PROCTORING
+// ═══════════════════════════════════════
+function showLock(){
+  if(!testActive||submitted) return;
+  const o=document.getElementById('proctor-overlay');
+  o.style.display='flex';
+  const pins=document.querySelectorAll('.proctor-pin');
+  pins.forEach(p=>p.value='');
+  document.getElementById('proctor-error').textContent='';
+  setTimeout(()=>pins[0].focus(),100);
+}
+
+setupPins('.proctor-pin',function(){});
+
+document.getElementById('proctor-unlock-btn').addEventListener('click',function(){
+  const pins=document.querySelectorAll('.proctor-pin');
+  const entered=Array.from(pins).map(p=>parseInt(p.value));
+  if(JSON.stringify(entered)===JSON.stringify(PROCTOR_CODE)){
+    document.getElementById('proctor-overlay').style.display='none';
+    enterFS();
+  } else {
+    document.getElementById('proctor-error').textContent='Incorrect password. Contact your proctor.';
+    pins.forEach(p=>p.value='');
+    setTimeout(()=>pins[0].focus(),100);
+  }
+});
+
+document.addEventListener('visibilitychange',function(){if(document.hidden&&testActive&&!submitted)showLock();});
+window.addEventListener('blur',function(){if(testActive&&!submitted)showLock();});
+document.addEventListener('fullscreenchange',function(){if(!document.fullscreenElement&&testActive&&!submitted)showLock();});
+document.addEventListener('webkitfullscreenchange',function(){if(!document.webkitFullscreenElement&&testActive&&!submitted)showLock();});
+
+// ═══════════════════════════════════════
+// PASSAGE NAVIGATION
+// ═══════════════════════════════════════
+document.querySelectorAll('.passage-tab').forEach(tab=>{
+  tab.addEventListener('click',function(){
+    const p=this.dataset.passage;
+    document.querySelectorAll('.passage-tab').forEach(t=>t.classList.remove('active'));
+    this.classList.add('active');
+    document.querySelectorAll('.passage-content').forEach(c=>c.classList.remove('active'));
+    document.querySelectorAll('.questions-content').forEach(c=>c.classList.remove('active'));
+    document.getElementById('passage-text-'+p).classList.add('active');
+    document.getElementById('passage-q-'+p).classList.add('active');
+    document.getElementById('text-panel').scrollTop=0;
+    document.getElementById('questions-panel').scrollTop=0;
+  });
+});
+
+// ═══════════════════════════════════════
+// YELLOW HIGHLIGHTING SYSTEM
+// ═══════════════════════════════════════
+const hlToggle=document.getElementById('highlight-toggle');
+
+hlToggle.addEventListener('click',function(){
+  highlightMode=!highlightMode;
+  this.classList.toggle('active',highlightMode);
+  document.querySelectorAll('.passage-text').forEach(el=>{
+    el.style.cursor=highlightMode?'text':'auto';
+  });
+});
+
+// Highlight on text selection (works on mobile and desktop)
+document.getElementById('text-panel').addEventListener('mouseup', applyHighlight);
+document.getElementById('text-panel').addEventListener('touchend', function(e){
+  setTimeout(applyHighlight, 150); // Small delay for mobile selection
+});
+
+function applyHighlight(){
+  if(!highlightMode) return;
+  const sel=window.getSelection();
+  if(!sel||sel.isCollapsed||!sel.rangeCount) return;
+
+  const range=sel.getRangeAt(0);
+  const container=document.getElementById('text-panel');
+
+  // Ensure selection is within passage text
+  if(!container.contains(range.commonAncestorContainer)) return;
+
+  const text=sel.toString().trim();
+  if(!text) return;
+
+  try {
+    // Check if clicking on existing highlight to remove it
+    const anchor=sel.anchorNode;
+    if(anchor&&anchor.parentElement&&anchor.parentElement.tagName==='MARK'){
+      const mark=anchor.parentElement;
+      const parent=mark.parentNode;
+      while(mark.firstChild) parent.insertBefore(mark.firstChild, mark);
+      parent.removeChild(mark);
+      parent.normalize();
+      sel.removeAllRanges();
+      return;
+    }
+
+    const mark=document.createElement('mark');
+    range.surroundContents(mark);
+    sel.removeAllRanges();
+  } catch(e){
+    // If surroundContents fails (cross-element selection), handle gracefully
+    sel.removeAllRanges();
+  }
+}
+
+// ═══════════════════════════════════════
+// COLLECT ALL ANSWERS
+// ═══════════════════════════════════════
+function collectAnswers(){
+  const a={};
+  // Q1-Q8: TFNG selects
+  for(let i=1;i<=8;i++){const el=document.querySelector(`select[data-q="${i}"]`);a['Q'+i]=el?el.value:'';}
+  // Q9-Q14: radio
+  for(let i=9;i<=14;i++){const c=document.querySelector(`input[name="q${i}"]:checked`);a['Q'+i]=c?c.value:'';}
+  // Q15-Q20: text
+  for(let i=15;i<=20;i++){const el=document.querySelector(`input[data-q="${i}"]`);a['Q'+i]=el?el.value.trim():'';}
+  // Q21-Q28: para inputs
+  for(let i=21;i<=28;i++){const el=document.querySelector(`input[data-q="${i}"]`);a['Q'+i]=el?el.value.trim().toUpperCase():'';}
+  // Q29-Q34: radio
+  for(let i=29;i<=34;i++){const c=document.querySelector(`input[name="q${i}"]:checked`);a['Q'+i]=c?c.value:'';}
+  // Q35-Q40: text
+  for(let i=35;i<=40;i++){const el=document.querySelector(`input[data-q="${i}"]`);a['Q'+i]=el?el.value.trim():'';}
+  return a;
+}
+
+// ═══════════════════════════════════════
+// GENERATE PLAIN TEXT
+// ═══════════════════════════════════════
+function genText(a){
+  const lines=[];
+  lines.push('EDUNEST READING TEST — ANSWER SHEET');
+  lines.push('==========================================');
+  lines.push('Student: '+studentName);
+  lines.push('Date: '+new Date().toLocaleDateString('en-GB',{day:'2-digit',month:'long',year:'numeric'}));
+  lines.push('Test Owner: GULRUX');
+  lines.push('');
+  lines.push('PASSAGE 1: The Statue of Liberty');
+  lines.push('-------------------------------------------');
+  lines.push('Questions 1–8 (True/False/Not Given)');
+  for(let i=1;i<=8;i++) lines.push('Q'+i+': '+(a['Q'+i]||'(no answer)'));
+  lines.push('');
+  lines.push('Questions 9–14 (Multiple Choice)');
+  for(let i=9;i<=14;i++) lines.push('Q'+i+': '+(a['Q'+i]||'(no answer)'));
+  lines.push('');
+  lines.push('Questions 15–20 (Gap Filling)');
+  for(let i=15;i<=20;i++) lines.push('Q'+i+': '+(a['Q'+i]||'(no answer)'));
+  lines.push('');
+  lines.push('PASSAGE 2: The Exploration of Marine Life');
+  lines.push('-------------------------------------------');
+  lines.push('Questions 21–28 (Paragraph Matching A–F)');
+  for(let i=21;i<=28;i++) lines.push('Q'+i+': '+(a['Q'+i]||'(no answer)'));
+  lines.push('');
+  lines.push('Questions 29–34 (Multiple Choice)');
+  for(let i=29;i<=34;i++) lines.push('Q'+i+': '+(a['Q'+i]||'(no answer)'));
+  lines.push('');
+  lines.push('Questions 35–40 (Gap Filling)');
+  for(let i=35;i<=40;i++) lines.push('Q'+i+': '+(a['Q'+i]||'(no answer)'));
+  lines.push('');
+  lines.push('==========================================');
+  lines.push('END OF ANSWER SHEET');
+  return lines.join('\n');
+}
+
+// ═══════════════════════════════════════
+// SUBMIT → PDF
+// ═══════════════════════════════════════
+function submitAnswers(){
+  if(submitted) return;
+  if(!confirm('Are you sure you want to submit? You cannot change answers after submission.')) return;
+  submitted=true;
+  const a=collectAnswers();
+  generatePDF(a);
+  document.getElementById('submit-btn').style.display='none';
+  document.getElementById('copy-btn-inline').style.display='inline-block';
+  document.getElementById('post-submit').style.display='block';
+}
+
+function generatePDF(a){
+  const date=new Date().toLocaleDateString('en-GB',{day:'2-digit',month:'long',year:'numeric'});
+  const qLabels={
+    1:'The Statue of Liberty was opened in the 19th century.',
+    2:'The statue was a gift from the United States to France.',
+    3:'Gustave Eiffel designed the outside appearance of the statue.',
+    4:'The statue was originally brown in color.',
+    5:'The green color protects the statue from damage.',
+    6:"The tablet shows the date of France's independence.",
+    7:'The statue was the tallest structure in the world at the time it was built.',
+    8:'The Statue of Liberty has never been repaired.',
+    9:'The Statue of Liberty was mainly created to symbolize',
+    10:'Frédéric Auguste Bartholdi was responsible for',
+    11:'The metal framework was designed by the engineer who later built the',
+    12:'The green color of the statue is the result of',
+    13:"The broken chains at the statue's feet represent",
+    14:'For many immigrants, the statue was',
+    15:'The Statue of Liberty stands on Liberty ____.',
+    16:'It was officially opened in ____.',
+    17:'The statue is made mainly of ____ sheets.',
+    18:'The Roman goddess is called ____.',
+    19:'The date is written in Roman ____.',
+    20:'The statue is protected as a national ____.',
+    21:'An early scientific journey that collected many ocean samples',
+    22:'How new devices can resist extreme conditions',
+    23:'A mention of dangers facing ocean ecosystems',
+    24:'A discovery that changed ideas about how life survives',
+    25:'Information about public education and support for research',
+    26:'Most of the ocean has not yet been studied',
+    27:'Cooperation between different countries',
+    28:'Why early humans knew little about the deep ocean',
+    29:'The main idea of the passage is that',
+    30:'The HMS Challenger expedition was important because it',
+    31:'Remotely operated vehicles are useful because they',
+    32:'Organisms near hydrothermal vents survive by using',
+    33:'Marine exploration is difficult mainly because the deep ocean is',
+    34:'The writer suggests that in the future',
+    35:"The Earth's surface is covered by ____.",
+    36:'The expedition took place in the 19th ____.',
+    37:'Alvin can explore deep-sea ____.',
+    38:'Hydrothermal vents release hot water from beneath the sea ____.',
+    39:'Overfishing and pollution are serious ____ to marine life.',
+    40:'Many marine species are still waiting to be ____.'
+  };
+
+  function row(q,ans){
+    return `<tr><td style="padding:7px 10px;font-weight:700;color:#6d28d9;width:45px;font-family:'Courier New',monospace;">Q${q}</td><td style="padding:7px 10px;color:#444;font-size:12px;">${qLabels[q]||''}</td><td style="padding:7px 10px;text-align:right;font-weight:700;color:#1a1a2e;min-width:100px;">${ans||'—'}</td></tr>`;
+  }
+
+  let html=`<!DOCTYPE html><html><head><meta charset="UTF-8"><style>
+    @page{size:A4;margin:18mm;}
+    body{font-family:'Segoe UI',Arial,sans-serif;color:#1a1a2e;line-height:1.5;font-size:12px;}
+    .hdr{text-align:center;border-bottom:3px solid #6d28d9;padding-bottom:12px;margin-bottom:18px;}
+    .hdr h1{font-size:22px;color:#6d28d9;margin:0 0 2px;}
+    .hdr p{margin:1px 0;color:#555;font-size:12px;}
+    .sec{background:#6d28d9;color:#fff;padding:7px 14px;border-radius:6px;font-size:13px;font-weight:700;margin:16px 0 8px;}
+    table{width:100%;border-collapse:collapse;}
+    tr{border-bottom:1px solid #eee;}
+    .ft{text-align:center;margin-top:24px;padding-top:12px;border-top:2px solid #eee;color:#999;font-size:10px;}
+  </style></head><body>
+  <div class="hdr"><h1>EDUNEST READING TEST</h1><p><b>Student:</b> ${studentName} &nbsp;|&nbsp; <b>Date:</b> ${date} &nbsp;|&nbsp; <b>Test Owner:</b> GULRUX</p></div>
+
+  <div class="sec">Passage 1 — Questions 1–8: True / False / Not Given</div>
+  <table>${[1,2,3,4,5,6,7,8].map(i=>row(i,a['Q'+i])).join('')}</table>
+
+  <div class="sec">Passage 1 — Questions 9–14: Multiple Choice</div>
+  <table>${[9,10,11,12,13,14].map(i=>row(i,a['Q'+i])).join('')}</table>
+
+  <div class="sec">Passage 1 — Questions 15–20: Gap Filling</div>
+  <table>${[15,16,17,18,19,20].map(i=>row(i,a['Q'+i])).join('')}</table>
+
+  <div class="sec">Passage 2 — Questions 21–28: Paragraph Matching</div>
+  <table>${[21,22,23,24,25,26,27,28].map(i=>row(i,a['Q'+i])).join('')}</table>
+
+  <div class="sec">Passage 2 — Questions 29–34: Multiple Choice</div>
+  <table>${[29,30,31,32,33,34].map(i=>row(i,a['Q'+i])).join('')}</table>
+
+  <div class="sec">Passage 2 — Questions 35–40: Gap Filling</div>
+  <table>${[35,36,37,38,39,40].map(i=>row(i,a['Q'+i])).join('')}</table>
+
+  <div class="ft">EDUNEST Reading Test &bull; Answer Sheet &bull; Test Owner: GULRUX</div>
+  </body></html>`;
+
+  const w=window.open('','_blank');
+  if(w){w.document.write(html);w.document.close();setTimeout(()=>w.print(),500);}
+  else{const b=new Blob([html],{type:'text/html'});const u=URL.createObjectURL(b);const link=document.createElement('a');link.href=u;link.download=studentName.replace(/\s+/g,'_')+'_Reading_Answers.html';document.body.appendChild(link);link.click();document.body.removeChild(link);URL.revokeObjectURL(u);}
+}
+
+// ═══════════════════════════════════════
+// COPY ANSWERS (cross-device)
+// ═══════════════════════════════════════
+function copyAnswers(){
+  const a=collectAnswers();
+  const text=genText(a);
+
+  if(navigator.clipboard&&navigator.clipboard.writeText){
+    navigator.clipboard.writeText(text).then(()=>showCF('✓ Answers copied to clipboard!')).catch(()=>fbCopy(text));
+  } else { fbCopy(text); }
+}
+
+function fbCopy(text){
+  const ta=document.createElement('textarea');
+  ta.value=text;
+  ta.style.cssText='position:fixed;left:-9999px;top:0;opacity:0;';
+  document.body.appendChild(ta);
+  ta.contentEditable=true;ta.readOnly=false;
+  const range=document.createRange();
+  range.selectNodeContents(ta);
+  const sel=window.getSelection();sel.removeAllRanges();sel.addRange(range);
+  ta.setSelectionRange(0,text.length);
+  try{document.execCommand('copy');showCF('✓ Answers copied to clipboard!');}
+  catch(e){
+    showCF('Select all text and copy manually:');
+    const modal=document.createElement('div');
+    modal.style.cssText='position:fixed;inset:0;z-index:99999;background:rgba(0,0,0,0.92);display:flex;align-items:center;justify-content:center;padding:20px;';
+    const box=document.createElement('div');
+    box.style.cssText='background:#1e1952;border-radius:16px;padding:24px;max-width:600px;width:100%;max-height:80vh;overflow:auto;';
+    const t=document.createElement('textarea');
+    t.value=text;t.readOnly=true;
+    t.style.cssText='width:100%;height:400px;background:#0f0c29;color:#f5f3ff;border:1px solid #333;border-radius:8px;padding:12px;font-family:monospace;font-size:11px;resize:none;';
+    const btn=document.createElement('button');
+    btn.textContent='Close';
+    btn.style.cssText='margin-top:12px;padding:10px 24px;background:#b388ff;color:#0f0c29;border:none;border-radius:8px;cursor:pointer;font-size:14px;font-weight:700;';
+    btn.onclick=()=>document.body.removeChild(modal);
+    box.appendChild(t);box.appendChild(btn);modal.appendChild(box);document.body.appendChild(modal);
+    t.select();
+  }
+  document.body.removeChild(ta);
+}
+
+function showCF(m){const el=document.getElementById('copy-feedback');el.textContent=m;setTimeout(()=>{el.textContent='';},3500);}
+</script>
+</body>
+</html>
