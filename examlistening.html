@@ -1,0 +1,1792 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EDUNEST Listening Test</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg-primary: #0a0e1a;
+  --bg-secondary: #111827;
+  --bg-card: #1a2035;
+  --accent: #6366f1;
+  --accent-light: #818cf8;
+  --accent-glow: rgba(99, 102, 241, 0.3);
+  --gold: #f59e0b;
+  --gold-light: #fbbf24;
+  --text-primary: #f1f5f9;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+  --border: rgba(255,255,255,0.08);
+  --success: #10b981;
+  --danger: #ef4444;
+  --glass: rgba(255,255,255,0.03);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ─── WELCOME SCREEN ─── */
+#welcome-screen {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.welcome-bg {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  background:
+    radial-gradient(ellipse 80% 60% at 50% 0%, rgba(99,102,241,0.15) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 50% at 80% 100%, rgba(245,158,11,0.08) 0%, transparent 50%),
+    radial-gradient(ellipse 50% 40% at 10% 80%, rgba(99,102,241,0.06) 0%, transparent 50%),
+    var(--bg-primary);
+}
+
+.welcome-particles {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.particle {
+  position: absolute;
+  width: 2px;
+  height: 2px;
+  background: var(--accent-light);
+  border-radius: 50%;
+  opacity: 0;
+  animation: particleFloat 8s infinite ease-in-out;
+}
+
+@keyframes particleFloat {
+  0%, 100% { opacity: 0; transform: translateY(0) scale(1); }
+  50% { opacity: 0.6; transform: translateY(-100px) scale(1.5); }
+}
+
+.welcome-container {
+  position: relative;
+  z-index: 10;
+  width: 100%;
+  max-width: 520px;
+  padding: 20px;
+}
+
+.welcome-card {
+  background: linear-gradient(135deg, rgba(26,32,53,0.95), rgba(17,24,39,0.98));
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  padding: 48px 40px;
+  backdrop-filter: blur(40px);
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,0.05),
+    0 25px 50px -12px rgba(0,0,0,0.5),
+    0 0 100px rgba(99,102,241,0.08);
+  animation: cardAppear 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  opacity: 0;
+  transform: translateY(30px);
+}
+
+@keyframes cardAppear {
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.welcome-logo {
+  text-align: center;
+  margin-bottom: 8px;
+}
+
+.welcome-logo img {
+  height: 60px;
+  width: auto;
+  object-fit: contain;
+  filter: drop-shadow(0 4px 12px rgba(99,102,241,0.3));
+}
+
+.welcome-badge {
+  text-align: center;
+  margin-bottom: 28px;
+}
+
+.welcome-badge span {
+  display: inline-block;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--gold);
+  background: rgba(245,158,11,0.1);
+  border: 1px solid rgba(245,158,11,0.2);
+  padding: 6px 16px;
+  border-radius: 100px;
+}
+
+.welcome-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 28px;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 4px;
+  background: linear-gradient(135deg, var(--text-primary), var(--accent-light));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  line-height: 1.3;
+}
+
+.welcome-subtitle {
+  text-align: center;
+  color: var(--text-secondary);
+  font-size: 14px;
+  margin-bottom: 32px;
+  font-weight: 300;
+}
+
+.welcome-owner {
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 11px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-bottom: 28px;
+  font-weight: 500;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-label {
+  display: block;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  margin-bottom: 8px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.form-input {
+  width: 100%;
+  padding: 14px 18px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  color: var(--text-primary);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 15px;
+  transition: all 0.3s ease;
+  outline: none;
+}
+
+.form-input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-glow);
+  background: rgba(255,255,255,0.06);
+}
+
+.form-input::placeholder {
+  color: var(--text-muted);
+}
+
+.pin-container {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+}
+
+.pin-input {
+  width: 56px;
+  height: 64px;
+  text-align: center;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 24px;
+  font-weight: 600;
+  background: rgba(255,255,255,0.04);
+  border: 2px solid var(--border);
+  border-radius: 14px;
+  color: var(--text-primary);
+  transition: all 0.3s ease;
+  outline: none;
+  -webkit-text-security: disc;
+}
+
+.pin-input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-glow);
+  background: rgba(99,102,241,0.05);
+  transform: translateY(-2px);
+}
+
+.pin-input.error {
+  border-color: var(--danger);
+  box-shadow: 0 0 0 3px rgba(239,68,68,0.2);
+  animation: pinShake 0.5s ease;
+}
+
+.pin-input.success {
+  border-color: var(--success);
+  box-shadow: 0 0 0 3px rgba(16,185,129,0.2);
+}
+
+@keyframes pinShake {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-8px); }
+  40% { transform: translateX(8px); }
+  60% { transform: translateX(-5px); }
+  80% { transform: translateX(5px); }
+}
+
+.error-msg {
+  text-align: center;
+  color: var(--danger);
+  font-size: 13px;
+  margin-top: 10px;
+  min-height: 20px;
+  font-weight: 500;
+}
+
+.start-btn {
+  width: 100%;
+  padding: 16px;
+  margin-top: 24px;
+  background: linear-gradient(135deg, var(--accent), #4f46e5);
+  border: none;
+  border-radius: 14px;
+  color: white;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  letter-spacing: 0.5px;
+  position: relative;
+  overflow: hidden;
+}
+
+.start-btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, transparent, rgba(255,255,255,0.15));
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.start-btn:hover::before { opacity: 1; }
+
+.start-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(99,102,241,0.4);
+}
+
+.start-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* ─── PROCTOR OVERLAY ─── */
+#proctor-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  background: rgba(0,0,0,0.95);
+  backdrop-filter: blur(20px);
+  align-items: center;
+  justify-content: center;
+  animation: overlayIn 0.3s ease;
+}
+
+@keyframes overlayIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.proctor-card {
+  background: var(--bg-card);
+  border: 1px solid rgba(239,68,68,0.3);
+  border-radius: 20px;
+  padding: 48px 40px;
+  max-width: 440px;
+  width: 90%;
+  text-align: center;
+  box-shadow: 0 0 60px rgba(239,68,68,0.1);
+}
+
+.proctor-icon {
+  width: 64px;
+  height: 64px;
+  margin: 0 auto 20px;
+  background: rgba(239,68,68,0.1);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+}
+
+.proctor-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--danger);
+  margin-bottom: 10px;
+}
+
+.proctor-text {
+  color: var(--text-secondary);
+  font-size: 14px;
+  margin-bottom: 24px;
+  line-height: 1.6;
+}
+
+.proctor-pin-container {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin-bottom: 12px;
+}
+
+.proctor-pin {
+  width: 50px;
+  height: 58px;
+  text-align: center;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 22px;
+  font-weight: 600;
+  background: rgba(255,255,255,0.04);
+  border: 2px solid var(--border);
+  border-radius: 12px;
+  color: var(--text-primary);
+  transition: all 0.3s ease;
+  outline: none;
+  -webkit-text-security: disc;
+}
+
+.proctor-pin:focus {
+  border-color: var(--danger);
+  box-shadow: 0 0 0 3px rgba(239,68,68,0.2);
+}
+
+.proctor-error {
+  color: var(--danger);
+  font-size: 13px;
+  min-height: 20px;
+  font-weight: 500;
+}
+
+.proctor-btn {
+  padding: 14px 40px;
+  margin-top: 16px;
+  background: linear-gradient(135deg, var(--danger), #dc2626);
+  border: none;
+  border-radius: 12px;
+  color: white;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.proctor-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(239,68,68,0.3);
+}
+
+/* ─── TEST SCREEN ─── */
+#test-screen {
+  display: none;
+  min-height: 100vh;
+  background: var(--bg-primary);
+}
+
+.test-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(10,14,26,0.9);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+  padding: 12px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.header-logo img {
+  height: 32px;
+  width: auto;
+}
+
+.header-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.header-student {
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+.header-student strong {
+  color: var(--accent-light);
+}
+
+/* ─── NAVIGATION ─── */
+.part-nav {
+  display: flex;
+  gap: 6px;
+  padding: 16px 24px 0;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.part-nav-btn {
+  padding: 10px 20px;
+  background: var(--glass);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  color: var(--text-secondary);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  letter-spacing: 0.3px;
+}
+
+.part-nav-btn:hover {
+  background: rgba(99,102,241,0.1);
+  border-color: rgba(99,102,241,0.3);
+  color: var(--text-primary);
+}
+
+.part-nav-btn.active {
+  background: linear-gradient(135deg, var(--accent), #4f46e5);
+  border-color: var(--accent);
+  color: white;
+  box-shadow: 0 4px 15px rgba(99,102,241,0.3);
+}
+
+/* ─── TEST CONTENT ─── */
+.test-body {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 24px 24px 120px;
+}
+
+.part-section {
+  display: none;
+  animation: partFadeIn 0.4s ease;
+}
+
+.part-section.active {
+  display: block;
+}
+
+@keyframes partFadeIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.part-header {
+  font-family: 'Playfair Display', serif;
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: 6px;
+  color: var(--text-primary);
+}
+
+.part-instruction {
+  color: var(--text-secondary);
+  font-size: 14px;
+  margin-bottom: 28px;
+  line-height: 1.6;
+}
+
+.question-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 20px 24px;
+  margin-bottom: 14px;
+  transition: all 0.3s ease;
+}
+
+.question-card:hover {
+  border-color: rgba(99,102,241,0.15);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+}
+
+.q-number {
+  display: inline-block;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--accent-light);
+  background: rgba(99,102,241,0.1);
+  padding: 3px 10px;
+  border-radius: 6px;
+  margin-bottom: 10px;
+}
+
+.q-text {
+  font-size: 15px;
+  color: var(--text-primary);
+  margin-bottom: 12px;
+  line-height: 1.5;
+}
+
+.q-input {
+  width: 100%;
+  max-width: 360px;
+  padding: 12px 16px;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  color: var(--text-primary);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  outline: none;
+  transition: all 0.3s ease;
+}
+
+.q-input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-glow);
+}
+
+/* Radio options */
+.options-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.option-label {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  background: rgba(255,255,255,0.02);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 14px;
+}
+
+.option-label:hover {
+  background: rgba(99,102,241,0.05);
+  border-color: rgba(99,102,241,0.2);
+}
+
+.option-label input[type="radio"] {
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border: 2px solid var(--text-muted);
+  border-radius: 50%;
+  transition: all 0.3s ease;
+  flex-shrink: 0;
+  position: relative;
+}
+
+.option-label input[type="radio"]:checked {
+  border-color: var(--accent);
+  background: var(--accent);
+}
+
+.option-label input[type="radio"]:checked::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 8px;
+  height: 8px;
+  background: white;
+  border-radius: 50%;
+}
+
+.option-label:has(input:checked) {
+  background: rgba(99,102,241,0.08);
+  border-color: rgba(99,102,241,0.3);
+}
+
+/* Table style for Part 2 */
+.dates-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  margin-bottom: 20px;
+}
+
+.dates-table th {
+  background: rgba(99,102,241,0.1);
+  padding: 12px 16px;
+  text-align: left;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--accent-light);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.dates-table th:first-child { border-radius: 10px 0 0 0; }
+.dates-table th:last-child { border-radius: 0 10px 0 0; }
+
+.dates-table td {
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--border);
+  font-size: 14px;
+}
+
+.dates-table tr:last-child td { border-bottom: none; }
+.dates-table tr:last-child td:first-child { border-radius: 0 0 0 10px; }
+.dates-table tr:last-child td:last-child { border-radius: 0 0 10px 0; }
+
+/* Part 3 dialogue */
+.dialogue-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 18px 22px;
+  margin-bottom: 12px;
+}
+
+.dialogue-line {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  font-size: 14px;
+  line-height: 2;
+}
+
+.speaker {
+  font-weight: 600;
+  color: var(--accent-light);
+  flex-shrink: 0;
+}
+
+.time-input {
+  width: 100px;
+  padding: 8px 12px;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--gold);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 14px;
+  text-align: center;
+  outline: none;
+  transition: all 0.3s ease;
+}
+
+.time-input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-glow);
+}
+
+/* Part 5 message card */
+.message-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 28px;
+}
+
+.message-header {
+  font-family: 'Playfair Display', serif;
+  font-size: 18px;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 20px;
+  color: var(--gold);
+}
+
+.message-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 14px;
+  flex-wrap: wrap;
+}
+
+.message-label {
+  font-weight: 500;
+  color: var(--text-secondary);
+  min-width: 160px;
+  font-size: 14px;
+}
+
+.message-value {
+  color: var(--text-primary);
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.message-input {
+  flex: 1;
+  min-width: 150px;
+  padding: 10px 14px;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--text-primary);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  outline: none;
+  transition: all 0.3s ease;
+}
+
+.message-input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-glow);
+}
+
+.message-indent {
+  padding-left: 24px;
+}
+
+/* ─── SUBMIT AREA ─── */
+.submit-area {
+  text-align: center;
+  padding: 40px 0 20px;
+}
+
+.submit-btn {
+  padding: 16px 48px;
+  background: linear-gradient(135deg, var(--success), #059669);
+  border: none;
+  border-radius: 14px;
+  color: white;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  letter-spacing: 0.5px;
+}
+
+.submit-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(16,185,129,0.3);
+}
+
+.post-submit {
+  display: none;
+  margin-top: 24px;
+  animation: partFadeIn 0.5s ease;
+}
+
+.copy-btn {
+  padding: 14px 36px;
+  background: linear-gradient(135deg, var(--accent), #4f46e5);
+  border: none;
+  border-radius: 12px;
+  color: white;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 12px;
+}
+
+.copy-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(99,102,241,0.3);
+}
+
+.submit-msg {
+  color: var(--success);
+  font-size: 15px;
+  font-weight: 500;
+  margin-bottom: 16px;
+}
+
+/* ─── FOOTER ─── */
+.test-footer {
+  text-align: center;
+  padding: 20px;
+  color: var(--text-muted);
+  font-size: 12px;
+  border-top: 1px solid var(--border);
+  margin-top: 40px;
+}
+
+/* ─── RESPONSIVE ─── */
+@media (max-width: 600px) {
+  .welcome-card { padding: 36px 24px; }
+  .welcome-title { font-size: 22px; }
+  .pin-input { width: 48px; height: 56px; font-size: 20px; }
+  .test-header { padding: 10px 16px; flex-wrap: wrap; }
+  .test-body { padding: 16px 16px 100px; }
+  .question-card { padding: 16px; }
+  .part-header { font-size: 18px; }
+  .message-label { min-width: 120px; font-size: 13px; }
+  .part-nav-btn { padding: 8px 14px; font-size: 12px; }
+  .header-title { font-size: 14px; }
+  .proctor-card { padding: 32px 24px; }
+  .proctor-pin { width: 44px; height: 52px; font-size: 20px; }
+}
+
+/* Print / PDF styles */
+@media print {
+  body { background: white; color: black; }
+  .test-header, .part-nav, .submit-area, .post-submit { display: none !important; }
+  .part-section { display: block !important; page-break-inside: avoid; }
+  .question-card { border: 1px solid #ddd; box-shadow: none; background: white; }
+}
+</style>
+</head>
+<body>
+
+<!-- ═══════ WELCOME SCREEN ═══════ -->
+<div id="welcome-screen">
+  <div class="welcome-bg"></div>
+  <div class="welcome-particles" id="particles"></div>
+  <div class="welcome-container">
+    <div class="welcome-card">
+      <div class="welcome-logo">
+        <img src="https://image2url.com/r2/default/images/1769700366134-01db5cda-e300-4af6-8039-9c7cad80199a.png" alt="EDUNEST" onerror="this.style.display='none'">
+      </div>
+      <div class="welcome-badge"><span>Listening Examination</span></div>
+      <div class="welcome-title">EDUNEST Listening Test</div>
+      <div class="welcome-subtitle">Complete all 5 parts carefully. Good luck!</div>
+      <div class="welcome-owner">Test Owner: JONY</div>
+
+      <div class="form-group">
+        <label class="form-label">Student Name</label>
+        <input type="text" id="student-name" class="form-input" placeholder="Enter your full name" autocomplete="off">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Access Code</label>
+        <div class="pin-container">
+          <input type="tel" class="pin-input" maxlength="1" data-pin="0" inputmode="numeric" autocomplete="off">
+          <input type="tel" class="pin-input" maxlength="1" data-pin="1" inputmode="numeric" autocomplete="off">
+          <input type="tel" class="pin-input" maxlength="1" data-pin="2" inputmode="numeric" autocomplete="off">
+          <input type="tel" class="pin-input" maxlength="1" data-pin="3" inputmode="numeric" autocomplete="off">
+        </div>
+        <div class="error-msg" id="pin-error"></div>
+      </div>
+
+      <button class="start-btn" id="start-btn" disabled>Begin Examination</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════ PROCTOR OVERLAY ═══════ -->
+<div id="proctor-overlay">
+  <div class="proctor-card">
+    <div class="proctor-icon">🔒</div>
+    <div class="proctor-title">Session Locked</div>
+    <div class="proctor-text">You left the test window. Please enter the proctor password to continue your examination.</div>
+    <div class="proctor-pin-container">
+      <input type="tel" class="proctor-pin" maxlength="1" data-ppin="0" inputmode="numeric" autocomplete="off">
+      <input type="tel" class="proctor-pin" maxlength="1" data-ppin="1" inputmode="numeric" autocomplete="off">
+      <input type="tel" class="proctor-pin" maxlength="1" data-ppin="2" inputmode="numeric" autocomplete="off">
+      <input type="tel" class="proctor-pin" maxlength="1" data-ppin="3" inputmode="numeric" autocomplete="off">
+    </div>
+    <div class="proctor-error" id="proctor-error"></div>
+    <button class="proctor-btn" id="proctor-unlock-btn">Unlock Session</button>
+  </div>
+</div>
+
+<!-- ═══════ TEST SCREEN ═══════ -->
+<div id="test-screen">
+  <div class="test-header">
+    <div class="header-left">
+      <div class="header-logo">
+        <img src="https://image2url.com/r2/default/images/1769700366134-01db5cda-e300-4af6-8039-9c7cad80199a.png" alt="EDUNEST" onerror="this.style.display='none'">
+      </div>
+      <div>
+        <div class="header-title">Listening Test</div>
+        <div class="header-student">Student: <strong id="display-name"></strong></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Part Navigation -->
+  <div class="part-nav">
+    <button class="part-nav-btn active" data-part="1">Part 1</button>
+    <button class="part-nav-btn" data-part="2">Part 2</button>
+    <button class="part-nav-btn" data-part="3">Part 3</button>
+    <button class="part-nav-btn" data-part="4">Part 4</button>
+    <button class="part-nav-btn" data-part="5">Part 5</button>
+  </div>
+
+  <div class="test-body">
+
+    <!-- ═══ PART 1 ═══ -->
+    <div class="part-section active" id="part-1">
+      <div class="part-header">Part 1</div>
+      <div class="part-instruction">Write down some names and places.</div>
+
+      <div class="question-card">
+        <div class="q-number">Q1</div>
+        <div class="q-text">Name:</div>
+        <input type="text" class="q-input" data-q="1" placeholder="Write the name here...">
+      </div>
+      <div class="question-card">
+        <div class="q-number">Q2</div>
+        <div class="q-text">Name:</div>
+        <input type="text" class="q-input" data-q="2" placeholder="Write the name here...">
+      </div>
+      <div class="question-card">
+        <div class="q-number">Q3</div>
+        <div class="q-text">Place:</div>
+        <input type="text" class="q-input" data-q="3" placeholder="Write the place here...">
+      </div>
+      <div class="question-card">
+        <div class="q-number">Q4</div>
+        <div class="q-text">Place:</div>
+        <input type="text" class="q-input" data-q="4" placeholder="Write the place here...">
+      </div>
+      <div class="question-card">
+        <div class="q-number">Q5</div>
+        <div class="q-text">Name:</div>
+        <input type="text" class="q-input" data-q="5" placeholder="Write the name here...">
+      </div>
+      <div class="question-card">
+        <div class="q-number">Q6</div>
+        <div class="q-text">Place:</div>
+        <input type="text" class="q-input" data-q="6" placeholder="Write the place here...">
+      </div>
+      <div class="question-card">
+        <div class="q-number">Q7</div>
+        <div class="q-text">Name:</div>
+        <input type="text" class="q-input" data-q="7" placeholder="Write the name here...">
+      </div>
+      <div class="question-card">
+        <div class="q-number">Q8</div>
+        <div class="q-text">Place:</div>
+        <input type="text" class="q-input" data-q="8" placeholder="Write the place here...">
+      </div>
+      <div class="question-card">
+        <div class="q-number">Q9</div>
+        <div class="q-text">Name:</div>
+        <input type="text" class="q-input" data-q="9" placeholder="Write the name here...">
+      </div>
+      <div class="question-card">
+        <div class="q-number">Q10</div>
+        <div class="q-text">Place:</div>
+        <input type="text" class="q-input" data-q="10" placeholder="Write the place here...">
+      </div>
+    </div>
+
+    <!-- ═══ PART 2 ═══ -->
+    <div class="part-section" id="part-2">
+      <div class="part-header">Part 2</div>
+      <div class="part-instruction">Listen to the following dates. As you listen, tick the correct letter A or B.</div>
+
+      <div class="question-card" style="padding:0; overflow:hidden;">
+        <table class="dates-table">
+          <thead>
+            <tr>
+              <th>Question</th>
+              <th>A</th>
+              <th>B</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>11. When's Lincoln's birthday?</td>
+              <td><label class="option-label" style="padding:8px 12px;margin:0;border:none;background:transparent;"><input type="radio" name="q11" value="A" data-q="11"> February 12th</label></td>
+              <td><label class="option-label" style="padding:8px 12px;margin:0;border:none;background:transparent;"><input type="radio" name="q11" value="B" data-q="11"> February 20th</label></td>
+            </tr>
+            <tr>
+              <td>12. Do you know Valentine's Day?</td>
+              <td><label class="option-label" style="padding:8px 12px;margin:0;border:none;background:transparent;"><input type="radio" name="q12" value="A" data-q="12"> February 15th</label></td>
+              <td><label class="option-label" style="padding:8px 12px;margin:0;border:none;background:transparent;"><input type="radio" name="q12" value="B" data-q="12"> February 14th</label></td>
+            </tr>
+            <tr>
+              <td>13. When's Washington's Birthday?</td>
+              <td><label class="option-label" style="padding:8px 12px;margin:0;border:none;background:transparent;"><input type="radio" name="q13" value="A" data-q="13"> February 23rd</label></td>
+              <td><label class="option-label" style="padding:8px 12px;margin:0;border:none;background:transparent;"><input type="radio" name="q13" value="B" data-q="13"> February 21st</label></td>
+            </tr>
+            <tr>
+              <td>14. Do you know when April Fool's Day is?</td>
+              <td><label class="option-label" style="padding:8px 12px;margin:0;border:none;background:transparent;"><input type="radio" name="q14" value="A" data-q="14"> April 1st</label></td>
+              <td><label class="option-label" style="padding:8px 12px;margin:0;border:none;background:transparent;"><input type="radio" name="q14" value="B" data-q="14"> April 3rd</label></td>
+            </tr>
+            <tr>
+              <td>15. When is Easter?</td>
+              <td><label class="option-label" style="padding:8px 12px;margin:0;border:none;background:transparent;"><input type="radio" name="q15" value="A" data-q="15"> April 3rd</label></td>
+              <td><label class="option-label" style="padding:8px 12px;margin:0;border:none;background:transparent;"><input type="radio" name="q15" value="B" data-q="15"> April 1st</label></td>
+            </tr>
+            <tr>
+              <td>16. When is Mother's Day?</td>
+              <td><label class="option-label" style="padding:8px 12px;margin:0;border:none;background:transparent;"><input type="radio" name="q16" value="A" data-q="16"> May 5th</label></td>
+              <td><label class="option-label" style="padding:8px 12px;margin:0;border:none;background:transparent;"><input type="radio" name="q16" value="B" data-q="16"> May 8th</label></td>
+            </tr>
+            <tr>
+              <td>17. What date is Memorial Day?</td>
+              <td><label class="option-label" style="padding:8px 12px;margin:0;border:none;background:transparent;"><input type="radio" name="q17" value="A" data-q="17"> May 13th</label></td>
+              <td><label class="option-label" style="padding:8px 12px;margin:0;border:none;background:transparent;"><input type="radio" name="q17" value="B" data-q="17"> May 30th</label></td>
+            </tr>
+            <tr>
+              <td>18. Do you know when Father's Day is?</td>
+              <td><label class="option-label" style="padding:8px 12px;margin:0;border:none;background:transparent;"><input type="radio" name="q18" value="A" data-q="18"> June 19th</label></td>
+              <td><label class="option-label" style="padding:8px 12px;margin:0;border:none;background:transparent;"><input type="radio" name="q18" value="B" data-q="18"> June 9th</label></td>
+            </tr>
+            <tr>
+              <td>19. When is Independence Day?</td>
+              <td><label class="option-label" style="padding:8px 12px;margin:0;border:none;background:transparent;"><input type="radio" name="q19" value="A" data-q="19"> July 5th</label></td>
+              <td><label class="option-label" style="padding:8px 12px;margin:0;border:none;background:transparent;"><input type="radio" name="q19" value="B" data-q="19"> July 4th</label></td>
+            </tr>
+            <tr>
+              <td>20. When is Friendship Day?</td>
+              <td><label class="option-label" style="padding:8px 12px;margin:0;border:none;background:transparent;"><input type="radio" name="q20" value="A" data-q="20"> August 17th</label></td>
+              <td><label class="option-label" style="padding:8px 12px;margin:0;border:none;background:transparent;"><input type="radio" name="q20" value="B" data-q="20"> August 7th</label></td>
+            </tr>
+            <tr>
+              <td>21. When is Halloween?</td>
+              <td><label class="option-label" style="padding:8px 12px;margin:0;border:none;background:transparent;"><input type="radio" name="q21" value="A" data-q="21"> October 1st</label></td>
+              <td><label class="option-label" style="padding:8px 12px;margin:0;border:none;background:transparent;"><input type="radio" name="q21" value="B" data-q="21"> October 31st</label></td>
+            </tr>
+            <tr>
+              <td>22. When is Thanksgiving Day?</td>
+              <td><label class="option-label" style="padding:8px 12px;margin:0;border:none;background:transparent;"><input type="radio" name="q22" value="A" data-q="22"> November 25th</label></td>
+              <td><label class="option-label" style="padding:8px 12px;margin:0;border:none;background:transparent;"><input type="radio" name="q22" value="B" data-q="22"> November 24th</label></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ═══ PART 3 ═══ -->
+    <div class="part-section" id="part-3">
+      <div class="part-header">Part 3</div>
+      <div class="part-instruction">When the answer is given, write down the time in the space below.</div>
+
+      <div class="dialogue-card">
+        <div class="q-number">Q23</div>
+        <div class="dialogue-line">
+          <span class="speaker">A:</span> Excuse me. Can you tell me the time, please?
+        </div>
+        <div class="dialogue-line">
+          <span class="speaker">B:</span> Yes. It's <input type="text" class="time-input" data-q="23" placeholder="___">.
+        </div>
+      </div>
+
+      <div class="dialogue-card">
+        <div class="q-number">Q24</div>
+        <div class="dialogue-line">
+          <span class="speaker">A:</span> Do you have the right time, please?
+        </div>
+        <div class="dialogue-line">
+          <span class="speaker">B:</span> I think it's <input type="text" class="time-input" data-q="24" placeholder="___">.
+        </div>
+      </div>
+
+      <div class="dialogue-card">
+        <div class="q-number">Q25</div>
+        <div class="dialogue-line">
+          <span class="speaker">A:</span> Do you know what time the next bus is, please?
+        </div>
+        <div class="dialogue-line">
+          <span class="speaker">B:</span> Yes. It's <input type="text" class="time-input" data-q="25" placeholder="___">.
+        </div>
+      </div>
+
+      <div class="dialogue-card">
+        <div class="q-number">Q26</div>
+        <div class="dialogue-line">
+          <span class="speaker">A:</span> What time do you finish your work today?
+        </div>
+        <div class="dialogue-line">
+          <span class="speaker">B:</span> <input type="text" class="time-input" data-q="26" placeholder="___">.
+        </div>
+      </div>
+
+      <div class="dialogue-card">
+        <div class="q-number">Q27</div>
+        <div class="dialogue-line">
+          <span class="speaker">A:</span> When do the shops open, please?
+        </div>
+        <div class="dialogue-line">
+          <span class="speaker">B:</span> <input type="text" class="time-input" data-q="27" placeholder="___">.
+        </div>
+      </div>
+
+      <div class="dialogue-card">
+        <div class="q-number">Q28</div>
+        <div class="dialogue-line">
+          <span class="speaker">A:</span> What time does the London train leave, please?
+        </div>
+        <div class="dialogue-line">
+          <span class="speaker">B:</span> <input type="text" class="time-input" data-q="28" placeholder="___">.
+        </div>
+      </div>
+
+      <div class="dialogue-card">
+        <div class="q-number">Q29</div>
+        <div class="dialogue-line">
+          <span class="speaker">A:</span> What's the next train to Birmingham, please?
+        </div>
+        <div class="dialogue-line">
+          <span class="speaker">B:</span> <input type="text" class="time-input" data-q="29" placeholder="___">.
+        </div>
+      </div>
+
+      <div class="dialogue-card">
+        <div class="q-number">Q30</div>
+        <div class="dialogue-line">
+          <span class="speaker">A:</span> Excuse me, please. What time does the Liverpool train arrive?
+        </div>
+        <div class="dialogue-line">
+          <span class="speaker">B:</span> <input type="text" class="time-input" data-q="30" placeholder="___">.
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ PART 4 ═══ -->
+    <div class="part-section" id="part-4">
+      <div class="part-header">Part 4</div>
+      <div class="part-instruction">Listen and choose the correct answer A, B or C.</div>
+
+      <div class="question-card">
+        <div class="q-number">Q31</div>
+        <div class="q-text">The girl will pay</div>
+        <div class="options-group">
+          <label class="option-label"><input type="radio" name="q31" value="A" data-q="31"> A&ensp;£5</label>
+          <label class="option-label"><input type="radio" name="q31" value="B" data-q="31"> B&ensp;£7</label>
+          <label class="option-label"><input type="radio" name="q31" value="C" data-q="31"> C&ensp;£9</label>
+        </div>
+      </div>
+
+      <div class="question-card">
+        <div class="q-number">Q32</div>
+        <div class="q-text">The girl will get on the coach</div>
+        <div class="options-group">
+          <label class="option-label"><input type="radio" name="q32" value="A" data-q="32"> A&ensp;outside the library</label>
+          <label class="option-label"><input type="radio" name="q32" value="B" data-q="32"> B&ensp;in front of the Grand Hotel</label>
+          <label class="option-label"><input type="radio" name="q32" value="C" data-q="32"> C&ensp;in Bridge Street</label>
+        </div>
+      </div>
+
+      <div class="question-card">
+        <div class="q-number">Q33</div>
+        <div class="q-text">The coach will be at the girl's stop at</div>
+        <div class="options-group">
+          <label class="option-label"><input type="radio" name="q33" value="A" data-q="33"> A&ensp;8.45 am</label>
+          <label class="option-label"><input type="radio" name="q33" value="B" data-q="33"> B&ensp;8.55 am</label>
+          <label class="option-label"><input type="radio" name="q33" value="C" data-q="33"> C&ensp;9.05 am</label>
+        </div>
+      </div>
+
+      <div class="question-card">
+        <div class="q-number">Q34</div>
+        <div class="q-text">In Edinburgh, the girl will visit</div>
+        <div class="options-group">
+          <label class="option-label"><input type="radio" name="q34" value="A" data-q="34"> A&ensp;the castle and shops</label>
+          <label class="option-label"><input type="radio" name="q34" value="B" data-q="34"> B&ensp;the cathedral and museums</label>
+          <label class="option-label"><input type="radio" name="q34" value="C" data-q="34"> C&ensp;the castle and cathedral</label>
+        </div>
+      </div>
+
+      <div class="question-card">
+        <div class="q-number">Q35</div>
+        <div class="q-text">The whole trip takes</div>
+        <div class="options-group">
+          <label class="option-label"><input type="radio" name="q35" value="A" data-q="35"> A&ensp;2 hours</label>
+          <label class="option-label"><input type="radio" name="q35" value="B" data-q="35"> B&ensp;2 ¼ hours</label>
+          <label class="option-label"><input type="radio" name="q35" value="C" data-q="35"> C&ensp;4 ¼ hours</label>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ PART 5 ═══ -->
+    <div class="part-section" id="part-5">
+      <div class="part-header">Part 5</div>
+      <div class="part-instruction">Listen and complete questions 36 to 40.</div>
+
+      <div class="message-card">
+        <div class="message-header">Message for Anna</div>
+
+        <div class="message-row">
+          <span class="message-label">From:</span>
+          <span class="message-value">Bob Watson</span>
+        </div>
+
+        <div class="message-row">
+          <span class="message-label">Name of shop:</span>
+          <span class="q-number" style="margin:0">Q36</span>
+          <input type="text" class="message-input" data-q="36" placeholder="___________">
+        </div>
+
+        <div class="message-row" style="margin-bottom:6px;">
+          <span class="message-label">Boots:</span>
+        </div>
+
+        <div class="message-row message-indent">
+          <span class="message-label">Size:</span>
+          <span class="q-number" style="margin:0">Q37</span>
+          <input type="text" class="message-input" data-q="37" placeholder="___________">
+        </div>
+
+        <div class="message-row message-indent">
+          <span class="message-label">Colour:</span>
+          <span class="q-number" style="margin:0">Q38</span>
+          <input type="text" class="message-input" data-q="38" placeholder="___________">
+        </div>
+
+        <div class="message-row message-indent">
+          <span class="message-label">Sale price:</span>
+          <span class="q-number" style="margin:0">Q39</span>
+          £<input type="text" class="message-input" data-q="39" placeholder="___________" style="max-width:120px;">
+        </div>
+
+        <div class="message-row">
+          <span class="message-label">Tomorrow shop closes at:</span>
+          <span class="q-number" style="margin:0">Q40</span>
+          <input type="text" class="message-input" data-q="40" placeholder="___________">
+        </div>
+      </div>
+
+      <!-- Submit Area -->
+      <div class="submit-area" id="submit-area">
+        <button class="submit-btn" id="submit-btn" onclick="submitAnswers()">SUBMIT ANSWERS</button>
+        <div class="post-submit" id="post-submit">
+          <div class="submit-msg">✓ Answers submitted successfully! Your PDF has been downloaded.</div>
+          <button class="copy-btn" id="copy-btn" onclick="copyAnswers()">COPY ANSWERS</button>
+          <div id="copy-feedback" style="color:var(--accent-light);font-size:13px;margin-top:10px;min-height:20px;"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="test-footer">
+      EDUNEST Listening Test &bull; Test Owner: JONY &bull; All rights reserved
+    </div>
+  </div>
+</div>
+
+<script>
+// ═══════════════════════════════════
+// CONFIGURATION (passwords hidden)
+// ═══════════════════════════════════
+const ACCESS_CODE = [0,1,1,1];
+const PROCTOR_CODE = [1,0,1,1];
+
+let testActive = false;
+let studentName = '';
+let submitted = false;
+
+// ═══════════════════════════════════
+// PARTICLES ANIMATION
+// ═══════════════════════════════════
+(function createParticles() {
+  const container = document.getElementById('particles');
+  for (let i = 0; i < 40; i++) {
+    const p = document.createElement('div');
+    p.className = 'particle';
+    p.style.left = Math.random() * 100 + '%';
+    p.style.top = Math.random() * 100 + '%';
+    p.style.animationDelay = Math.random() * 8 + 's';
+    p.style.animationDuration = (6 + Math.random() * 6) + 's';
+    container.appendChild(p);
+  }
+})();
+
+// ═══════════════════════════════════
+// PIN INPUT LOGIC
+// ═══════════════════════════════════
+function setupPinInputs(selector, onComplete) {
+  const pins = document.querySelectorAll(selector);
+  pins.forEach((input, idx) => {
+    input.addEventListener('input', function() {
+      this.value = this.value.replace(/[^0-9]/g, '');
+      if (this.value && idx < pins.length - 1) {
+        pins[idx + 1].focus();
+      }
+      const code = Array.from(pins).map(p => p.value);
+      if (code.every(v => v !== '')) onComplete(code);
+    });
+    input.addEventListener('keydown', function(e) {
+      if (e.key === 'Backspace' && !this.value && idx > 0) {
+        pins[idx - 1].focus();
+        pins[idx - 1].value = '';
+      }
+    });
+    // Paste support
+    input.addEventListener('paste', function(e) {
+      e.preventDefault();
+      const data = (e.clipboardData || window.clipboardData).getData('text').replace(/\D/g, '');
+      for (let i = 0; i < Math.min(data.length, pins.length); i++) {
+        pins[i].value = data[i];
+      }
+      if (data.length >= pins.length) {
+        pins[pins.length - 1].focus();
+        const code = Array.from(pins).map(p => p.value);
+        onComplete(code);
+      }
+    });
+  });
+}
+
+// Welcome PIN
+setupPinInputs('.pin-input', function(code) {
+  checkStartReady();
+});
+
+// Enable start button logic
+function checkStartReady() {
+  const name = document.getElementById('student-name').value.trim();
+  const pins = document.querySelectorAll('.pin-input');
+  const allFilled = Array.from(pins).every(p => p.value !== '');
+  document.getElementById('start-btn').disabled = !(name && allFilled);
+}
+
+document.getElementById('student-name').addEventListener('input', checkStartReady);
+
+// Start button
+document.getElementById('start-btn').addEventListener('click', function() {
+  const pins = document.querySelectorAll('.pin-input');
+  const entered = Array.from(pins).map(p => parseInt(p.value));
+
+  if (JSON.stringify(entered) === JSON.stringify(ACCESS_CODE)) {
+    // SUCCESS
+    pins.forEach(p => p.classList.add('success'));
+    studentName = document.getElementById('student-name').value.trim();
+    document.getElementById('display-name').textContent = studentName;
+
+    setTimeout(() => {
+      document.getElementById('welcome-screen').style.display = 'none';
+      document.getElementById('test-screen').style.display = 'block';
+      testActive = true;
+      enterFullscreen();
+    }, 500);
+  } else {
+    // WRONG
+    pins.forEach(p => p.classList.add('error'));
+    document.getElementById('pin-error').textContent = 'Incorrect access code. Please try again.';
+    setTimeout(() => {
+      pins.forEach(p => { p.classList.remove('error'); p.value = ''; });
+      pins[0].focus();
+      document.getElementById('pin-error').textContent = '';
+    }, 1500);
+  }
+});
+
+// ═══════════════════════════════════
+// FULLSCREEN
+// ═══════════════════════════════════
+function enterFullscreen() {
+  const el = document.documentElement;
+  try {
+    if (el.requestFullscreen) el.requestFullscreen();
+    else if (el.webkitRequestFullscreen) el.webkitRequestFullscreen();
+    else if (el.msRequestFullscreen) el.msRequestFullscreen();
+  } catch(e) {}
+}
+
+// ═══════════════════════════════════
+// PROCTORING SYSTEM
+// ═══════════════════════════════════
+function showProctorLock() {
+  if (!testActive || submitted) return;
+  const overlay = document.getElementById('proctor-overlay');
+  overlay.style.display = 'flex';
+  const pins = document.querySelectorAll('.proctor-pin');
+  pins.forEach(p => p.value = '');
+  document.getElementById('proctor-error').textContent = '';
+  setTimeout(() => pins[0].focus(), 100);
+}
+
+setupPinInputs('.proctor-pin', function() {});
+
+document.getElementById('proctor-unlock-btn').addEventListener('click', function() {
+  const pins = document.querySelectorAll('.proctor-pin');
+  const entered = Array.from(pins).map(p => parseInt(p.value));
+
+  if (JSON.stringify(entered) === JSON.stringify(PROCTOR_CODE)) {
+    document.getElementById('proctor-overlay').style.display = 'none';
+    enterFullscreen();
+  } else {
+    document.getElementById('proctor-error').textContent = 'Incorrect password. Contact your proctor.';
+    pins.forEach(p => p.value = '');
+    setTimeout(() => pins[0].focus(), 100);
+  }
+});
+
+// Detect tab switch / window blur
+document.addEventListener('visibilitychange', function() {
+  if (document.hidden && testActive && !submitted) {
+    showProctorLock();
+  }
+});
+
+window.addEventListener('blur', function() {
+  if (testActive && !submitted) {
+    showProctorLock();
+  }
+});
+
+// Detect fullscreen exit
+document.addEventListener('fullscreenchange', function() {
+  if (!document.fullscreenElement && testActive && !submitted) {
+    showProctorLock();
+  }
+});
+
+document.addEventListener('webkitfullscreenchange', function() {
+  if (!document.webkitFullscreenElement && testActive && !submitted) {
+    showProctorLock();
+  }
+});
+
+// ═══════════════════════════════════
+// PART NAVIGATION
+// ═══════════════════════════════════
+document.querySelectorAll('.part-nav-btn').forEach(btn => {
+  btn.addEventListener('click', function() {
+    const partNum = this.dataset.part;
+    document.querySelectorAll('.part-nav-btn').forEach(b => b.classList.remove('active'));
+    this.classList.add('active');
+    document.querySelectorAll('.part-section').forEach(s => s.classList.remove('active'));
+    document.getElementById('part-' + partNum).classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+});
+
+// ═══════════════════════════════════
+// COLLECT ANSWERS
+// ═══════════════════════════════════
+function collectAnswers() {
+  const answers = {};
+
+  // Part 1: text inputs Q1-Q10
+  for (let i = 1; i <= 10; i++) {
+    const el = document.querySelector(`[data-q="${i}"]`);
+    answers[`Q${i}`] = el ? el.value.trim() : '';
+  }
+
+  // Part 2: radio Q11-Q22
+  for (let i = 11; i <= 22; i++) {
+    const checked = document.querySelector(`input[name="q${i}"]:checked`);
+    answers[`Q${i}`] = checked ? checked.value : '';
+  }
+
+  // Part 3: time inputs Q23-Q30
+  for (let i = 23; i <= 30; i++) {
+    const el = document.querySelector(`[data-q="${i}"]`);
+    answers[`Q${i}`] = el ? el.value.trim() : '';
+  }
+
+  // Part 4: radio Q31-Q35
+  for (let i = 31; i <= 35; i++) {
+    const checked = document.querySelector(`input[name="q${i}"]:checked`);
+    answers[`Q${i}`] = checked ? checked.value : '';
+  }
+
+  // Part 5: text inputs Q36-Q40
+  for (let i = 36; i <= 40; i++) {
+    const el = document.querySelector(`[data-q="${i}"]`);
+    answers[`Q${i}`] = el ? el.value.trim() : '';
+  }
+
+  return answers;
+}
+
+// ═══════════════════════════════════
+// GENERATE ANSWER TEXT
+// ═══════════════════════════════════
+function generateAnswerText(answers) {
+  const lines = [];
+  lines.push('EDUNEST LISTENING TEST - ANSWER SHEET');
+  lines.push('======================================');
+  lines.push('Student Name: ' + studentName);
+  lines.push('Date: ' + new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'long', year: 'numeric' }));
+  lines.push('Test Owner: JONY');
+  lines.push('');
+
+  lines.push('PART 1 - Names and Places');
+  lines.push('---------------------------');
+  for (let i = 1; i <= 10; i++) {
+    lines.push(`Q${i}: ${answers['Q'+i] || '(no answer)'}`);
+  }
+  lines.push('');
+
+  lines.push('PART 2 - Dates (A or B)');
+  lines.push('---------------------------');
+  const p2Questions = [
+    "When's Lincoln's birthday?",
+    "Do you know Valentine's Day?",
+    "When's Washington's Birthday?",
+    "Do you know when April Fool's Day is?",
+    "When is Easter?",
+    "When is Mother's Day?",
+    "What date is Memorial Day?",
+    "Do you know when Father's Day is?",
+    "When is Independence Day?",
+    "When is Friendship Day?",
+    "When is Halloween?",
+    "When is Thanksgiving Day?"
+  ];
+  for (let i = 11; i <= 22; i++) {
+    lines.push(`Q${i}. ${p2Questions[i-11]} — ${answers['Q'+i] || '(no answer)'}`);
+  }
+  lines.push('');
+
+  lines.push('PART 3 - Times');
+  lines.push('---------------------------');
+  for (let i = 23; i <= 30; i++) {
+    lines.push(`Q${i}: ${answers['Q'+i] || '(no answer)'}`);
+  }
+  lines.push('');
+
+  lines.push('PART 4 - Multiple Choice (A, B or C)');
+  lines.push('--------------------------------------');
+  const p4Questions = [
+    'The girl will pay',
+    'The girl will get on the coach',
+    "The coach will be at the girl's stop at",
+    'In Edinburgh, the girl will visit',
+    'The whole trip takes'
+  ];
+  for (let i = 31; i <= 35; i++) {
+    lines.push(`Q${i}. ${p4Questions[i-31]} — ${answers['Q'+i] || '(no answer)'}`);
+  }
+  lines.push('');
+
+  lines.push('PART 5 - Message for Anna');
+  lines.push('---------------------------');
+  lines.push(`Q36. Name of shop: ${answers['Q36'] || '(no answer)'}`);
+  lines.push(`Q37. Size: ${answers['Q37'] || '(no answer)'}`);
+  lines.push(`Q38. Colour: ${answers['Q38'] || '(no answer)'}`);
+  lines.push(`Q39. Sale price: £${answers['Q39'] || '(no answer)'}`);
+  lines.push(`Q40. Tomorrow shop closes at: ${answers['Q40'] || '(no answer)'}`);
+  lines.push('');
+  lines.push('======================================');
+  lines.push('END OF ANSWER SHEET');
+
+  return lines.join('\n');
+}
+
+// ═══════════════════════════════════
+// SUBMIT ANSWERS — PDF DOWNLOAD
+// ═══════════════════════════════════
+function submitAnswers() {
+  if (submitted) return;
+
+  if (!confirm('Are you sure you want to submit your answers? You cannot change them after submission.')) return;
+
+  submitted = true;
+  const answers = collectAnswers();
+  const text = generateAnswerText(answers);
+
+  // Generate PDF using a printable HTML approach
+  generatePDF(answers, text);
+
+  document.getElementById('submit-btn').style.display = 'none';
+  document.getElementById('post-submit').style.display = 'block';
+}
+
+function generatePDF(answers, text) {
+  const date = new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'long', year: 'numeric' });
+
+  const p2Questions = [
+    "11. When's Lincoln's birthday?",
+    "12. Do you know Valentine's Day?",
+    "13. When's Washington's Birthday?",
+    "14. Do you know when April Fool's Day is?",
+    "15. When is Easter?",
+    "16. When is Mother's Day?",
+    "17. What date is Memorial Day?",
+    "18. Do you know when Father's Day is?",
+    "19. When is Independence Day?",
+    "20. When is Friendship Day?",
+    "21. When is Halloween?",
+    "22. When is Thanksgiving Day?"
+  ];
+
+  const p4Questions = [
+    '31. The girl will pay',
+    '32. The girl will get on the coach',
+    "33. The coach will be at the girl's stop at",
+    '34. In Edinburgh, the girl will visit',
+    '35. The whole trip takes'
+  ];
+
+  let html = `<!DOCTYPE html><html><head><meta charset="UTF-8"><style>
+    @page { size: A4; margin: 20mm; }
+    body { font-family: 'Segoe UI', Arial, sans-serif; color: #1a1a2e; line-height: 1.6; font-size: 13px; }
+    .header { text-align: center; border-bottom: 3px solid #4f46e5; padding-bottom: 14px; margin-bottom: 20px; }
+    .header h1 { font-size: 22px; color: #4f46e5; margin: 0 0 4px; }
+    .header p { margin: 2px 0; color: #555; font-size: 13px; }
+    .part-title { background: #4f46e5; color: white; padding: 8px 14px; border-radius: 6px; font-size: 14px; font-weight: 600; margin: 18px 0 10px; }
+    .q-row { display: flex; padding: 6px 0; border-bottom: 1px solid #eee; }
+    .q-label { font-weight: 600; min-width: 50px; color: #4f46e5; }
+    .q-question { flex: 1; color: #444; }
+    .q-answer { min-width: 140px; text-align: right; font-weight: 600; color: #1a1a2e; }
+    .msg-box { background: #f8f9fc; border: 1px solid #e0e0e0; border-radius: 8px; padding: 16px; margin-top: 10px; }
+    .msg-row { padding: 4px 0; }
+    .msg-label { color: #555; display: inline-block; min-width: 180px; }
+    .msg-value { font-weight: 600; }
+    .footer { text-align: center; margin-top: 30px; padding-top: 14px; border-top: 2px solid #eee; color: #999; font-size: 11px; }
+  </style></head><body>
+  <div class="header">
+    <h1>EDUNEST LISTENING TEST</h1>
+    <p><strong>Student:</strong> ${studentName}</p>
+    <p><strong>Date:</strong> ${date} &nbsp;&bull;&nbsp; <strong>Test Owner:</strong> JONY</p>
+  </div>
+
+  <div class="part-title">Part 1 — Names and Places</div>`;
+
+  for (let i = 1; i <= 10; i++) {
+    html += `<div class="q-row"><span class="q-label">Q${i}</span><span class="q-answer">${answers['Q'+i] || '—'}</span></div>`;
+  }
+
+  html += `<div class="part-title">Part 2 — Dates (A or B)</div>`;
+  for (let i = 11; i <= 22; i++) {
+    html += `<div class="q-row"><span class="q-label">Q${i}</span><span class="q-question">${p2Questions[i-11]}</span><span class="q-answer">${answers['Q'+i] || '—'}</span></div>`;
+  }
+
+  html += `<div class="part-title">Part 3 — Times</div>`;
+  for (let i = 23; i <= 30; i++) {
+    html += `<div class="q-row"><span class="q-label">Q${i}</span><span class="q-answer">${answers['Q'+i] || '—'}</span></div>`;
+  }
+
+  html += `<div class="part-title">Part 4 — Multiple Choice (A, B or C)</div>`;
+  for (let i = 31; i <= 35; i++) {
+    html += `<div class="q-row"><span class="q-label">Q${i}</span><span class="q-question">${p4Questions[i-31]}</span><span class="q-answer">${answers['Q'+i] || '—'}</span></div>`;
+  }
+
+  html += `<div class="part-title">Part 5 — Message for Anna</div>
+  <div class="msg-box">
+    <div class="msg-row"><span class="msg-label">From:</span> <span class="msg-value">Bob Watson</span></div>
+    <div class="msg-row"><span class="msg-label">Q36. Name of shop:</span> <span class="msg-value">${answers['Q36'] || '—'}</span></div>
+    <div class="msg-row"><span class="msg-label">Q37. Size:</span> <span class="msg-value">${answers['Q37'] || '—'}</span></div>
+    <div class="msg-row"><span class="msg-label">Q38. Colour:</span> <span class="msg-value">${answers['Q38'] || '—'}</span></div>
+    <div class="msg-row"><span class="msg-label">Q39. Sale price:</span> <span class="msg-value">£${answers['Q39'] || '—'}</span></div>
+    <div class="msg-row"><span class="msg-label">Q40. Shop closes at:</span> <span class="msg-value">${answers['Q40'] || '—'}</span></div>
+  </div>
+
+  <div class="footer">EDUNEST Listening Test &bull; Answer Sheet &bull; Test Owner: JONY</div>
+  </body></html>`;
+
+  // Open print dialog for PDF save
+  const printWindow = window.open('', '_blank');
+  if (printWindow) {
+    printWindow.document.write(html);
+    printWindow.document.close();
+    setTimeout(() => {
+      printWindow.print();
+    }, 500);
+  } else {
+    // Fallback: download as HTML file that can be printed to PDF
+    const blob = new Blob([html], { type: 'text/html' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `${studentName.replace(/\s+/g, '_')}_Listening_Answers.html`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }
+}
+
+// ═══════════════════════════════════
+// COPY ANSWERS — Cross-device
+// ═══════════════════════════════════
+function copyAnswers() {
+  const answers = collectAnswers();
+  const text = generateAnswerText(answers);
+
+  // Try modern clipboard API first
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(() => {
+      showCopyFeedback('Answers copied to clipboard!');
+    }).catch(() => {
+      fallbackCopy(text);
+    });
+  } else {
+    fallbackCopy(text);
+  }
+}
+
+function fallbackCopy(text) {
+  // Fallback for mobile and older browsers
+  const textarea = document.createElement('textarea');
+  textarea.value = text;
+  textarea.style.position = 'fixed';
+  textarea.style.left = '-9999px';
+  textarea.style.top = '0';
+  textarea.style.opacity = '0';
+  document.body.appendChild(textarea);
+
+  // iOS specific
+  const range = document.createRange();
+  textarea.contentEditable = true;
+  textarea.readOnly = false;
+  range.selectNodeContents(textarea);
+  const selection = window.getSelection();
+  selection.removeAllRanges();
+  selection.addRange(range);
+  textarea.setSelectionRange(0, text.length);
+
+  try {
+    document.execCommand('copy');
+    showCopyFeedback('Answers copied to clipboard!');
+  } catch (err) {
+    // Last resort: show text in a dialog
+    showCopyFeedback('Select all text below and copy manually:');
+    const modal = document.createElement('div');
+    modal.style.cssText = 'position:fixed;inset:0;z-index:99999;background:rgba(0,0,0,0.9);display:flex;align-items:center;justify-content:center;padding:20px;';
+    const inner = document.createElement('div');
+    inner.style.cssText = 'background:#1a2035;border-radius:16px;padding:24px;max-width:600px;width:100%;max-height:80vh;overflow:auto;';
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    ta.style.cssText = 'width:100%;height:400px;background:#111827;color:#f1f5f9;border:1px solid #333;border-radius:8px;padding:12px;font-family:monospace;font-size:12px;resize:none;';
+    ta.readOnly = true;
+    const closeBtn = document.createElement('button');
+    closeBtn.textContent = 'Close';
+    closeBtn.style.cssText = 'margin-top:12px;padding:10px 24px;background:#6366f1;color:white;border:none;border-radius:8px;cursor:pointer;font-size:14px;';
+    closeBtn.onclick = () => document.body.removeChild(modal);
+    inner.appendChild(ta);
+    inner.appendChild(closeBtn);
+    modal.appendChild(inner);
+    document.body.appendChild(modal);
+    ta.select();
+  }
+  document.body.removeChild(textarea);
+}
+
+function showCopyFeedback(msg) {
+  const el = document.getElementById('copy-feedback');
+  el.textContent = msg;
+  setTimeout(() => { el.textContent = ''; }, 3000);
+}
+</script>
+</body>
+</html>
