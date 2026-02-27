@@ -1,0 +1,1173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EDUNEST — Intermediate Listening Test 7</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   ROOT & RESET
+============================================================ */
+:root {
+  --red:       #C8102E;
+  --red-dark:  #8B0A1E;
+  --red-dim:   rgba(200,16,46,0.18);
+  --red-glow:  rgba(200,16,46,0.35);
+  --white:     #FFFFFF;
+  --off-white: #FFF9F9;
+  --cream:     #FDF1F3;
+  --border:    #EABFC7;
+  --text:      #1C0609;
+  --gray:      #6B6B6B;
+  --green:     #22C55E;
+  --green-dim: rgba(34,197,94,0.15);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Inter',sans-serif;background:#F7F8FC;min-height:100vh;overflow-x:hidden;}
+
+/* ============================================================
+   WELCOME SCREEN
+============================================================ */
+#welcomeScreen {
+  position: fixed; inset: 0; z-index: 9999;
+  background: #16213E;
+  display: flex; align-items: center; justify-content: center;
+  flex-direction: column;
+  overflow-y: auto; padding: 24px 16px;
+}
+
+.bg-particles { display: none; }
+
+.w-card {
+  position: relative; z-index: 2;
+  width: min(480px, 96vw);
+  text-align: center;
+  background: transparent; border: none;
+  border-radius: 0; padding: 0;
+  backdrop-filter: none; box-shadow: none;
+  animation: cardRise 0.7s cubic-bezier(0.16,1,0.3,1) both;
+}
+@keyframes cardRise {
+  from{opacity:0;transform:translateY(30px);}
+  to{opacity:1;transform:translateY(0);}
+}
+
+.w-logo { display: none; }
+.w-logo-wrap { margin-bottom: 0; }
+
+.w-pill {
+  display: inline-block;
+  background: #3B4A8A; color: #A8B4FF;
+  font-size: 10px; font-weight: 700;
+  letter-spacing: 3px; text-transform: uppercase;
+  padding: 7px 20px; border-radius: 100px;
+  margin-bottom: 28px; border: none;
+}
+.w-pill-dot { display: none; }
+
+.w-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(34px, 7vw, 48px); font-weight: 700;
+  color: #FFFFFF; line-height: 1.1; margin-bottom: 10px; text-shadow: none;
+}
+.w-meta {
+  font-size: 16px; color: rgba(255,255,255,0.55);
+  letter-spacing: 0; text-transform: none; margin-bottom: 10px;
+}
+.w-owner-line {
+  font-size: 11px; color: rgba(255,255,255,0.3);
+  letter-spacing: 3px; text-transform: uppercase;
+  margin-bottom: 36px; display: block;
+}
+
+.w-divider { display: none; }
+
+.w-steps { display: flex; flex-direction: column; gap: 22px; }
+.w-step  { text-align: left; }
+.w-step-head { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+.w-step-num  { display: none; }
+.w-step-title {
+  font-size: 11px; font-weight: 700;
+  letter-spacing: 2.5px; text-transform: uppercase;
+  color: rgba(255,255,255,0.55); transition: color 0.3s;
+}
+.w-step-title.lit { color: rgba(255,255,255,0.55); }
+
+.w-input-wrap { position: relative; }
+.w-input {
+  width: 100%; background: rgba(255,255,255,0.08);
+  border: none; border-radius: 16px; color: #fff;
+  font-family: 'Inter', sans-serif; font-size: 16px;
+  padding: 18px 50px 18px 20px; outline: none;
+  transition: background 0.25s, box-shadow 0.25s;
+}
+.w-input:focus { background: rgba(255,255,255,0.12); box-shadow: 0 0 0 2px rgba(100,130,255,0.4); }
+.w-input.valid { background: rgba(255,255,255,0.10); }
+.w-input::placeholder { color: rgba(255,255,255,0.28); }
+.w-input-icon {
+  position: absolute; right: 16px; top: 50%;
+  transform: translateY(-50%);
+  font-size: 18px; opacity: 0; transition: opacity 0.3s; pointer-events: none;
+}
+.w-input-icon.show { opacity: 1; }
+
+.pwd-box { background: transparent; border: none; padding: 0; box-shadow: none; }
+.pwd-box.lit { background: transparent; border: none; box-shadow: none; }
+.pwd-instr { display: none; }
+
+.digit-row {
+  display: flex; gap: 12px; justify-content: flex-start;
+  margin-bottom: 0; cursor: pointer;
+}
+.d-cell {
+  width: 72px; height: 72px; border-radius: 16px;
+  background: rgba(255,255,255,0.08); border: none;
+  display: flex; align-items: center; justify-content: center;
+  transition: background 0.22s, box-shadow 0.22s;
+}
+.d-cell.active  { background: rgba(255,255,255,0.13); box-shadow: 0 0 0 2px rgba(100,130,255,0.5); animation: none; }
+.d-cell.filled  { background: rgba(255,255,255,0.13); box-shadow: none; }
+.d-cell.correct { background: rgba(34,197,94,0.2); box-shadow: 0 0 0 2px rgba(34,197,94,0.5); animation: none; }
+.d-cell.wrong   { background: rgba(255,80,80,0.2); animation: shake-cell 0.42s ease; }
+@keyframes shake-cell {
+  0%,100%{transform:translateX(0);} 20%{transform:translateX(-7px);}
+  40%{transform:translateX(7px);} 60%{transform:translateX(-4px);} 80%{transform:translateX(4px);}
+}
+.d-dot   { width:14px;height:14px;border-radius:50%;background:rgba(255,255,255,0.7); }
+.d-dot-ok{ width:14px;height:14px;border-radius:50%;background:#22C55E; }
+.d-cursor{
+  width:2px;height:30px;border-radius:2px;
+  background:rgba(255,255,255,0.6);
+  animation:cur-blink 1s step-end infinite;
+}
+@keyframes cur-blink{0%,100%{opacity:1;}50%{opacity:0;}}
+
+.pwd-real{position:fixed;top:0;left:0;width:1px;height:1px;opacity:0;pointer-events:none;}
+.tap-btn{display:none;}
+
+.w-feedback {
+  margin-top:10px;height:0;overflow:hidden;border-radius:8px;
+  font-size:12px;font-weight:600;
+  display:flex;align-items:center;justify-content:center;gap:6px;
+  transition:height 0.3s,padding 0.3s,opacity 0.3s;opacity:0;
+}
+.w-feedback.show { height:34px;padding:0 12px;opacity:1; }
+.w-feedback.info    { background:rgba(100,130,255,0.15);color:#A8B4FF;border:1px solid rgba(100,130,255,0.3); }
+.w-feedback.success { background:rgba(34,197,94,0.15);color:#6EE89A;border:1px solid rgba(34,197,94,0.3); }
+.w-feedback.error   { background:rgba(255,80,80,0.15);color:#FF9090;border:1px solid rgba(255,80,80,0.3); }
+
+.w-start {
+  width:100%;margin-top:28px;
+  background:#3B4A8A;border:none;border-radius:16px;color:#fff;
+  font-family:'Inter',sans-serif;font-size:14px;font-weight:700;
+  letter-spacing:2.5px;text-transform:uppercase;padding:20px;
+  cursor:pointer;display:flex;align-items:center;justify-content:center;gap:12px;
+  transition:all 0.22s;box-shadow:0 4px 20px rgba(0,0,0,0.3);
+}
+.w-start:hover:not(:disabled){background:#4a5fa8;box-shadow:0 6px 28px rgba(0,0,0,0.4);}
+.w-start:disabled{opacity:0.4;cursor:not-allowed;}
+.w-arrow{font-size:16px;}
+
+.w-footer{font-size:11px;color:rgba(255,255,255,0.18);text-align:center;margin-top:24px;letter-spacing:0.8px;}
+
+
+/* ============================================================
+   PROCTOR OVERLAY
+============================================================ */
+#proctorOverlay{
+  display:none;position:fixed;inset:0;z-index:99999;
+  background:rgba(0,0,0,0.96);
+  align-items:center;justify-content:center;
+}
+.pro-box{
+  background:#130205;
+  border:2px solid var(--red);
+  border-radius:22px;padding:48px 40px;
+  text-align:center;max-width:390px;width:90%;
+  box-shadow:0 0 60px rgba(200,16,46,0.15);
+  animation:cardRise 0.4s cubic-bezier(0.16,1,0.3,1);
+}
+.pro-icon{font-size:46px;margin-bottom:14px;}
+.pro-title{font-family:'Cormorant Garamond',serif;font-size:26px;color:var(--red);margin-bottom:8px;}
+.pro-text{color:rgba(255,255,255,0.5);font-size:13px;line-height:1.6;margin-bottom:24px;}
+.pro-input{
+  width:100%;background:rgba(255,255,255,0.05);
+  border:1.5px solid rgba(200,16,46,0.3);border-radius:10px;
+  color:#fff;font-family:'JetBrains Mono',monospace;
+  font-size:26px;padding:13px;text-align:center;letter-spacing:10px;
+  outline:none;transition:all 0.2s;margin-bottom:10px;
+}
+.pro-input:focus{border-color:var(--red);}
+.pro-err{color:#FF8080;font-size:12px;margin-bottom:10px;display:none;}
+.pro-btn{
+  width:100%;background:var(--red);border:none;border-radius:10px;
+  color:#fff;font-size:14px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;
+  padding:14px;cursor:pointer;transition:all 0.2s;
+}
+.pro-btn:hover{background:var(--red-dark);}
+
+/* ============================================================
+   SUCCESS MODAL
+============================================================ */
+#successModal{
+  display:none;position:fixed;inset:0;z-index:9999;
+  background:rgba(0,0,0,0.72);
+  align-items:center;justify-content:center;padding:20px;
+}
+.suc-box{
+  background:#fff;border-radius:22px;
+  padding:44px;max-width:520px;width:100%;
+  text-align:center;
+  box-shadow:0 40px 80px rgba(0,0,0,0.3);
+  animation:cardRise 0.4s cubic-bezier(0.16,1,0.3,1);
+}
+.suc-icon{font-size:52px;margin-bottom:14px;}
+.suc-title{font-family:'Cormorant Garamond',serif;font-size:28px;color:var(--red);margin-bottom:6px;}
+.suc-sub{color:var(--gray);font-size:13px;margin-bottom:20px;}
+.suc-answers{
+  background:var(--cream);border:1px solid var(--border);border-radius:12px;
+  padding:18px;text-align:left;
+  font-family:'JetBrains Mono',monospace;font-size:11.5px;
+  color:var(--text);line-height:1.9;
+  max-height:240px;overflow-y:auto;margin-bottom:20px;
+}
+.suc-btns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;}
+.suc-btn{
+  font-family:'Inter',sans-serif;font-size:13px;font-weight:600;
+  border:none;border-radius:10px;padding:13px 24px;cursor:pointer;transition:all 0.2s;
+}
+.suc-btn.primary{background:var(--red);color:#fff;box-shadow:0 4px 14px rgba(200,16,46,0.3);}
+.suc-btn.secondary{background:var(--cream);border:1.5px solid var(--border);color:var(--red);}
+.suc-btn:hover{opacity:0.85;transform:translateY(-1px);}
+
+/* ============================================================
+   TEST SCREEN
+============================================================ */
+#testScreen{display:none;min-height:100vh;background:var(--off-white);}
+
+/* TOP BAR */
+.t-bar{
+  background:linear-gradient(135deg,var(--red-dark) 0%,var(--red) 100%);
+  height:62px;padding:0 28px;
+  display:flex;align-items:center;justify-content:space-between;
+  position:sticky;top:0;z-index:100;
+  box-shadow:0 4px 20px rgba(200,16,46,0.28);
+}
+.t-bar-left{display:flex;align-items:center;gap:12px;}
+.t-bar-logo{width:34px;height:34px;object-fit:contain;filter:brightness(0) invert(1);}
+.t-bar-title{
+  font-family:'Cormorant Garamond',serif;
+  font-size:18px;font-weight:700;color:#fff;letter-spacing:0.3px;
+}
+.t-bar-right{display:flex;align-items:center;gap:14px;}
+
+.t-student-chip{
+  background:rgba(255,255,255,0.14);
+  border:1px solid rgba(255,255,255,0.2);
+  border-radius:100px;color:#fff;
+  font-size:12px;font-weight:500;
+  padding:6px 13px;display:flex;align-items:center;gap:6px;
+  max-width:180px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;
+}
+
+/* Progress ring — compact, non-intrusive */
+.ring-wrap{
+  position:relative;width:44px;height:44px;
+  cursor:default;flex-shrink:0;
+}
+.ring-wrap svg{position:absolute;top:0;left:0;transform:rotate(-90deg);}
+.ring-bg{fill:none;stroke:rgba(255,255,255,0.14);stroke-width:3;}
+.ring-fg{fill:none;stroke:#fff;stroke-width:3;stroke-linecap:round;transition:stroke-dashoffset 0.5s;}
+.ring-label{
+  position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  font-family:'JetBrains Mono',monospace;font-size:9.5px;font-weight:500;color:#fff;
+}
+
+/* NAV TABS */
+.t-tabs{
+  background:#fff;border-bottom:2.5px solid var(--border);
+  padding:0 28px;display:flex;gap:0;overflow-x:auto;scrollbar-width:none;
+}
+.t-tab{
+  background:none;border:none;border-bottom:3px solid transparent;
+  margin-bottom:-2.5px;
+  font-family:'Inter',sans-serif;font-size:13px;font-weight:600;
+  color:var(--gray);padding:15px 22px;cursor:pointer;
+  white-space:nowrap;letter-spacing:0.2px;transition:all 0.2s;
+}
+.t-tab:hover{color:var(--red);}
+.t-tab.active{color:var(--red);border-bottom-color:var(--red);}
+
+/* section status dots on tab */
+.t-tab-count{
+  display:inline-flex;align-items:center;justify-content:center;
+  width:18px;height:18px;border-radius:50%;
+  background:rgba(200,16,46,0.1);
+  color:var(--red);font-size:9px;font-weight:700;
+  margin-left:6px;transition:all 0.3s;
+}
+.t-tab.active .t-tab-count{background:var(--red);color:#fff;}
+
+/* CONTENT */
+.t-content{max-width:820px;margin:0 auto;padding:36px 22px 110px;}
+
+.t-section{display:none;}
+.t-section.active{display:block;}
+
+/* Section header */
+.sec-hdr{
+  background:linear-gradient(135deg,var(--red) 0%,var(--red-dark) 100%);
+  border-radius:18px;padding:24px 30px;margin-bottom:28px;
+  color:#fff;position:relative;overflow:hidden;
+}
+.sec-hdr::before{
+  content:'';position:absolute;right:-16px;top:-16px;
+  width:100px;height:100px;border-radius:50%;background:rgba(255,255,255,0.07);
+}
+.sec-hdr::after{
+  content:'';position:absolute;right:18px;bottom:-28px;
+  width:70px;height:70px;border-radius:50%;background:rgba(255,255,255,0.04);
+}
+.sec-hdr-tag{font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;opacity:0.65;margin-bottom:6px;}
+.sec-hdr-title{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:700;line-height:1.4;}
+
+/* Question card */
+.q-card{
+  background:#fff;border:1.5px solid var(--border);
+  border-radius:15px;padding:26px 28px;margin-bottom:18px;
+  transition:box-shadow 0.2s,border-color 0.2s;
+}
+.q-card:hover{box-shadow:0 4px 18px rgba(200,16,46,0.07);}
+.q-card.answered{border-color:rgba(200,16,46,0.35);}
+
+.q-num{
+  display:inline-flex;align-items:center;justify-content:center;
+  width:27px;height:27px;border-radius:50%;
+  background:var(--red);color:#fff;
+  font-size:11px;font-weight:700;margin-bottom:11px;
+}
+.q-prompt{font-size:15px;font-weight:500;color:var(--text);margin-bottom:16px;line-height:1.5;}
+
+/* Options grid */
+.opt-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:8px;}
+.opt-grid.single-col{grid-template-columns:1fr;}
+
+.opt-lbl{
+  display:flex;align-items:flex-start;gap:10px;
+  padding:12px 15px;
+  border:1.5px solid var(--border);border-radius:11px;
+  cursor:pointer;transition:all 0.17s;user-select:none;
+}
+.opt-lbl:hover{border-color:var(--red);background:var(--cream);}
+.opt-lbl.selected{
+  border-color:var(--red);
+  background:rgba(200,16,46,0.05);
+}
+.opt-lbl input{accent-color:var(--red);width:15px;height:15px;flex-shrink:0;margin-top:2px;}
+.opt-text{font-size:14px;color:var(--text);line-height:1.4;}
+
+/* Fill-in table */
+.fill-tbl{width:100%;border-collapse:collapse;}
+.fill-tbl td{
+  padding:11px 0;border-bottom:1px solid var(--border);
+  font-size:14px;color:var(--text);vertical-align:middle;
+}
+.fill-tbl td:first-child{padding-right:14px;white-space:nowrap;font-weight:500;}
+.fill-tbl tr:last-child td{border-bottom:none;}
+.fill-in{
+  background:transparent;
+  border:none;border-bottom:2.5px solid rgba(200,16,46,0.25);
+  font-family:'Inter',sans-serif;font-size:14px;color:var(--text);
+  padding:4px 8px;outline:none;min-width:160px;
+  transition:border-color 0.2s;
+}
+.fill-in:focus{border-bottom-color:var(--red);}
+.fill-in.has-val{border-bottom-color:rgba(200,16,46,0.6);}
+
+/* Info box inside section */
+.info-box{
+  background:rgba(200,16,46,0.04);
+  border:1px solid rgba(200,16,46,0.15);
+  border-radius:12px;padding:16px 20px;margin-bottom:20px;
+}
+.info-box-title{font-weight:700;font-size:14px;color:var(--red);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;}
+.info-box-sub{font-size:13px;color:var(--gray);}
+
+/* BOTTOM BAR */
+.b-bar{
+  position:fixed;bottom:0;left:0;right:0;
+  background:#fff;border-top:2px solid var(--border);
+  padding:13px 28px;
+  display:flex;align-items:center;justify-content:space-between;gap:12px;
+  z-index:100;box-shadow:0 -4px 18px rgba(0,0,0,0.06);
+}
+.b-bar-left{font-size:12px;color:var(--gray);display:flex;align-items:center;gap:6px;}
+.b-answered-count{font-weight:700;color:var(--red);}
+.b-bar-right{display:flex;gap:10px;}
+.b-btn{
+  font-family:'Inter',sans-serif;font-size:13px;font-weight:600;
+  border:none;border-radius:10px;padding:11px 22px;cursor:pointer;transition:all 0.2s;
+}
+.b-btn.copy{background:var(--cream);border:1.5px solid var(--border);color:var(--red);}
+.b-btn.copy:hover{background:rgba(200,16,46,0.08);}
+.b-btn.submit{
+  background:linear-gradient(135deg,var(--red) 0%,var(--red-dark) 100%);
+  color:#fff;box-shadow:0 4px 14px rgba(200,16,46,0.28);
+}
+.b-btn.submit:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(200,16,46,0.4);}
+
+/* responsive */
+@media(max-width:580px){
+  .t-bar{padding:0 14px;height:56px;}
+  .t-bar-title{font-size:15px;}
+  .t-student-chip{max-width:100px;font-size:11px;}
+  .t-content{padding:22px 14px 110px;}
+  .q-card{padding:18px;}
+  .opt-grid{grid-template-columns:1fr;}
+  .b-bar{padding:11px 14px;}
+  .b-bar-left{display:none;}
+}
+</style>
+</head>
+<body>
+
+<!-- bg particles (decorative) -->
+<!-- ================================================================
+     WELCOME SCREEN
+================================================================ -->
+<div id="welcomeScreen">
+  <div class="w-card">
+
+    <div class="w-logo-wrap">
+      <div class="w-pill">EDUNEST CD PLATFORM</div>
+    </div>
+
+    <h1 class="w-title">Intermediate Listening<br>Test 7</h1>
+    <p class="w-meta">3 Sections · 20 Questions</p>
+    <span class="w-owner-line">TEST OWNER: JONY</span>
+
+    <div class="w-steps">
+
+      <!-- Step 1 — Name -->
+      <div class="w-step" id="wStep1">
+        <div class="w-step-head">
+          <div class="w-step-num" id="sNum1"></div>
+          <div class="w-step-title lit" id="sTitle1">YOUR FULL NAME</div>
+        </div>
+        <div class="w-input-wrap">
+          <input class="w-input" id="nameInput" type="text"
+            placeholder="Enter your full name..."
+            autocomplete="off"
+            oninput="onNameType(this)"
+            onblur="onNameBlur(this)">
+          <div class="w-input-icon" id="nameIcon">✅</div>
+        </div>
+      </div>
+
+
+
+    </div>
+
+    <button class="w-start" id="startBtn" onclick="tryStart()" disabled>
+      <span>&#9658;</span><span>BEGIN TEST</span>
+    </button>
+
+    <p class="w-footer">© 2025 EDUNEST · Secure Assessment Environment</p>
+  </div>
+</div>
+
+<!-- ================================================================
+     PROCTOR OVERLAY
+================================================================ -->
+<div id="proctorOverlay" style="display:none;">
+  <div class="pro-box">
+    <div class="pro-icon">🔒</div>
+    <div class="pro-title">Test Suspended</div>
+    <div class="pro-text">You left the test window.<br>Enter the supervisor password to continue.</div>
+    <input class="pro-input" id="proInput" type="password"
+      inputmode="numeric" maxlength="4" placeholder="••••"
+      onkeydown="if(event.key==='Enter')unlockProctor()">
+    <div class="pro-err" id="proErr">Incorrect password. Contact your supervisor.</div>
+    <button class="pro-btn" onclick="unlockProctor()">RESUME TEST</button>
+  </div>
+</div>
+
+<!-- ================================================================
+     SUCCESS MODAL
+================================================================ -->
+<div id="successModal" style="display:none;">
+  <div class="suc-box">
+    <div class="suc-icon">✅</div>
+    <div class="suc-title">Answers Submitted!</div>
+    <div class="suc-sub">Your responses have been recorded. Copy or save below.</div>
+    <div class="suc-answers" id="sucAnswers"></div>
+    <div class="suc-btns">
+      <button class="suc-btn secondary" onclick="copyFromModal()">📋 Copy Answers</button>
+      <button class="suc-btn primary" onclick="savePDF()">💾 Save as PDF</button>
+      <button class="suc-btn secondary" onclick="document.getElementById('successModal').style.display='none'">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- ================================================================
+     TEST SCREEN
+================================================================ -->
+<div id="testScreen">
+
+  <!-- Top bar -->
+  <div class="t-bar">
+    <div class="t-bar-left">
+      <img class="t-bar-logo"
+        src="https://image2url.com/r2/default/images/1769700366134-01db5cda-e300-4af6-8039-9c7cad80199a.png"
+        alt="EDUNEST" onerror="this.style.display='none'">
+      <span class="t-bar-title">EDUNEST · Listening Test 7</span>
+    </div>
+    <div class="t-bar-right">
+      <div class="t-student-chip">👤 <span id="chipName">Student</span></div>
+      <!-- Progress ring -->
+      <div class="ring-wrap" title="Answered questions">
+        <svg width="44" height="44" viewBox="0 0 44 44">
+          <circle class="ring-bg" cx="22" cy="22" r="18"/>
+          <circle class="ring-fg" id="ringFg" cx="22" cy="22" r="18"
+            stroke-dasharray="113.1" stroke-dashoffset="113.1"/>
+        </svg>
+        <div class="ring-label" id="ringLabel">0%</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Navigation tabs -->
+  <div class="t-tabs">
+    <button class="t-tab active" id="tab0" onclick="goSection(0,this)">
+      🎧 Section 1 <span class="t-tab-count" id="tc0">10</span>
+    </button>
+    <button class="t-tab" id="tab1" onclick="goSection(1,this)">
+      🎧 Section 2 <span class="t-tab-count" id="tc1">5</span>
+    </button>
+    <button class="t-tab" id="tab2" onclick="goSection(2,this)">
+      🎧 Section 3 <span class="t-tab-count" id="tc2">5</span>
+    </button>
+  </div>
+
+  <!-- Content -->
+  <div class="t-content">
+
+    <!-- ===================== SECTION 1 ===================== -->
+    <div class="t-section active" id="sec0">
+      <div class="sec-hdr">
+        <div class="sec-hdr-tag">Section 1 &nbsp;·&nbsp; Questions 1–10</div>
+        <div class="sec-hdr-title">Listen to 5 people talking about their jobs.<br>For questions 1–10, choose the correct answer.</div>
+      </div>
+
+      <!-- Q1 -->
+      <div class="q-card" id="qc1">
+        <div class="q-num">1</div>
+        <div class="q-prompt">James is a …</div>
+        <div class="opt-grid">
+          <label class="opt-lbl"><input type="radio" name="q1" value="A" onchange="onAns('q1')"> <span class="opt-text">A. Pilot</span></label>
+          <label class="opt-lbl"><input type="radio" name="q1" value="B" onchange="onAns('q1')"> <span class="opt-text">B. Flight attendant</span></label>
+          <label class="opt-lbl"><input type="radio" name="q1" value="C" onchange="onAns('q1')"> <span class="opt-text">C. Airport cleaner</span></label>
+        </div>
+      </div>
+
+      <!-- Q2 -->
+      <div class="q-card" id="qc2">
+        <div class="q-num">2</div>
+        <div class="q-prompt">James …</div>
+        <div class="opt-grid single-col">
+          <label class="opt-lbl"><input type="radio" name="q2" value="A" onchange="onAns('q2')"> <span class="opt-text">A. Is from a different country</span></label>
+          <label class="opt-lbl"><input type="radio" name="q2" value="B" onchange="onAns('q2')"> <span class="opt-text">B. Cleans uniforms</span></label>
+          <label class="opt-lbl"><input type="radio" name="q2" value="C" onchange="onAns('q2')"> <span class="opt-text">C. Travels a lot</span></label>
+        </div>
+      </div>
+
+      <!-- Q3 -->
+      <div class="q-card" id="qc3">
+        <div class="q-num">3</div>
+        <div class="q-prompt">Anna is a …</div>
+        <div class="opt-grid">
+          <label class="opt-lbl"><input type="radio" name="q3" value="A" onchange="onAns('q3')"> <span class="opt-text">A. Teacher</span></label>
+          <label class="opt-lbl"><input type="radio" name="q3" value="B" onchange="onAns('q3')"> <span class="opt-text">B. School bus driver</span></label>
+          <label class="opt-lbl"><input type="radio" name="q3" value="C" onchange="onAns('q3')"> <span class="opt-text">C. Children's coach</span></label>
+        </div>
+      </div>
+
+      <!-- Q4 -->
+      <div class="q-card" id="qc4">
+        <div class="q-num">4</div>
+        <div class="q-prompt">Anna …</div>
+        <div class="opt-grid single-col">
+          <label class="opt-lbl"><input type="radio" name="q4" value="A" onchange="onAns('q4')"> <span class="opt-text">A. Doesn't like some children very much</span></label>
+          <label class="opt-lbl"><input type="radio" name="q4" value="B" onchange="onAns('q4')"> <span class="opt-text">B. Has to do some work in the evenings</span></label>
+          <label class="opt-lbl"><input type="radio" name="q4" value="C" onchange="onAns('q4')"> <span class="opt-text">C. Only works in the mornings</span></label>
+        </div>
+      </div>
+
+      <!-- Q5 -->
+      <div class="q-card" id="qc5">
+        <div class="q-num">5</div>
+        <div class="q-prompt">Phil is a …</div>
+        <div class="opt-grid">
+          <label class="opt-lbl"><input type="radio" name="q5" value="A" onchange="onAns('q5')"> <span class="opt-text">A. Receptionist</span></label>
+          <label class="opt-lbl"><input type="radio" name="q5" value="B" onchange="onAns('q5')"> <span class="opt-text">B. Hotel manager</span></label>
+          <label class="opt-lbl"><input type="radio" name="q5" value="C" onchange="onAns('q5')"> <span class="opt-text">C. Chef</span></label>
+        </div>
+      </div>
+
+      <!-- Q6 -->
+      <div class="q-card" id="qc6">
+        <div class="q-num">6</div>
+        <div class="q-prompt">Phil …</div>
+        <div class="opt-grid single-col">
+          <label class="opt-lbl"><input type="radio" name="q6" value="A" onchange="onAns('q6')"> <span class="opt-text">A. Works in a small hotel</span></label>
+          <label class="opt-lbl"><input type="radio" name="q6" value="B" onchange="onAns('q6')"> <span class="opt-text">B. Doesn't like his work</span></label>
+          <label class="opt-lbl"><input type="radio" name="q6" value="C" onchange="onAns('q6')"> <span class="opt-text">C. Would like to work at a different place in the future</span></label>
+        </div>
+      </div>
+
+      <!-- Q7 -->
+      <div class="q-card" id="qc7">
+        <div class="q-num">7</div>
+        <div class="q-prompt">Lucy is a …</div>
+        <div class="opt-grid">
+          <label class="opt-lbl"><input type="radio" name="q7" value="A" onchange="onAns('q7')"> <span class="opt-text">A. Waitress</span></label>
+          <label class="opt-lbl"><input type="radio" name="q7" value="B" onchange="onAns('q7')"> <span class="opt-text">B. Manager</span></label>
+          <label class="opt-lbl"><input type="radio" name="q7" value="C" onchange="onAns('q7')"> <span class="opt-text">C. Store assistant</span></label>
+        </div>
+      </div>
+
+      <!-- Q8 -->
+      <div class="q-card" id="qc8">
+        <div class="q-num">8</div>
+        <div class="q-prompt">Lucy …</div>
+        <div class="opt-grid">
+          <label class="opt-lbl"><input type="radio" name="q8" value="A" onchange="onAns('q8')"> <span class="opt-text">A. Hates her uniform</span></label>
+          <label class="opt-lbl"><input type="radio" name="q8" value="B" onchange="onAns('q8')"> <span class="opt-text">B. Likes her job</span></label>
+          <label class="opt-lbl"><input type="radio" name="q8" value="C" onchange="onAns('q8')"> <span class="opt-text">C. Doesn't like her job</span></label>
+        </div>
+      </div>
+
+      <!-- Q9 -->
+      <div class="q-card" id="qc9">
+        <div class="q-num">9</div>
+        <div class="q-prompt">Dan is a …</div>
+        <div class="opt-grid">
+          <label class="opt-lbl"><input type="radio" name="q9" value="A" onchange="onAns('q9')"> <span class="opt-text">A. Nurse</span></label>
+          <label class="opt-lbl"><input type="radio" name="q9" value="B" onchange="onAns('q9')"> <span class="opt-text">B. Hospital cleaner</span></label>
+          <label class="opt-lbl"><input type="radio" name="q9" value="C" onchange="onAns('q9')"> <span class="opt-text">C. Teacher</span></label>
+        </div>
+      </div>
+
+      <!-- Q10 -->
+      <div class="q-card" id="qc10">
+        <div class="q-num">10</div>
+        <div class="q-prompt">Dan …</div>
+        <div class="opt-grid single-col">
+          <label class="opt-lbl"><input type="radio" name="q10" value="A" onchange="onAns('q10')"> <span class="opt-text">A. Always works in the day</span></label>
+          <label class="opt-lbl"><input type="radio" name="q10" value="B" onchange="onAns('q10')"> <span class="opt-text">B. Needs to take medicine</span></label>
+          <label class="opt-lbl"><input type="radio" name="q10" value="C" onchange="onAns('q10')"> <span class="opt-text">C. Plays with the children</span></label>
+        </div>
+      </div>
+    </div><!-- /sec0 -->
+
+    <!-- ===================== SECTION 2 ===================== -->
+    <div class="t-section" id="sec1">
+      <div class="sec-hdr">
+        <div class="sec-hdr-tag">Section 2 &nbsp;·&nbsp; Questions 11–15</div>
+        <div class="sec-hdr-title">You will hear a woman talking to a shop assistant about buying a video film for her daughter.<br>Listen and complete questions 11–15.</div>
+      </div>
+
+      <div class="info-box">
+        <div class="info-box-title">🎬 VIDEO</div>
+        <div class="info-box-sub">Actor in film: <strong>Brad Smith</strong></div>
+      </div>
+
+      <div class="q-card" id="qc11">
+        <table class="fill-tbl">
+          <tr>
+            <td><span class="q-num" style="display:inline-flex;margin-bottom:0;margin-right:6px;">11</span> Name of film:</td>
+            <td>Blue <input class="fill-in" id="q11" placeholder="___________" oninput="onFill('q11')"></td>
+          </tr>
+          <tr>
+            <td><span class="q-num" style="display:inline-flex;margin-bottom:0;margin-right:6px;">12</span> For people:</td>
+            <td><input class="fill-in" id="q12" placeholder="___________" oninput="onFill('q12')"> years old or more</td>
+          </tr>
+          <tr>
+            <td><span class="q-num" style="display:inline-flex;margin-bottom:0;margin-right:6px;">13</span> Cost:</td>
+            <td>£<input class="fill-in" id="q13" placeholder="___________" oninput="onFill('q13')"></td>
+          </tr>
+          <tr>
+            <td><span class="q-num" style="display:inline-flex;margin-bottom:0;margin-right:6px;">14</span> Video shop in:</td>
+            <td><input class="fill-in" id="q14" placeholder="___________" oninput="onFill('q14')"> Street</td>
+          </tr>
+          <tr>
+            <td><span class="q-num" style="display:inline-flex;margin-bottom:0;margin-right:6px;">15</span> Opposite:</td>
+            <td><input class="fill-in" id="q15" placeholder="___________" oninput="onFill('q15')"></td>
+          </tr>
+        </table>
+      </div>
+    </div><!-- /sec1 -->
+
+    <!-- ===================== SECTION 3 ===================== -->
+    <div class="t-section" id="sec2">
+      <div class="sec-hdr">
+        <div class="sec-hdr-tag">Section 3 &nbsp;·&nbsp; Questions 16–20</div>
+        <div class="sec-hdr-title">You will hear some information about a visitor to a school.<br>Listen and complete questions 16–20.</div>
+      </div>
+
+      <div class="info-box">
+        <div class="info-box-title">🏫 BLACKBURN SCHOOL — Visiting Speaker</div>
+        <div class="info-box-sub">Day: <strong>Thursday</strong></div>
+      </div>
+
+      <div class="q-card" id="qc16">
+        <table class="fill-tbl">
+          <tr>
+            <td><span class="q-num" style="display:inline-flex;margin-bottom:0;margin-right:6px;">16</span> Name:</td>
+            <td>Dr Robert <input class="fill-in" id="q16" placeholder="___________" oninput="onFill('q16')"></td>
+          </tr>
+          <tr>
+            <td><span class="q-num" style="display:inline-flex;margin-bottom:0;margin-right:6px;">17</span> Subject:</td>
+            <td>Space <input class="fill-in" id="q17" placeholder="___________" oninput="onFill('q17')"></td>
+          </tr>
+          <tr>
+            <td><span class="q-num" style="display:inline-flex;margin-bottom:0;margin-right:6px;">18</span> Place:</td>
+            <td>School <input class="fill-in" id="q18" placeholder="___________" oninput="onFill('q18')"></td>
+          </tr>
+          <tr>
+            <td><span class="q-num" style="display:inline-flex;margin-bottom:0;margin-right:6px;">19</span> Time of talk:</td>
+            <td><input class="fill-in" id="q19" placeholder="___________" oninput="onFill('q19')"> p.m.</td>
+          </tr>
+          <tr>
+            <td><span class="q-num" style="display:inline-flex;margin-bottom:0;margin-right:6px;">20</span> Tickets for parents cost:</td>
+            <td>£<input class="fill-in" id="q20" placeholder="___________" oninput="onFill('q20')"></td>
+          </tr>
+        </table>
+      </div>
+    </div><!-- /sec2 -->
+
+  </div><!-- /t-content -->
+
+  <!-- Bottom bar -->
+  <div class="b-bar">
+    <div class="b-bar-left">
+      <span>Answered:</span>
+      <span class="b-answered-count" id="answeredCount">0</span>
+      <span>/ 20</span>
+    </div>
+    <div class="b-bar-right">
+      <button class="b-btn copy" onclick="copyAnswersDirect()">📋 Copy Answers</button>
+      <button class="b-btn submit" onclick="submitTest()">✔ Submit Answers</button>
+    </div>
+  </div>
+
+</div><!-- /testScreen -->
+
+<!-- ================================================================
+     JAVASCRIPT
+================================================================ -->
+<script>
+/* ---- CONSTANTS ---- */
+const CORRECT_PWD  = '0620';
+const PROCTOR_PWD  = '2110';
+const TOTAL_QS     = 20;
+
+/* ---- STATE ---- */
+let codeBuf    = '';
+let codeFocused = false;
+let studentName = '';
+let submitted   = false;
+
+/* ============================================================
+   BACKGROUND PARTICLES
+============================================================ */
+(function spawnParticles(){
+  const wrap = document.getElementById('bgParticles');
+  for(let i=0;i<18;i++){
+    const p = document.createElement('div');
+    p.className = 'particle';
+    const size = 20 + Math.random()*60;
+    p.style.cssText = `
+      width:${size}px;height:${size}px;
+      left:${Math.random()*100}%;
+      animation-duration:${8+Math.random()*14}s;
+      animation-delay:${-Math.random()*14}s;
+      opacity:${0.04+Math.random()*0.06};
+    `;
+    wrap.appendChild(p);
+  }
+})();
+
+/* ============================================================
+   WELCOME — NAME STEP
+============================================================ */
+function onNameType(el){
+  const v = el.value.trim();
+  const icon = document.getElementById('nameIcon');
+  const num  = document.getElementById('sNum1');
+  if(v.length >= 2){
+    el.classList.add('valid');
+    icon.classList.add('show');
+    if(num){ num.classList.add('done'); num.textContent='✓'; }
+    document.getElementById('startBtn').disabled = false;
+  } else {
+    el.classList.remove('valid');
+    icon.classList.remove('show');
+    if(num){ num.classList.remove('done'); num.textContent='1'; }
+    document.getElementById('startBtn').disabled = true;
+  }
+}
+
+function onNameBlur(el){ /* no code step */ }
+
+/* ============================================================
+   WELCOME — CODE STEP
+============================================================ */
+function activateCode(){
+  const inp = document.getElementById('codeInput');
+  inp.style.opacity='0';
+  inp.style.position='fixed';
+  inp.style.top='0'; inp.style.left='0';
+  inp.style.width='1px'; inp.style.height='1px';
+  inp.focus();
+}
+
+function onCodeFocus(){
+  codeFocused = true;
+  document.getElementById('pwdBox').classList.add('lit');
+  renderCells();
+}
+
+function onCodeBlur(){
+  codeFocused = false;
+  renderCells();
+}
+
+function onCodeType(el){
+  el.value = el.value.replace(/\D/g,'').slice(0,4);
+  codeBuf = el.value;
+  renderCells();
+
+  // live feedback
+  const rem = 4 - codeBuf.length;
+  if(codeBuf.length > 0 && codeBuf.length < 4){
+    setFeedback('info', `${rem} digit${rem>1?'s':''} remaining…`);
+  } else if(codeBuf.length === 0){
+    clearFeedback();
+  }
+  if(codeBuf.length === 4) setTimeout(checkCode, 180);
+}
+
+function renderCells(){
+  for(let i=0;i<4;i++){
+    const cell = document.getElementById('dc'+i);
+    const isFilled   = i < codeBuf.length;
+    const isActive   = (i === codeBuf.length) && codeFocused;
+    cell.className = 'd-cell';
+    cell.innerHTML = '';
+    if(isFilled){
+      cell.classList.add('filled');
+      const d = document.createElement('div'); d.className='d-dot'; cell.appendChild(d);
+    } else if(isActive){
+      cell.classList.add('active');
+      const c = document.createElement('div'); c.className='d-cursor'; cell.appendChild(c);
+    }
+  }
+}
+
+function setFeedback(type, msg){
+  const fb = document.getElementById('codeFeedback');
+  fb.className = 'w-feedback '+type+' show';
+  fb.textContent = msg;
+}
+
+function clearFeedback(){
+  const fb = document.getElementById('codeFeedback');
+  fb.className = 'w-feedback';
+  fb.textContent = '';
+}
+
+function checkCode(){
+  const name = document.getElementById('nameInput').value.trim();
+  if(!name){
+    setFeedback('error','⚠️ Please enter your name first');
+    codeBuf=''; document.getElementById('codeInput').value=''; renderCells();
+    document.getElementById('nameInput').focus();
+    return;
+  }
+  if(codeBuf === CORRECT_PWD){
+    // success animation
+    for(let i=0;i<4;i++){
+      const cell=document.getElementById('dc'+i);
+      cell.className='d-cell correct';
+      cell.innerHTML='<div class="d-dot-ok"></div>';
+    }
+    setFeedback('success','✓ Access granted — launching test…');
+    setTimeout(()=>launchTest(name), 850);
+  } else {
+    for(let i=0;i<4;i++){
+      const cell=document.getElementById('dc'+i);
+      cell.className='d-cell wrong';
+    }
+    setFeedback('error','✗ Wrong code — please try again');
+    codeBuf=''; document.getElementById('codeInput').value='';
+    setTimeout(()=>{ renderCells(); clearFeedback(); }, 1300);
+  }
+}
+
+function tryStart(){
+  const name = document.getElementById('nameInput').value.trim();
+  if(!name){ document.getElementById('nameInput').focus(); return; }
+  launchTest(name);
+}
+
+/* ============================================================
+   LAUNCH TEST
+============================================================ */
+function launchTest(name){
+  studentName = name;
+  document.getElementById('chipName').textContent = name;
+  const ws = document.getElementById('welcomeScreen');
+  ws.style.transition = 'opacity 0.5s';
+  ws.style.opacity = '0';
+  setTimeout(()=>{
+    ws.style.display='none';
+    document.getElementById('testScreen').style.display='block';
+    enterFullscreen();
+    setupProctoring();
+    updateProgress();
+  },500);
+}
+
+/* ============================================================
+   FULLSCREEN
+============================================================ */
+function enterFullscreen(){
+  const el = document.documentElement;
+  try{
+    if(el.requestFullscreen) el.requestFullscreen();
+    else if(el.webkitRequestFullscreen) el.webkitRequestFullscreen();
+    else if(el.mozRequestFullScreen) el.mozRequestFullScreen();
+  }catch(e){}
+}
+
+/* ============================================================
+   PROCTORING
+============================================================ */
+function setupProctoring(){
+  document.addEventListener('visibilitychange',()=>{ if(document.hidden && !submitted) showProctor(); });
+  window.addEventListener('blur',()=>{ if(!submitted) showProctor(); });
+}
+function showProctor(){
+  const ov = document.getElementById('proctorOverlay');
+  ov.style.display='flex';
+  document.getElementById('proInput').value='';
+  document.getElementById('proErr').style.display='none';
+  setTimeout(()=>document.getElementById('proInput').focus(),100);
+}
+function unlockProctor(){
+  if(document.getElementById('proInput').value === PROCTOR_PWD){
+    document.getElementById('proctorOverlay').style.display='none';
+    enterFullscreen();
+  } else {
+    document.getElementById('proErr').style.display='block';
+    document.getElementById('proInput').value='';
+  }
+}
+
+/* ============================================================
+   NAVIGATION
+============================================================ */
+function goSection(idx, btn){
+  document.querySelectorAll('.t-section').forEach((s,i)=>s.classList.toggle('active',i===idx));
+  document.querySelectorAll('.t-tab').forEach(t=>t.classList.remove('active'));
+  btn.classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+/* ============================================================
+   VISUAL FEEDBACK ON ANSWER
+============================================================ */
+function onAns(name){
+  // highlight selected
+  document.querySelectorAll(`input[name="${name}"]`).forEach(inp=>{
+    inp.closest('.opt-lbl').classList.toggle('selected', inp.checked);
+  });
+  // mark card answered
+  const card = document.querySelector(`input[name="${name}"]`)?.closest('.q-card');
+  if(card) card.classList.add('answered');
+  updateProgress();
+  updateTabCounts();
+}
+
+function onFill(id){
+  const el = document.getElementById(id);
+  el.classList.toggle('has-val', el.value.trim().length > 0);
+  updateProgress();
+  updateTabCounts();
+}
+
+/* ============================================================
+   PROGRESS
+============================================================ */
+function countAnswered(){
+  let n = 0;
+  // radio q1-q10
+  for(let i=1;i<=10;i++){
+    if(document.querySelector(`input[name="q${i}"]:checked`)) n++;
+  }
+  // fill q11-q20
+  for(let i=11;i<=20;i++){
+    const el=document.getElementById('q'+i);
+    if(el && el.value.trim()) n++;
+  }
+  return n;
+}
+
+function updateProgress(){
+  const n = countAnswered();
+  const pct = Math.round((n/TOTAL_QS)*100);
+  const circ = 113.1;
+  const offset = circ - (pct/100)*circ;
+  document.getElementById('ringFg').style.strokeDashoffset = offset;
+  document.getElementById('ringLabel').textContent = pct+'%';
+  document.getElementById('answeredCount').textContent = n;
+}
+
+function updateTabCounts(){
+  // sec1: q1-q10 radio
+  let s1=0;
+  for(let i=1;i<=10;i++) if(document.querySelector(`input[name="q${i}"]:checked`)) s1++;
+  document.getElementById('tc0').textContent = s1+'/10';
+
+  // sec2: q11-q15 fill
+  let s2=0;
+  for(let i=11;i<=15;i++) if(document.getElementById('q'+i)?.value.trim()) s2++;
+  document.getElementById('tc1').textContent = s2+'/5';
+
+  // sec3: q16-q20 fill
+  let s3=0;
+  for(let i=16;i<=20;i++) if(document.getElementById('q'+i)?.value.trim()) s3++;
+  document.getElementById('tc2').textContent = s3+'/5';
+}
+
+/* ============================================================
+   COLLECT & FORMAT ANSWERS
+============================================================ */
+function collectAnswers(){
+  const a = {};
+  for(let i=1;i<=10;i++){
+    const el=document.querySelector(`input[name="q${i}"]:checked`);
+    a['q'+i] = el ? el.value : '—';
+  }
+  for(let i=11;i<=20;i++){
+    const el=document.getElementById('q'+i);
+    a['q'+i] = el ? (el.value.trim()||'—') : '—';
+  }
+  return a;
+}
+
+function formatAnswers(a){
+  const dt = new Date().toLocaleString();
+  let t = `EDUNEST — Intermediate Listening Test 7\n`;
+  t += `Student : ${studentName}\n`;
+  t += `Date    : ${dt}\n`;
+  t += `${'─'.repeat(46)}\n\n`;
+  t += `SECTION 1  (Questions 1–10)\n`;
+  for(let i=1;i<=10;i++) t+=`  Q${String(i).padStart(2,'0')}: ${a['q'+i]}\n`;
+  t += `\nSECTION 2  (Questions 11–15)\n`;
+  t += `  Q11 Name of film  : Blue ${a.q11}\n`;
+  t += `  Q12 Age restriction: ${a.q12} years old or more\n`;
+  t += `  Q13 Cost          : £${a.q13}\n`;
+  t += `  Q14 Video shop in : ${a.q14} Street\n`;
+  t += `  Q15 Opposite      : ${a.q15}\n`;
+  t += `\nSECTION 3  (Questions 16–20)\n`;
+  t += `  Q16 Name          : Dr Robert ${a.q16}\n`;
+  t += `  Q17 Subject       : Space ${a.q17}\n`;
+  t += `  Q18 Place         : School ${a.q18}\n`;
+  t += `  Q19 Time          : ${a.q19} p.m.\n`;
+  t += `  Q20 Ticket price  : £${a.q20}\n`;
+  return t;
+}
+
+/* ============================================================
+   SUBMIT
+============================================================ */
+function submitTest(){
+  submitted = true;
+  const a = collectAnswers();
+  const txt = formatAnswers(a);
+  document.getElementById('sucAnswers').innerText = txt;
+  document.getElementById('successModal').style.display='flex';
+}
+
+/* ============================================================
+   COPY
+============================================================ */
+function doCopy(text){
+  if(navigator.clipboard){
+    navigator.clipboard.writeText(text).then(()=>alert('✅ Answers copied to clipboard!'));
+  } else {
+    const ta=document.createElement('textarea');
+    ta.value=text; document.body.appendChild(ta);
+    ta.select(); document.execCommand('copy');
+    document.body.removeChild(ta);
+    alert('✅ Answers copied!');
+  }
+}
+function copyFromModal(){ doCopy(document.getElementById('sucAnswers').innerText); }
+function copyAnswersDirect(){ doCopy(formatAnswers(collectAnswers())); }
+
+/* ============================================================
+   SAVE PDF
+============================================================ */
+function savePDF(){
+  const a = collectAnswers();
+  const dt = new Date().toLocaleString();
+  const win = window.open('','_blank');
+  win.document.write(`<!DOCTYPE html><html><head>
+<meta charset="UTF-8">
+<title>Listening Test 7 — ${studentName}</title>
+<style>
+  body{font-family:Arial,sans-serif;max-width:680px;margin:40px auto;color:#1C0609;font-size:14px;}
+  h1{color:#C8102E;font-size:22px;border-bottom:3px solid #C8102E;padding-bottom:10px;margin-bottom:6px;}
+  .meta{color:#888;font-size:12px;margin-bottom:24px;}
+  h2{color:#C8102E;font-size:13px;text-transform:uppercase;letter-spacing:1.5px;margin:22px 0 10px;border-left:4px solid #C8102E;padding-left:10px;}
+  .row{display:flex;gap:8px;padding:7px 0;border-bottom:1px solid #f0d0d5;}
+  .row:last-child{border-bottom:none;}
+  .ql{font-weight:700;color:#8B0A1E;min-width:40px;}
+  .info{background:#FDF1F3;border:1px solid #EABFC7;border-radius:8px;padding:12px 16px;margin-bottom:12px;font-size:13px;}
+  @media print{body{margin:20px;}}
+</style>
+</head><body>
+<h1>EDUNEST — Intermediate Listening Test 7</h1>
+<div class="meta">Student: <strong>${studentName}</strong> &nbsp;|&nbsp; Submitted: ${dt}</div>
+
+<h2>Section 1 — Questions 1–10</h2>
+${[1,2,3,4,5,6,7,8,9,10].map(i=>`<div class="row"><span class="ql">Q${i}</span><span>${a['q'+i]}</span></div>`).join('')}
+
+<h2>Section 2 — Questions 11–15</h2>
+<div class="info">Actor: <strong>Brad Smith</strong></div>
+<div class="row"><span class="ql">Q11</span><span>Name of film: Blue ${a.q11}</span></div>
+<div class="row"><span class="ql">Q12</span><span>Age: ${a.q12} years old or more</span></div>
+<div class="row"><span class="ql">Q13</span><span>Cost: £${a.q13}</span></div>
+<div class="row"><span class="ql">Q14</span><span>Video shop in: ${a.q14} Street</span></div>
+<div class="row"><span class="ql">Q15</span><span>Opposite: ${a.q15}</span></div>
+
+<h2>Section 3 — Questions 16–20</h2>
+<div class="info">Blackburn School — Visiting Speaker &nbsp;|&nbsp; Day: <strong>Thursday</strong></div>
+<div class="row"><span class="ql">Q16</span><span>Name: Dr Robert ${a.q16}</span></div>
+<div class="row"><span class="ql">Q17</span><span>Subject: Space ${a.q17}</span></div>
+<div class="row"><span class="ql">Q18</span><span>Place: School ${a.q18}</span></div>
+<div class="row"><span class="ql">Q19</span><span>Time: ${a.q19} p.m.</span></div>
+<div class="row"><span class="ql">Q20</span><span>Ticket price: £${a.q20}</span></div>
+
+<p style="margin-top:32px;color:#bbb;font-size:11px;">EDUNEST · Test by JONY · ${dt}</p>
+<script>window.onload=function(){window.print();}<\/script>
+</body></html>`);
+  win.document.close();
+}
+</script>
+</body>
+</html>
