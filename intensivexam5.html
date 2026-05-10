@@ -1,0 +1,922 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EDUNEST – Intensive Reading Test 5</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+
+:root {
+  --blue-900: #0c1d3a;
+  --blue-800: #122c55;
+  --blue-700: #1a3f7a;
+  --blue-600: #2158a8;
+  --blue-500: #2d6fd6;
+  --blue-400: #5a9bf5;
+  --blue-300: #8cbbff;
+  --blue-200: #bdd7ff;
+  --blue-100: #e0edff;
+  --blue-50: #f0f6ff;
+  --white: #ffffff;
+  --gray-50: #f8fafc;
+  --gray-100: #f1f5f9;
+  --gray-200: #e2e8f0;
+  --gray-300: #cbd5e1;
+  --gray-400: #94a3b8;
+  --gray-500: #64748b;
+  --gray-600: #475569;
+  --gray-700: #334155;
+  --accent: #f59e0b;
+  --accent-light: #fef3c7;
+  --danger: #ef4444;
+  --success: #10b981;
+}
+
+html, body { height:100%; font-family:'DM Sans', sans-serif; background:var(--blue-900); color:var(--gray-700); overflow:hidden; }
+
+/* ===================== WELCOME SCREEN ===================== */
+#welcomeScreen {
+  position:fixed; inset:0; z-index:9999;
+  display:flex; align-items:center; justify-content:center;
+  background: linear-gradient(135deg, var(--blue-900) 0%, var(--blue-800) 40%, var(--blue-700) 100%);
+  overflow:hidden;
+}
+#welcomeScreen::before {
+  content:''; position:absolute; inset:0;
+  background: radial-gradient(circle at 20% 80%, rgba(45,111,214,0.15) 0%, transparent 50%),
+              radial-gradient(circle at 80% 20%, rgba(90,155,245,0.1) 0%, transparent 50%);
+}
+.welcome-particles {
+  position:absolute; inset:0; overflow:hidden;
+}
+.particle {
+  position:absolute; border-radius:50%; background:rgba(255,255,255,0.04);
+  animation: float 20s infinite ease-in-out;
+}
+.particle:nth-child(1) { width:300px; height:300px; top:-50px; left:-50px; animation-delay:0s; }
+.particle:nth-child(2) { width:200px; height:200px; bottom:10%; right:5%; animation-delay:-5s; }
+.particle:nth-child(3) { width:150px; height:150px; top:40%; left:60%; animation-delay:-10s; }
+.particle:nth-child(4) { width:250px; height:250px; top:60%; left:20%; animation-delay:-15s; }
+
+@keyframes float {
+  0%, 100% { transform:translateY(0) scale(1); }
+  50% { transform:translateY(-30px) scale(1.05); }
+}
+
+.welcome-card {
+  position:relative; z-index:2;
+  background: rgba(255,255,255,0.97);
+  backdrop-filter: blur(20px);
+  border-radius: 24px;
+  padding: 48px 44px;
+  width: 420px;
+  max-width: 92vw;
+  box-shadow: 0 25px 60px rgba(0,0,0,0.3), 0 0 0 1px rgba(255,255,255,0.1);
+  text-align: center;
+  animation: cardIn 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+@keyframes cardIn {
+  from { opacity:0; transform:translateY(30px) scale(0.95); }
+  to { opacity:1; transform:translateY(0) scale(1); }
+}
+
+.welcome-logo { width:80px; height:80px; object-fit:contain; margin-bottom:16px; }
+.welcome-brand { font-family:'Playfair Display', serif; font-size:28px; font-weight:700; color:var(--blue-900); margin-bottom:4px; }
+.welcome-sub { font-size:13px; color:var(--gray-500); margin-bottom:6px; letter-spacing:0.5px; text-transform:uppercase; }
+.welcome-owner { font-size:12px; color:var(--blue-500); font-weight:600; margin-bottom:28px; letter-spacing:1px; }
+.welcome-divider { height:1px; background:var(--gray-200); margin-bottom:28px; }
+
+.field-group { text-align:left; margin-bottom:20px; }
+.field-label { display:block; font-size:12px; font-weight:600; color:var(--gray-500); text-transform:uppercase; letter-spacing:0.8px; margin-bottom:8px; }
+.field-input {
+  width:100%; padding:14px 16px; border:2px solid var(--gray-200); border-radius:12px;
+  font-family:'DM Sans', sans-serif; font-size:15px; color:var(--blue-900);
+  transition: border-color 0.25s, box-shadow 0.25s;
+  background:var(--gray-50);
+}
+.field-input:focus { outline:none; border-color:var(--blue-500); box-shadow:0 0 0 4px rgba(45,111,214,0.1); background:var(--white); }
+.field-input::placeholder { color:var(--gray-400); }
+
+.pin-container { display:flex; gap:10px; justify-content:center; }
+.pin-digit {
+  width:56px; height:60px; text-align:center; font-size:24px; font-weight:700;
+  border:2px solid var(--gray-200); border-radius:14px; color:var(--blue-900);
+  background:var(--gray-50); font-family:'DM Sans', sans-serif;
+  transition: border-color 0.25s, box-shadow 0.25s, transform 0.15s;
+}
+.pin-digit:focus { outline:none; border-color:var(--blue-500); box-shadow:0 0 0 4px rgba(45,111,214,0.1); background:var(--white); transform:scale(1.05); }
+
+.error-msg { color:var(--danger); font-size:13px; margin-top:10px; min-height:20px; font-weight:500; }
+
+.start-btn {
+  width:100%; padding:16px; border:none; border-radius:14px;
+  background: linear-gradient(135deg, var(--blue-600), var(--blue-500));
+  color:var(--white); font-family:'DM Sans', sans-serif; font-size:16px; font-weight:600;
+  cursor:pointer; transition: transform 0.2s, box-shadow 0.2s;
+  margin-top:8px; letter-spacing:0.3px;
+}
+.start-btn:hover { transform:translateY(-2px); box-shadow:0 8px 25px rgba(45,111,214,0.4); }
+.start-btn:active { transform:translateY(0); }
+.start-btn:disabled { opacity:0.5; cursor:not-allowed; transform:none; box-shadow:none; }
+
+/* ===================== PROCTOR OVERLAY ===================== */
+#proctorOverlay {
+  position:fixed; inset:0; z-index:99999;
+  background: rgba(12,29,58,0.97);
+  display:none; align-items:center; justify-content:center;
+  backdrop-filter:blur(10px);
+}
+.proctor-card {
+  background:var(--white); border-radius:20px; padding:44px; width:400px; max-width:90vw;
+  text-align:center; box-shadow:0 20px 50px rgba(0,0,0,0.4);
+}
+.proctor-icon { font-size:48px; margin-bottom:16px; }
+.proctor-title { font-family:'Playfair Display', serif; font-size:22px; color:var(--blue-900); margin-bottom:8px; }
+.proctor-text { font-size:14px; color:var(--gray-500); margin-bottom:24px; line-height:1.6; }
+.proctor-pin-container { display:flex; gap:10px; justify-content:center; margin-bottom:12px; }
+.proctor-pin {
+  width:52px; height:56px; text-align:center; font-size:22px; font-weight:700;
+  border:2px solid var(--gray-200); border-radius:12px; color:var(--blue-900);
+  background:var(--gray-50); font-family:'DM Sans', sans-serif;
+}
+.proctor-pin:focus { outline:none; border-color:var(--blue-500); box-shadow:0 0 0 4px rgba(45,111,214,0.1); }
+.proctor-error { color:var(--danger); font-size:13px; min-height:20px; margin-bottom:8px; font-weight:500; }
+
+/* ===================== MAIN TEST ===================== */
+#testScreen { display:none; height:100vh; flex-direction:column; background:var(--gray-50); }
+
+.test-header {
+  display:flex; align-items:center; justify-content:space-between;
+  padding:10px 24px; background:var(--white);
+  border-bottom:1px solid var(--gray-200);
+  box-shadow:0 1px 4px rgba(0,0,0,0.04);
+  flex-shrink:0; min-height:56px;
+}
+.header-left { display:flex; align-items:center; gap:12px; }
+.header-logo { width:36px; height:36px; object-fit:contain; }
+.header-title { font-family:'Playfair Display', serif; font-size:17px; color:var(--blue-900); font-weight:700; }
+.header-badge { font-size:11px; background:var(--blue-100); color:var(--blue-700); padding:3px 10px; border-radius:20px; font-weight:600; }
+.header-right { display:flex; align-items:center; gap:16px; }
+.student-name-display { font-size:13px; color:var(--gray-500); }
+.student-name-display strong { color:var(--blue-900); }
+
+/* Progress Ring */
+.progress-ring-container {
+  position:relative; width:42px; height:42px; cursor:pointer;
+}
+.progress-ring-container svg { transform:rotate(-90deg); }
+.progress-ring-bg { fill:none; stroke:var(--gray-200); stroke-width:3.5; }
+.progress-ring-fill { fill:none; stroke:var(--blue-500); stroke-width:3.5; stroke-linecap:round; transition:stroke-dashoffset 0.5s ease; }
+.progress-ring-text {
+  position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+  font-size:10px; font-weight:700; color:var(--blue-700);
+}
+
+/* Split Pane */
+.test-body { display:flex; flex:1; overflow:hidden; }
+
+.passage-pane {
+  width:50%; border-right:1px solid var(--gray-200); overflow-y:auto;
+  background:var(--white); padding:32px 36px;
+}
+.questions-pane {
+  width:50%; overflow-y:auto; background:var(--gray-50); padding:32px 36px;
+}
+
+/* Passage Styling */
+.passage-label {
+  display:inline-block; font-size:11px; font-weight:700; text-transform:uppercase;
+  letter-spacing:1.2px; color:var(--blue-500); background:var(--blue-50);
+  padding:4px 12px; border-radius:6px; margin-bottom:12px;
+}
+.passage-title {
+  font-family:'Playfair Display', serif; font-size:22px; font-weight:700;
+  color:var(--blue-900); line-height:1.35; margin-bottom:20px;
+}
+.passage-text { font-size:14.5px; line-height:1.85; color:var(--gray-700); text-align:justify; }
+.passage-text p { margin-bottom:16px; }
+.passage-divider { height:2px; background:linear-gradient(to right, var(--blue-200), transparent); margin:36px 0; }
+
+/* Questions Styling */
+.q-section-title {
+  font-family:'Playfair Display', serif; font-size:17px; font-weight:700;
+  color:var(--blue-900); margin-bottom:6px;
+}
+.q-section-instruction {
+  font-size:13px; color:var(--gray-500); margin-bottom:20px; font-style:italic; line-height:1.5;
+}
+.q-block { margin-bottom:22px; }
+.q-number {
+  display:inline-flex; align-items:center; justify-content:center;
+  width:28px; height:28px; border-radius:50%; font-size:12px; font-weight:700;
+  background:var(--blue-100); color:var(--blue-700); margin-right:8px; flex-shrink:0;
+}
+.q-number.answered { background:var(--blue-500); color:var(--white); }
+.q-text { font-size:14px; color:var(--gray-700); margin-bottom:10px; display:flex; align-items:baseline; line-height:1.5; }
+.q-text span { flex:1; }
+
+/* TFN Buttons */
+.tfn-group { display:flex; gap:8px; margin-left:36px; }
+.tfn-btn {
+  padding:7px 16px; border:2px solid var(--gray-200); border-radius:8px;
+  background:var(--white); font-size:13px; font-weight:600; color:var(--gray-600);
+  cursor:pointer; transition:all 0.2s; font-family:'DM Sans', sans-serif;
+}
+.tfn-btn:hover { border-color:var(--blue-300); color:var(--blue-600); }
+.tfn-btn.selected { background:var(--blue-500); border-color:var(--blue-500); color:var(--white); }
+
+/* MCQ */
+.mcq-group { margin-left:36px; }
+.mcq-option {
+  display:flex; align-items:flex-start; gap:10px; padding:10px 14px;
+  border:2px solid var(--gray-200); border-radius:10px; margin-bottom:8px;
+  cursor:pointer; transition:all 0.2s; background:var(--white);
+}
+.mcq-option:hover { border-color:var(--blue-300); background:var(--blue-50); }
+.mcq-option.selected { border-color:var(--blue-500); background:var(--blue-50); }
+.mcq-letter {
+  width:26px; height:26px; border-radius:50%; display:flex; align-items:center; justify-content:center;
+  font-size:12px; font-weight:700; background:var(--gray-100); color:var(--gray-600);
+  flex-shrink:0; transition:all 0.2s;
+}
+.mcq-option.selected .mcq-letter { background:var(--blue-500); color:var(--white); }
+.mcq-option-text { font-size:13.5px; color:var(--gray-700); line-height:1.5; padding-top:2px; }
+
+/* Fill-in */
+.fill-input {
+  display:inline-block; width:140px; border:none; border-bottom:2px solid var(--gray-300);
+  padding:4px 2px; font-family:'DM Sans', sans-serif; font-size:14px; color:var(--blue-900);
+  background:transparent; transition:border-color 0.25s; margin:0 4px;
+}
+.fill-input:focus { outline:none; border-bottom-color:var(--blue-500); }
+
+.q-divider { height:1px; background:var(--gray-200); margin:28px 0; }
+
+/* ===================== BOTTOM BAR ===================== */
+.bottom-bar {
+  display:flex; align-items:center; justify-content:center; gap:14px;
+  padding:14px 24px; background:var(--white);
+  border-top:1px solid var(--gray-200);
+  flex-shrink:0;
+}
+.action-btn {
+  padding:12px 28px; border:none; border-radius:12px;
+  font-family:'DM Sans', sans-serif; font-size:14px; font-weight:600;
+  cursor:pointer; transition:all 0.2s; display:flex; align-items:center; gap:8px;
+}
+.submit-btn {
+  background:linear-gradient(135deg, var(--blue-600), var(--blue-500));
+  color:var(--white);
+}
+.submit-btn:hover { transform:translateY(-1px); box-shadow:0 6px 20px rgba(45,111,214,0.35); }
+.copy-btn {
+  background:var(--white); color:var(--blue-700); border:2px solid var(--blue-200);
+}
+.copy-btn:hover { background:var(--blue-50); border-color:var(--blue-400); }
+
+/* ===================== SUBMITTED OVERLAY ===================== */
+#submittedOverlay {
+  position:fixed; inset:0; z-index:10000;
+  background:rgba(12,29,58,0.95); display:none;
+  align-items:center; justify-content:center; backdrop-filter:blur(8px);
+}
+.submitted-card {
+  background:var(--white); border-radius:24px; padding:48px; width:440px; max-width:90vw;
+  text-align:center; box-shadow:0 25px 60px rgba(0,0,0,0.4);
+}
+.submitted-icon { font-size:56px; margin-bottom:16px; }
+.submitted-title { font-family:'Playfair Display', serif; font-size:24px; color:var(--blue-900); margin-bottom:8px; }
+.submitted-text { font-size:14px; color:var(--gray-500); margin-bottom:24px; line-height:1.6; }
+.submitted-copy-btn {
+  padding:14px 32px; border:2px solid var(--blue-200); border-radius:12px;
+  background:var(--white); color:var(--blue-700); font-family:'DM Sans', sans-serif;
+  font-size:14px; font-weight:600; cursor:pointer; transition:all 0.2s;
+}
+.submitted-copy-btn:hover { background:var(--blue-50); border-color:var(--blue-400); }
+.copy-feedback { font-size:13px; color:var(--success); margin-top:12px; min-height:20px; font-weight:500; }
+
+/* ===================== SCROLLBAR ===================== */
+.passage-pane::-webkit-scrollbar, .questions-pane::-webkit-scrollbar { width:6px; }
+.passage-pane::-webkit-scrollbar-track, .questions-pane::-webkit-scrollbar-track { background:transparent; }
+.passage-pane::-webkit-scrollbar-thumb, .questions-pane::-webkit-scrollbar-thumb { background:var(--gray-300); border-radius:3px; }
+.passage-pane::-webkit-scrollbar-thumb:hover, .questions-pane::-webkit-scrollbar-thumb:hover { background:var(--gray-400); }
+
+/* ===================== MOBILE ===================== */
+@media (max-width:768px) {
+  .welcome-card { padding:36px 28px; }
+  .pin-digit { width:48px; height:52px; font-size:20px; }
+  .test-body { flex-direction:column; }
+  .passage-pane, .questions-pane { width:100%; height:50%; border-right:none; padding:20px; }
+  .passage-pane { border-bottom:2px solid var(--gray-200); }
+  .passage-title { font-size:18px; }
+  .test-header { padding:8px 16px; }
+  .header-title { font-size:14px; }
+  .bottom-bar { padding:10px 16px; gap:10px; }
+  .action-btn { padding:10px 18px; font-size:13px; }
+}
+
+/* ===================== PRINT / PDF ===================== */
+@media print {
+  body { background:white !important; overflow:visible !important; }
+  #welcomeScreen, #proctorOverlay, .test-header, .bottom-bar, #submittedOverlay { display:none !important; }
+  #testScreen { display:block !important; height:auto !important; }
+  .test-body { display:block !important; overflow:visible !important; }
+  .passage-pane, .questions-pane { display:none !important; }
+  #printArea { display:block !important; padding:30px; }
+  .print-header { text-align:center; margin-bottom:24px; border-bottom:2px solid #1a3f7a; padding-bottom:16px; }
+  .print-logo { width:50px; height:50px; }
+  .print-title { font-family:'Playfair Display', serif; font-size:20px; color:#0c1d3a; margin:8px 0 4px; }
+  .print-student { font-size:14px; color:#475569; }
+  .print-answer-row { display:flex; justify-content:space-between; padding:8px 12px; border-bottom:1px solid #e2e8f0; font-size:14px; }
+  .print-answer-row:nth-child(even) { background:#f8fafc; }
+  .print-q-num { font-weight:700; color:#1a3f7a; width:100px; }
+  .print-q-ans { color:#0c1d3a; flex:1; text-align:right; }
+}
+#printArea { display:none; }
+</style>
+</head>
+<body>
+
+<!-- ==================== WELCOME SCREEN ==================== -->
+<div id="welcomeScreen">
+  <div class="welcome-particles">
+    <div class="particle"></div><div class="particle"></div><div class="particle"></div><div class="particle"></div>
+  </div>
+  <div class="welcome-card">
+    <img class="welcome-logo" src="https://image2url.com/r2/default/images/1769700366134-01db5cda-e300-4af6-8039-9c7cad80199a.png" alt="EDUNEST" onerror="this.style.display='none'">
+    <div class="welcome-brand">EDUNEST</div>
+    <div class="welcome-sub">Intensive Reading Test 5</div>
+    <div class="welcome-owner">Test Owner: GULRUX</div>
+    <div class="welcome-divider"></div>
+    <div class="field-group">
+      <label class="field-label">Your Full Name</label>
+      <input class="field-input" type="text" id="studentName" placeholder="Enter your name..." autocomplete="off">
+    </div>
+    <div class="field-group">
+      <label class="field-label">Access Code</label>
+      <div class="pin-container">
+        <input class="pin-digit" type="tel" maxlength="1" id="pin1" autocomplete="off">
+        <input class="pin-digit" type="tel" maxlength="1" id="pin2" autocomplete="off">
+        <input class="pin-digit" type="tel" maxlength="1" id="pin3" autocomplete="off">
+        <input class="pin-digit" type="tel" maxlength="1" id="pin4" autocomplete="off">
+      </div>
+      <div class="error-msg" id="welcomeError"></div>
+    </div>
+    <button class="start-btn" id="startBtn" onclick="startTest()">Begin Test</button>
+  </div>
+</div>
+
+<!-- ==================== PROCTOR OVERLAY ==================== -->
+<div id="proctorOverlay">
+  <div class="proctor-card">
+    <div class="proctor-icon">🔒</div>
+    <div class="proctor-title">Test Paused</div>
+    <div class="proctor-text">You left the test window. Please enter the proctor code to continue.</div>
+    <div class="proctor-pin-container">
+      <input class="proctor-pin" type="tel" maxlength="1" id="ppin1" autocomplete="off">
+      <input class="proctor-pin" type="tel" maxlength="1" id="ppin2" autocomplete="off">
+      <input class="proctor-pin" type="tel" maxlength="1" id="ppin3" autocomplete="off">
+      <input class="proctor-pin" type="tel" maxlength="1" id="ppin4" autocomplete="off">
+    </div>
+    <div class="proctor-error" id="proctorError"></div>
+  </div>
+</div>
+
+<!-- ==================== MAIN TEST ==================== -->
+<div id="testScreen">
+  <div class="test-header">
+    <div class="header-left">
+      <img class="header-logo" src="https://image2url.com/r2/default/images/1769700366134-01db5cda-e300-4af6-8039-9c7cad80199a.png" alt="EN" onerror="this.style.display='none'">
+      <div class="header-title">Intensive Reading Test 5</div>
+      <div class="header-badge">GULRUX</div>
+    </div>
+    <div class="header-right">
+      <div class="student-name-display">Student: <strong id="displayStudentName"></strong></div>
+      <div class="progress-ring-container" title="Answered questions">
+        <svg width="42" height="42" viewBox="0 0 42 42">
+          <circle class="progress-ring-bg" cx="21" cy="21" r="18"/>
+          <circle class="progress-ring-fill" id="progressRing" cx="21" cy="21" r="18"
+            stroke-dasharray="113.1" stroke-dashoffset="113.1"/>
+        </svg>
+        <div class="progress-ring-text" id="progressText">0/40</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="test-body">
+    <!-- LEFT: PASSAGES -->
+    <div class="passage-pane" id="passagePane">
+      <div class="passage-label">Passage 1</div>
+      <div class="passage-title">The University of Met Gala: Fashion as a Cultural Thesis</div>
+      <div class="passage-text">
+        <p>The Met Gala is often dismissed as a mere parade of vanity—a high-octane red carpet where celebrities flaunt avant-garde costumes. However, for those who study the intersection of history and sociology, the event serves as an unofficial "University of Met Gala." It is a masterclass in how clothing reflects the political, religious, and social shifts of human civilization. Each year, the Costume Institute at the Metropolitan Museum of Art selects a theme that demands rigorous academic research from its attendees. It is not just about looking beautiful; it is about interpreting a complex thesis through the medium of fabric.</p>
+        <p>Historically, the Gala began in 1948 as a midnight supper to raise funds for the newly founded Costume Institute. Since then, it has evolved into a global phenomenon. The "curriculum" of this university changes annually. For instance, the 2018 theme, <em>Heavenly Bodies: Fashion and the Catholic Imagination</em>, forced designers to delve into centuries of ecclesiastical history. This required an understanding of how religious iconography has influenced secular aesthetics. Students of fashion had to analyze the relationship between the sacred and the profane, much like a theology student would analyze ancient scripts.</p>
+        <p>Furthermore, the Met Gala acts as a bridge between the past and the future. Designers often use historical silhouettes—such as the Victorian corset or the 18th-century pannier—and reimagine them using modern technology like 3D printing. This synthesis of old and new provides a unique pedagogical tool for observers. It teaches us that nothing in culture is truly "new"; rather, everything is a sophisticated remix of what came before. When a celebrity wears a dress made of recycled ocean plastic, they are not just making a fashion statement; they are presenting a lecture on environmental ethics and the future of sustainable manufacturing.</p>
+        <p>Critics argue that the event is elitist, but its educational impact is undeniable. The exhibitions that follow the Gala attract hundreds of thousands of visitors, many of whom have never stepped foot in an art museum. By using the "hook" of celebrity culture, the Met Gala educates the public on textile conservation, the evolution of gender roles in dress, and the craftsmanship of haute couture. It is a brilliant example of "stealth education," where the audience learns profound historical lessons while believing they are simply consuming entertainment.</p>
+      </div>
+
+      <div class="passage-divider"></div>
+
+      <div class="passage-label">Passage 2</div>
+      <div class="passage-title">The Digital Erosion: How Short-Form Content Shrinks the Mind</div>
+      <div class="passage-text">
+        <p>In the modern era, the human brain is under siege by a relentless tide of "Shorts," "Reels," and "TikToks." These bite-sized videos, usually lasting less than sixty seconds, are designed to trigger an immediate dopamine hit. While they offer a quick escape from boredom, psychologists are increasingly worried about their long-term impact on cognitive function, particularly memory and attention span. We are witnessing a shift from "deep processing" to "surface browsing," a change that could have devastating consequences for the next generation of learners.</p>
+        <p>The primary danger of short-form content lies in the way it disrupts the "encoding" process of memory. For information to move from short-term to long-term memory, the brain requires time and focus. However, the rapid-fire nature of Shorts prevents this. Before the brain can process the first video, the user has already swiped to the next. This creates a state of "cognitive overload," where the brain becomes a sieve rather than a sponge. Consequently, frequent users find it difficult to remember what they watched just ten minutes prior, leading to a phenomenon known as "digital amnesia."</p>
+        <p>Moreover, the "infinite scroll" algorithm is engineered to be addictive. It exploits the brain's novelty-seeking behavior. Each new video provides a small reward, keeping the user in a loop for hours. This constant stimulation raises the threshold for what we find interesting. As a result, traditional forms of learning—such as reading a 600-word passage or listening to a lecture—feel agonizingly slow and boring. The brain becomes "re-wired" to expect instant gratification, making the sustained effort required for academic success feel almost impossible.</p>
+        <p>To protect our mental health, we must practice "digital hygiene." This involves intentionally choosing long-form content over snippets. Reading a book, for example, requires the brain to build complex mental maps and follow logical arguments, which strengthens neural pathways. By abandoning the mindless scroll, we can reclaim our ability to focus and ensure that our memories are built on solid ground rather than the shifting sands of 15-second clips. The choice is simple: feed your brain or distract it.</p>
+      </div>
+    </div>
+
+    <!-- RIGHT: QUESTIONS -->
+    <div class="questions-pane" id="questionsPane">
+
+      <!-- ====== PASSAGE 1 QUESTIONS ====== -->
+      <div class="q-section-title">Passage 1 — Questions 1–6</div>
+      <div class="q-section-instruction">Do the following statements agree with the information given in the passage? Choose TRUE, FALSE, or NOT GIVEN.</div>
+
+      <div class="q-block" id="qblock1">
+        <div class="q-text"><span class="q-number" id="qn1">1</span><span>The primary purpose of the first Met Gala was to showcase celebrity fashion.</span></div>
+        <div class="tfn-group">
+          <button class="tfn-btn" onclick="selectTFN(1,'True')">True</button>
+          <button class="tfn-btn" onclick="selectTFN(1,'False')">False</button>
+          <button class="tfn-btn" onclick="selectTFN(1,'Not Given')">Not Given</button>
+        </div>
+      </div>
+      <div class="q-block" id="qblock2">
+        <div class="q-text"><span class="q-number" id="qn2">2</span><span>The 2018 theme required designers to research religious history.</span></div>
+        <div class="tfn-group">
+          <button class="tfn-btn" onclick="selectTFN(2,'True')">True</button>
+          <button class="tfn-btn" onclick="selectTFN(2,'False')">False</button>
+          <button class="tfn-btn" onclick="selectTFN(2,'Not Given')">Not Given</button>
+        </div>
+      </div>
+      <div class="q-block" id="qblock3">
+        <div class="q-text"><span class="q-number" id="qn3">3</span><span>Every guest at the Met Gala is required to write a short essay about their outfit.</span></div>
+        <div class="tfn-group">
+          <button class="tfn-btn" onclick="selectTFN(3,'True')">True</button>
+          <button class="tfn-btn" onclick="selectTFN(3,'False')">False</button>
+          <button class="tfn-btn" onclick="selectTFN(3,'Not Given')">Not Given</button>
+        </div>
+      </div>
+      <div class="q-block" id="qblock4">
+        <div class="q-text"><span class="q-number" id="qn4">4</span><span>The Met Gala suggests that modern fashion is entirely independent of historical designs.</span></div>
+        <div class="tfn-group">
+          <button class="tfn-btn" onclick="selectTFN(4,'True')">True</button>
+          <button class="tfn-btn" onclick="selectTFN(4,'False')">False</button>
+          <button class="tfn-btn" onclick="selectTFN(4,'Not Given')">Not Given</button>
+        </div>
+      </div>
+      <div class="q-block" id="qblock5">
+        <div class="q-text"><span class="q-number" id="qn5">5</span><span>Some outfits at the Gala are used to discuss contemporary issues like the environment.</span></div>
+        <div class="tfn-group">
+          <button class="tfn-btn" onclick="selectTFN(5,'True')">True</button>
+          <button class="tfn-btn" onclick="selectTFN(5,'False')">False</button>
+          <button class="tfn-btn" onclick="selectTFN(5,'Not Given')">Not Given</button>
+        </div>
+      </div>
+      <div class="q-block" id="qblock6">
+        <div class="q-text"><span class="q-number" id="qn6">6</span><span>The museum's exhibitions are usually less popular than the opening night party.</span></div>
+        <div class="tfn-group">
+          <button class="tfn-btn" onclick="selectTFN(6,'True')">True</button>
+          <button class="tfn-btn" onclick="selectTFN(6,'False')">False</button>
+          <button class="tfn-btn" onclick="selectTFN(6,'Not Given')">Not Given</button>
+        </div>
+      </div>
+
+      <div class="q-divider"></div>
+
+      <div class="q-section-title">Passage 1 — Questions 7–12</div>
+      <div class="q-section-instruction">Choose the correct letter: A, B, or C.</div>
+
+      <div class="q-block" id="qblock7">
+        <div class="q-text"><span class="q-number" id="qn7">7</span><span>According to the text, the Met Gala is "unofficially" a university because:</span></div>
+        <div class="mcq-group">
+          <div class="mcq-option" onclick="selectMCQ(7,'A')"><span class="mcq-letter">A</span><span class="mcq-option-text">It offers professional degrees to the celebrities who attend.</span></div>
+          <div class="mcq-option" onclick="selectMCQ(7,'B')"><span class="mcq-letter">B</span><span class="mcq-option-text">It requires deep intellectual and academic interpretation of themes.</span></div>
+          <div class="mcq-option" onclick="selectMCQ(7,'C')"><span class="mcq-letter">C</span><span class="mcq-option-text">It is funded by major academic institutions in New York.</span></div>
+        </div>
+      </div>
+      <div class="q-block" id="qblock8">
+        <div class="q-text"><span class="q-number" id="qn8">8</span><span>What is mentioned about the 2018 theme?</span></div>
+        <div class="mcq-group">
+          <div class="mcq-option" onclick="selectMCQ(8,'A')"><span class="mcq-letter">A</span><span class="mcq-option-text">It explored the link between religious symbols and fashion.</span></div>
+          <div class="mcq-option" onclick="selectMCQ(8,'B')"><span class="mcq-letter">B</span><span class="mcq-option-text">It was the most expensive exhibition ever held at the Met.</span></div>
+          <div class="mcq-option" onclick="selectMCQ(8,'C')"><span class="mcq-letter">C</span><span class="mcq-option-text">It was widely criticized by theologians for being profane.</span></div>
+        </div>
+      </div>
+      <div class="q-block" id="qblock9">
+        <div class="q-text"><span class="q-number" id="qn9">9</span><span>How does the text describe the use of 3D printing?</span></div>
+        <div class="mcq-group">
+          <div class="mcq-option" onclick="selectMCQ(9,'A')"><span class="mcq-letter">A</span><span class="mcq-option-text">As a way to replace traditional tailors and manual labor.</span></div>
+          <div class="mcq-option" onclick="selectMCQ(9,'B')"><span class="mcq-letter">B</span><span class="mcq-option-text">As a method to update and reimagine historical styles.</span></div>
+          <div class="mcq-option" onclick="selectMCQ(9,'C')"><span class="mcq-letter">C</span><span class="mcq-option-text">As a cheaper alternative to high-end fabrics like silk.</span></div>
+        </div>
+      </div>
+      <div class="q-block" id="qblock10">
+        <div class="q-text"><span class="q-number" id="qn10">10</span><span>The author uses the term "stealth education" to mean:</span></div>
+        <div class="mcq-group">
+          <div class="mcq-option" onclick="selectMCQ(10,'A')"><span class="mcq-letter">A</span><span class="mcq-option-text">Learning something profound without realizing it is happening.</span></div>
+          <div class="mcq-option" onclick="selectMCQ(10,'B')"><span class="mcq-letter">B</span><span class="mcq-option-text">Studying in secret due to the high costs of museum entry.</span></div>
+          <div class="mcq-option" onclick="selectMCQ(10,'C')"><span class="mcq-letter">C</span><span class="mcq-option-text">Learning about fashion trends exclusively through social media.</span></div>
+        </div>
+      </div>
+      <div class="q-block" id="qblock11">
+        <div class="q-text"><span class="q-number" id="qn11">11</span><span>What is the "hook" mentioned in the final paragraph?</span></div>
+        <div class="mcq-group">
+          <div class="mcq-option" onclick="selectMCQ(11,'A')"><span class="mcq-letter">A</span><span class="mcq-option-text">The expensive price of the Gala tickets.</span></div>
+          <div class="mcq-option" onclick="selectMCQ(11,'B')"><span class="mcq-letter">B</span><span class="mcq-option-text">The historical artifacts on display.</span></div>
+          <div class="mcq-option" onclick="selectMCQ(11,'C')"><span class="mcq-letter">C</span><span class="mcq-option-text">The presence of famous people and celebrities.</span></div>
+        </div>
+      </div>
+      <div class="q-block" id="qblock12">
+        <div class="q-text"><span class="q-number" id="qn12">12</span><span>What can be inferred about the author's view of the Met Gala?</span></div>
+        <div class="mcq-group">
+          <div class="mcq-option" onclick="selectMCQ(12,'A')"><span class="mcq-letter">A</span><span class="mcq-option-text">They believe the event is far too elitist for the general public.</span></div>
+          <div class="mcq-option" onclick="selectMCQ(12,'B')"><span class="mcq-letter">B</span><span class="mcq-option-text">They see it as a valuable cultural and educational event.</span></div>
+          <div class="mcq-option" onclick="selectMCQ(12,'C')"><span class="mcq-letter">C</span><span class="mcq-option-text">They think it should be moved to a more accessible venue.</span></div>
+        </div>
+      </div>
+
+      <div class="q-divider"></div>
+
+      <div class="q-section-title">Passage 1 — Questions 13–20</div>
+      <div class="q-section-instruction">Complete the summary below. Write ONE WORD ONLY for each answer.</div>
+
+      <div class="q-block" style="line-height:2.1; font-size:14px; color:var(--gray-700);">
+        The Met Gala is more than a party; it is a <span class="q-number" id="qn13" style="vertical-align:middle">13</span><input class="fill-input" type="text" id="fill13" oninput="fillChanged(13)" placeholder="___________"> in cultural history. Although it started as a <span class="q-number" id="qn14" style="vertical-align:middle">14</span><input class="fill-input" type="text" id="fill14" oninput="fillChanged(14)" placeholder="___________"> event in 1948, it is now a global sensation. Designers must engage in <span class="q-number" id="qn15" style="vertical-align:middle">15</span><input class="fill-input" type="text" id="fill15" oninput="fillChanged(15)" placeholder="___________"> to match the yearly theme. For example, the 2018 event looked at how <span class="q-number" id="qn16" style="vertical-align:middle">16</span><input class="fill-input" type="text" id="fill16" oninput="fillChanged(16)" placeholder="___________"> symbols appear in fashion. The event also shows that fashion is a <span class="q-number" id="qn17" style="vertical-align:middle">17</span><input class="fill-input" type="text" id="fill17" oninput="fillChanged(17)" placeholder="___________"> of past and future ideas. Even though some people call the event <span class="q-number" id="qn18" style="vertical-align:middle">18</span><input class="fill-input" type="text" id="fill18" oninput="fillChanged(18)" placeholder="___________">, it helps the public learn about topics like <span class="q-number" id="qn19" style="vertical-align:middle">19</span><input class="fill-input" type="text" id="fill19" oninput="fillChanged(19)" placeholder="___________"> roles and conservation. This way, people get a history <span class="q-number" id="qn20" style="vertical-align:middle">20</span><input class="fill-input" type="text" id="fill20" oninput="fillChanged(20)" placeholder="___________"> while watching the red carpet.
+      </div>
+
+      <div class="q-divider"></div>
+
+      <!-- ====== PASSAGE 2 QUESTIONS ====== -->
+      <div class="q-section-title">Passage 2 — Questions 21–26</div>
+      <div class="q-section-instruction">Do the following statements agree with the information given in the passage? Choose TRUE, FALSE, or NOT GIVEN.</div>
+
+      <div class="q-block" id="qblock21">
+        <div class="q-text"><span class="q-number" id="qn21">21</span><span>Short videos are specifically designed to make the brain release a chemical called dopamine.</span></div>
+        <div class="tfn-group">
+          <button class="tfn-btn" onclick="selectTFN(21,'True')">True</button>
+          <button class="tfn-btn" onclick="selectTFN(21,'False')">False</button>
+          <button class="tfn-btn" onclick="selectTFN(21,'Not Given')">Not Given</button>
+        </div>
+      </div>
+      <div class="q-block" id="qblock22">
+        <div class="q-text"><span class="q-number" id="qn22">22</span><span>Deep processing is more common in people who watch Reels than in those who read books.</span></div>
+        <div class="tfn-group">
+          <button class="tfn-btn" onclick="selectTFN(22,'True')">True</button>
+          <button class="tfn-btn" onclick="selectTFN(22,'False')">False</button>
+          <button class="tfn-btn" onclick="selectTFN(22,'Not Given')">Not Given</button>
+        </div>
+      </div>
+      <div class="q-block" id="qblock23">
+        <div class="q-text"><span class="q-number" id="qn23">23</span><span>The "encoding" process is necessary for information to stay in the brain for a long time.</span></div>
+        <div class="tfn-group">
+          <button class="tfn-btn" onclick="selectTFN(23,'True')">True</button>
+          <button class="tfn-btn" onclick="selectTFN(23,'False')">False</button>
+          <button class="tfn-btn" onclick="selectTFN(23,'Not Given')">Not Given</button>
+        </div>
+      </div>
+      <div class="q-block" id="qblock24">
+        <div class="q-text"><span class="q-number" id="qn24">24</span><span>Users who watch Shorts for more than two hours a day lose their ability to speak clearly.</span></div>
+        <div class="tfn-group">
+          <button class="tfn-btn" onclick="selectTFN(24,'True')">True</button>
+          <button class="tfn-btn" onclick="selectTFN(24,'False')">False</button>
+          <button class="tfn-btn" onclick="selectTFN(24,'Not Given')">Not Given</button>
+        </div>
+      </div>
+      <div class="q-block" id="qblock25">
+        <div class="q-text"><span class="q-number" id="qn25">25</span><span>"Digital amnesia" refers to the inability to remember content from short videos.</span></div>
+        <div class="tfn-group">
+          <button class="tfn-btn" onclick="selectTFN(25,'True')">True</button>
+          <button class="tfn-btn" onclick="selectTFN(25,'False')">False</button>
+          <button class="tfn-btn" onclick="selectTFN(25,'Not Given')">Not Given</button>
+        </div>
+      </div>
+      <div class="q-block" id="qblock26">
+        <div class="q-text"><span class="q-number" id="qn26">26</span><span>Most social media companies are trying to make their algorithms less addictive.</span></div>
+        <div class="tfn-group">
+          <button class="tfn-btn" onclick="selectTFN(26,'True')">True</button>
+          <button class="tfn-btn" onclick="selectTFN(26,'False')">False</button>
+          <button class="tfn-btn" onclick="selectTFN(26,'Not Given')">Not Given</button>
+        </div>
+      </div>
+
+      <div class="q-divider"></div>
+
+      <div class="q-section-title">Passage 2 — Questions 27–32</div>
+      <div class="q-section-instruction">Choose the correct letter: A, B, or C.</div>
+
+      <div class="q-block" id="qblock27">
+        <div class="q-text"><span class="q-number" id="qn27">27</span><span>Why does the author compare the brain to a "sieve"?</span></div>
+        <div class="mcq-group">
+          <div class="mcq-option" onclick="selectMCQ(27,'A')"><span class="mcq-letter">A</span><span class="mcq-option-text">Because it is becoming more efficient at filtering information.</span></div>
+          <div class="mcq-option" onclick="selectMCQ(27,'B')"><span class="mcq-letter">B</span><span class="mcq-option-text">Because it is failing to hold onto information due to speed.</span></div>
+          <div class="mcq-option" onclick="selectMCQ(27,'C')"><span class="mcq-letter">C</span><span class="mcq-option-text">Because it is becoming stronger through constant use.</span></div>
+        </div>
+      </div>
+      <div class="q-block" id="qblock28">
+        <div class="q-text"><span class="q-number" id="qn28">28</span><span>According to the text, what is "novelty-seeking behavior"?</span></div>
+        <div class="mcq-group">
+          <div class="mcq-option" onclick="selectMCQ(28,'A')"><span class="mcq-letter">A</span><span class="mcq-option-text">The desire to find and experience new things.</span></div>
+          <div class="mcq-option" onclick="selectMCQ(28,'B')"><span class="mcq-letter">B</span><span class="mcq-option-text">The habit of buying new smartphones every year.</span></div>
+          <div class="mcq-option" onclick="selectMCQ(28,'C')"><span class="mcq-letter">C</span><span class="mcq-option-text">The ability to create original video content.</span></div>
+        </div>
+      </div>
+      <div class="q-block" id="qblock29">
+        <div class="q-text"><span class="q-number" id="qn29">29</span><span>How does short-form content affect traditional learning?</span></div>
+        <div class="mcq-group">
+          <div class="mcq-option" onclick="selectMCQ(29,'A')"><span class="mcq-letter">A</span><span class="mcq-option-text">It helps students memorize lecture notes faster.</span></div>
+          <div class="mcq-option" onclick="selectMCQ(29,'B')"><span class="mcq-letter">B</span><span class="mcq-option-text">It makes regular educational tasks feel extremely dull.</span></div>
+          <div class="mcq-option" onclick="selectMCQ(29,'C')"><span class="mcq-letter">C</span><span class="mcq-option-text">It replaces the need for long-form textbooks entirely.</span></div>
+        </div>
+      </div>
+      <div class="q-block" id="qblock30">
+        <div class="q-text"><span class="q-number" id="qn30">30</span><span>What is the main result of "constant stimulation"?</span></div>
+        <div class="mcq-group">
+          <div class="mcq-option" onclick="selectMCQ(30,'A')"><span class="mcq-letter">A</span><span class="mcq-option-text">It significantly improves a person's physical reflexes.</span></div>
+          <div class="mcq-option" onclick="selectMCQ(30,'B')"><span class="mcq-letter">B</span><span class="mcq-option-text">It lowers the brain's ability to focus on long-term goals.</span></div>
+          <div class="mcq-option" onclick="selectMCQ(30,'C')"><span class="mcq-letter">C</span><span class="mcq-option-text">It creates a need for faster and more exciting rewards.</span></div>
+        </div>
+      </div>
+      <div class="q-block" id="qblock31">
+        <div class="q-text"><span class="q-number" id="qn31">31</span><span>The term "digital hygiene" refers to:</span></div>
+        <div class="mcq-group">
+          <div class="mcq-option" onclick="selectMCQ(31,'A')"><span class="mcq-letter">A</span><span class="mcq-option-text">Limiting screen time and choosing high-quality content.</span></div>
+          <div class="mcq-option" onclick="selectMCQ(31,'B')"><span class="mcq-letter">B</span><span class="mcq-option-text">Cleaning the screens of your electronic devices regularly.</span></div>
+          <div class="mcq-option" onclick="selectMCQ(31,'C')"><span class="mcq-letter">C</span><span class="mcq-option-text">Watching educational videos instead of entertainment videos.</span></div>
+        </div>
+      </div>
+      <div class="q-block" id="qblock32">
+        <div class="q-text"><span class="q-number" id="qn32">32</span><span>What is the author's tone in the final paragraph?</span></div>
+        <div class="mcq-group">
+          <div class="mcq-option" onclick="selectMCQ(32,'A')"><span class="mcq-letter">A</span><span class="mcq-option-text">Indifferent and bored.</span></div>
+          <div class="mcq-option" onclick="selectMCQ(32,'B')"><span class="mcq-letter">B</span><span class="mcq-option-text">Encouraging and cautionary.</span></div>
+          <div class="mcq-option" onclick="selectMCQ(32,'C')"><span class="mcq-letter">C</span><span class="mcq-option-text">Angry and aggressive.</span></div>
+        </div>
+      </div>
+
+      <div class="q-divider"></div>
+
+      <div class="q-section-title">Passage 2 — Questions 33–40</div>
+      <div class="q-section-instruction">Complete the summary below. Write NO MORE THAN TWO WORDS for each answer.</div>
+
+      <div class="q-block" style="line-height:2.1; font-size:14px; color:var(--gray-700);">
+        Watching short-form videos creates an immediate <span class="q-number" id="qn33" style="vertical-align:middle">33</span><input class="fill-input" type="text" id="fill33" oninput="fillChanged(33)" placeholder="___________"> in the brain, but it harms our <span class="q-number" id="qn34" style="vertical-align:middle">34</span><input class="fill-input" type="text" id="fill34" oninput="fillChanged(34)" placeholder="___________">. The fast speed of these videos stops the <span class="q-number" id="qn35" style="vertical-align:middle">35</span><input class="fill-input" type="text" id="fill35" oninput="fillChanged(35)" placeholder="___________"> of information into long-term storage. This leads to <span class="q-number" id="qn36" style="vertical-align:middle">36</span><input class="fill-input" type="text" id="fill36" oninput="fillChanged(36)" placeholder="___________">, where people forget what they just saw. Because of the <span class="q-number" id="qn37" style="vertical-align:middle">37</span><input class="fill-input" type="text" id="fill37" oninput="fillChanged(37)" placeholder="___________">, users stay on their phones for a long time. This makes the brain want <span class="q-number" id="qn38" style="vertical-align:middle">38</span><input class="fill-input" type="text" id="fill38" oninput="fillChanged(38)" placeholder="___________">, which makes reading books seem very <span class="q-number" id="qn39" style="vertical-align:middle">39</span><input class="fill-input" type="text" id="fill39" oninput="fillChanged(39)" placeholder="___________">. To fix this, we should choose <span class="q-number" id="qn40" style="vertical-align:middle">40</span><input class="fill-input" type="text" id="fill40" oninput="fillChanged(40)" placeholder="___________"> to strengthen our minds.
+      </div>
+
+      <div style="height:40px;"></div>
+    </div>
+  </div>
+
+  <div class="bottom-bar">
+    <button class="action-btn submit-btn" onclick="submitTest()">📤 Submit Answers</button>
+    <button class="action-btn copy-btn" onclick="copyAnswers()">📋 Copy Answers</button>
+  </div>
+</div>
+
+<!-- ==================== SUBMITTED OVERLAY ==================== -->
+<div id="submittedOverlay">
+  <div class="submitted-card">
+    <div class="submitted-icon">✅</div>
+    <div class="submitted-title">Answers Submitted!</div>
+    <div class="submitted-text">Your answers have been saved as a PDF. You can also copy them below.</div>
+    <button class="submitted-copy-btn" onclick="copyAnswers()">📋 Copy Answers</button>
+    <div class="copy-feedback" id="copyFeedback"></div>
+  </div>
+</div>
+
+<!-- ==================== PRINT AREA (hidden, for PDF) ==================== -->
+<div id="printArea"></div>
+
+<script>
+// ========== STATE ==========
+const answers = {};
+let studentNameVal = '';
+let testStarted = false;
+let testSubmitted = false;
+const TOTAL = 40;
+
+// ========== PIN INPUT HELPERS ==========
+function setupPinInputs(ids, onComplete) {
+  ids.forEach((id, i) => {
+    const el = document.getElementById(id);
+    el.addEventListener('input', () => {
+      el.value = el.value.replace(/\D/g, '');
+      if (el.value && i < ids.length - 1) document.getElementById(ids[i+1]).focus();
+      if (i === ids.length - 1 && el.value) onComplete();
+    });
+    el.addEventListener('keydown', (e) => {
+      if (e.key === 'Backspace' && !el.value && i > 0) document.getElementById(ids[i-1]).focus();
+    });
+  });
+}
+setupPinInputs(['pin1','pin2','pin3','pin4'], () => {});
+setupPinInputs(['ppin1','ppin2','ppin3','ppin4'], checkProctorPin);
+
+function getPinValue(ids) {
+  return ids.map(id => document.getElementById(id).value).join('');
+}
+
+// ========== START TEST ==========
+function startTest() {
+  const name = document.getElementById('studentName').value.trim();
+  const pin = getPinValue(['pin1','pin2','pin3','pin4']);
+  const errEl = document.getElementById('welcomeError');
+
+  if (!name) { errEl.textContent = 'Please enter your name.'; return; }
+  if (pin !== '1959') { errEl.textContent = 'Incorrect access code. Try again.'; ['pin1','pin2','pin3','pin4'].forEach(id => document.getElementById(id).value = ''); document.getElementById('pin1').focus(); return; }
+
+  studentNameVal = name;
+  document.getElementById('displayStudentName').textContent = name;
+  document.getElementById('welcomeScreen').style.display = 'none';
+  document.getElementById('testScreen').style.display = 'flex';
+  testStarted = true;
+
+  // Request fullscreen
+  const el = document.documentElement;
+  if (el.requestFullscreen) el.requestFullscreen().catch(()=>{});
+  else if (el.webkitRequestFullscreen) el.webkitRequestFullscreen();
+  else if (el.msRequestFullscreen) el.msRequestFullscreen();
+}
+
+// ========== PROCTORING ==========
+document.addEventListener('visibilitychange', () => {
+  if (testStarted && !testSubmitted && document.hidden) showProctor();
+});
+window.addEventListener('blur', () => {
+  if (testStarted && !testSubmitted) showProctor();
+});
+document.addEventListener('fullscreenchange', () => {
+  if (testStarted && !testSubmitted && !document.fullscreenElement) showProctor();
+});
+
+function showProctor() {
+  const overlay = document.getElementById('proctorOverlay');
+  overlay.style.display = 'flex';
+  ['ppin1','ppin2','ppin3','ppin4'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('proctorError').textContent = '';
+  setTimeout(() => document.getElementById('ppin1').focus(), 100);
+}
+
+function checkProctorPin() {
+  const pin = getPinValue(['ppin1','ppin2','ppin3','ppin4']);
+  if (pin === '1953') {
+    document.getElementById('proctorOverlay').style.display = 'none';
+    const el = document.documentElement;
+    if (!document.fullscreenElement) {
+      if (el.requestFullscreen) el.requestFullscreen().catch(()=>{});
+      else if (el.webkitRequestFullscreen) el.webkitRequestFullscreen();
+    }
+  } else {
+    document.getElementById('proctorError').textContent = 'Incorrect code. Please try again.';
+    ['ppin1','ppin2','ppin3','ppin4'].forEach(id => document.getElementById(id).value = '');
+    document.getElementById('ppin1').focus();
+  }
+}
+
+// ========== ANSWER SELECTION ==========
+function updateProgress() {
+  const count = Object.keys(answers).length;
+  const pct = count / TOTAL;
+  const circumference = 2 * Math.PI * 18; // r=18
+  document.getElementById('progressRing').style.strokeDashoffset = circumference * (1 - pct);
+  document.getElementById('progressText').textContent = count + '/' + TOTAL;
+}
+
+function markAnswered(num) {
+  const qn = document.getElementById('qn' + num);
+  if (qn) qn.classList.add('answered');
+}
+
+function selectTFN(num, val) {
+  answers[num] = val;
+  const block = document.getElementById('qblock' + num);
+  block.querySelectorAll('.tfn-btn').forEach(b => b.classList.remove('selected'));
+  event.target.classList.add('selected');
+  markAnswered(num);
+  updateProgress();
+}
+
+function selectMCQ(num, val) {
+  answers[num] = val;
+  const block = document.getElementById('qblock' + num);
+  block.querySelectorAll('.mcq-option').forEach(o => o.classList.remove('selected'));
+  event.currentTarget.classList.add('selected');
+  markAnswered(num);
+  updateProgress();
+}
+
+function fillChanged(num) {
+  const v = document.getElementById('fill' + num).value.trim();
+  if (v) { answers[num] = v; markAnswered(num); }
+  else { delete answers[num]; document.getElementById('qn' + num).classList.remove('answered'); }
+  updateProgress();
+}
+
+// ========== FORMAT ANSWERS TEXT (only answered) ==========
+function getAnswersText() {
+  let lines = [];
+  lines.push('EDUNEST – Intensive Reading Test 5');
+  lines.push('Test Owner: GULRUX');
+  lines.push('Student: ' + studentNameVal);
+  lines.push('Date: ' + new Date().toLocaleDateString('en-GB', {day:'2-digit',month:'short',year:'numeric'}));
+  lines.push('─'.repeat(36));
+  for (let i = 1; i <= TOTAL; i++) {
+    if (answers[i] !== undefined && answers[i] !== '') {
+      lines.push('Q' + i + ': ' + answers[i]);
+    }
+  }
+  lines.push('─'.repeat(36));
+  lines.push('Total answered: ' + Object.keys(answers).length + '/' + TOTAL);
+  return lines.join('\n');
+}
+
+// ========== COPY ==========
+function copyAnswers() {
+  const text = getAnswersText();
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(() => showCopyFeedback('Answers copied to clipboard!')).catch(() => fallbackCopy(text));
+  } else {
+    fallbackCopy(text);
+  }
+}
+function fallbackCopy(text) {
+  const ta = document.createElement('textarea');
+  ta.value = text; ta.style.cssText = 'position:fixed;left:-9999px';
+  document.body.appendChild(ta); ta.select();
+  try { document.execCommand('copy'); showCopyFeedback('Answers copied to clipboard!'); }
+  catch { showCopyFeedback('Copy failed. Please select and copy manually.'); }
+  document.body.removeChild(ta);
+}
+function showCopyFeedback(msg) {
+  const el = document.getElementById('copyFeedback');
+  if (el) { el.textContent = msg; setTimeout(() => el.textContent = '', 3000); }
+}
+
+// ========== SUBMIT & PDF ==========
+function submitTest() {
+  if (!confirm('Are you sure you want to submit your answers? This cannot be undone.')) return;
+  testSubmitted = true;
+  generatePDF();
+  document.getElementById('submittedOverlay').style.display = 'flex';
+}
+
+function generatePDF() {
+  // Build a clean HTML document for PDF
+  let html = `<!DOCTYPE html><html><head><meta charset="UTF-8"><title>EDUNEST Reading Test Answers</title>
+  <style>
+    body{font-family:Helvetica,Arial,sans-serif;padding:40px;color:#1a1a2e;max-width:700px;margin:0 auto;}
+    .header{text-align:center;border-bottom:3px solid #1a3f7a;padding-bottom:20px;margin-bottom:24px;}
+    .logo-text{font-size:26px;font-weight:bold;color:#1a3f7a;margin-bottom:4px;}
+    .sub{font-size:13px;color:#64748b;margin-bottom:2px;}
+    .info{font-size:14px;color:#334155;margin-bottom:4px;}
+    table{width:100%;border-collapse:collapse;margin-top:20px;}
+    th{background:#1a3f7a;color:#fff;padding:10px 16px;text-align:left;font-size:13px;}
+    td{padding:9px 16px;font-size:14px;border-bottom:1px solid #e2e8f0;}
+    tr:nth-child(even){background:#f0f6ff;}
+    .footer{text-align:center;margin-top:28px;font-size:12px;color:#94a3b8;border-top:1px solid #e2e8f0;padding-top:14px;}
+  </style></head><body>
+    <div class="header">
+      <div class="logo-text">EDUNEST</div>
+      <div class="sub">Intensive Reading Test 5</div>
+      <div class="sub">Test Owner: GULRUX</div>
+    </div>
+    <div class="info"><strong>Student:</strong> ${studentNameVal}</div>
+    <div class="info"><strong>Date:</strong> ${new Date().toLocaleDateString('en-GB',{day:'2-digit',month:'long',year:'numeric'})}</div>
+    <div class="info"><strong>Answered:</strong> ${Object.keys(answers).length} / ${TOTAL}</div>
+    <table><tr><th>Question</th><th>Answer</th></tr>`;
+
+  for (let i = 1; i <= TOTAL; i++) {
+    if (answers[i] !== undefined && answers[i] !== '') {
+      html += `<tr><td>Question ${i}</td><td>${answers[i]}</td></tr>`;
+    }
+  }
+
+  html += `</table><div class="footer">Generated by EDUNEST Testing Platform</div></body></html>`;
+
+  // Open in new window for printing as PDF
+  const win = window.open('', '_blank');
+  if (win) {
+    win.document.write(html);
+    win.document.close();
+    setTimeout(() => { win.print(); }, 600);
+  } else {
+    // Fallback: create a blob download
+    const blob = new Blob([html], {type:'text/html'});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'EDUNEST_Reading_Test_Answers_' + studentNameVal.replace(/\s+/g,'_') + '.html';
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+}
+
+// Enter key on welcome
+document.getElementById('studentName').addEventListener('keydown', (e) => { if (e.key === 'Enter') document.getElementById('pin1').focus(); });
+document.getElementById('pin4').addEventListener('keydown', (e) => { if (e.key === 'Enter') startTest(); });
+</script>
+</body>
+</html>
